@@ -22,16 +22,6 @@ public class Tab1_Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab1_home, container, false);
-//        FloatingActionButton btnAddReport = (FloatingActionButton) rootView.findViewById(R.id.fab);
-//        btnAddReport.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v){
-//                Intent i = new Intent(getActivity(), SelectionPage.class);
-//                startActivity(i);
-//            }
-//        });
-
-
-
         return rootView;
 
     }
