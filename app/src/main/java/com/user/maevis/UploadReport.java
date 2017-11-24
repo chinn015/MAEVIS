@@ -14,11 +14,21 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.user.maevis.models.ReportModel;
+import com.user.maevis.session.SessionManager;
+
+import java.util.HashMap;
+
 public class UploadReport extends AppCompatActivity {
+
+    private EditText txtFldLocation;
+    private EditText txtFldDescription;
+    private ReportModel reportModel;
 
     ImageView ivImage;
     VideoView videoView;
@@ -41,6 +51,13 @@ public class UploadReport extends AppCompatActivity {
                 SelectImage();
             }
         });
+
+
+        reportModel = new ReportModel();
+
+        txtFldLocation = (EditText) findViewById(R.id.txtFldLocation);
+        txtFldLocation.setHint("Description ["+SelectionPage.getReportType()+"]");
+        txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
     }
 
     private void SelectImage(){
@@ -112,7 +129,8 @@ public class UploadReport extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_upload_report) {
-            Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
+            Toast.makeText(UploadReport.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
             return true;
         }
 
