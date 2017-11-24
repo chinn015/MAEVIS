@@ -41,10 +41,7 @@ public class SignUp extends AppCompatActivity {
     private EditText txtFldBirthdate;
     private EditText txtFldAddress;
     private Button btnCreateAccount;
-<<<<<<< HEAD
-=======
 
->>>>>>> 37ee98514508da4575c9018faf9b80f664f82132
     private Calendar currentDate;
     private int day, month, year;
     private int pk;
