@@ -73,7 +73,8 @@
         android:textAllCaps="false"
         android:layout_below="@+id/btnLogin"
         android:layout_alignStart="@+id/btnLogin"
-        android:textSize="15dp"/>
+        android:textSize="15dp"
+        android:onClick="onSignUp"/>
 
     <Button
         android:id="@+id/btnForgotPassword"
