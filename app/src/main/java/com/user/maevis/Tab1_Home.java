@@ -1,9 +1,5 @@
 package com.user.maevis;
 
-/**
- * Created by Chen on 10/28/2017.
- */
-
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;

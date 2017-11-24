@@ -1,8 +1,5 @@
 package com.user.maevis;
 
-/**
- * Created by Chen on 10/28/2017.
- */
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,9 +1,5 @@
 package com.user.maevis;
 
-/**
- * Created by Chen on 10/28/2017.
- */
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
