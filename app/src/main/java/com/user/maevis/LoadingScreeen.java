@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
 public class LoadingScreeen extends AppCompatActivity {
     private static final String TAG = LoadingScreeen.class.getSimpleName();
     private final int SPLASH_DISPLAY_LENGTH = 3000;
