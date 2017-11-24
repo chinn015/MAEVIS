@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "47183330652",
+    "firebase_url": "https://maevis-ecd17.firebaseio.com",
+    "project_id": "maevis-ecd17",
+    "storage_bucket": "maevis-ecd17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47183330652:android:65e27621be4c8b07",
+        "android_client_info": {
+          "package_name": "com.user.maevis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47183330652-b274sm5unhf4o4unms4tlekjle7ggeal.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.user.maevis",
+            "certificate_hash": "f25b55cca270b6ddf1bc2655e69b3969df246a8f"
+          }
+        },
+        {
+          "client_id": "47183330652-4g2ntl5uvjs19eoocneop55dg8v4v570.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8v1dOmtQ4JuQXaaeCOVb8i7Y7QhxpAHY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47183330652-4g2ntl5uvjs19eoocneop55dg8v4v570.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

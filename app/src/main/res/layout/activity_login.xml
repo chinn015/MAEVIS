@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.user.maevis.Login"
+    android:background="@drawable/bg_login">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/maevis_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/txtFldLoginUsername"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_below="@+id/imgLogo"
+        android:layout_alignStart="@+id/txtFldLoginPassword"
+        android:layout_marginBottom="19dp"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Username"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"/>
+
+    <EditText
+        android:id="@+id/txtFldLoginPassword"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:layout_below="@+id/txtFldLoginUsername"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Password"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/txtFldLoginPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="2dp"
+        android:text="Login"
+        android:background="@drawable/btn_rounded"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:textSize="17dp"
+        android:onClick="onLogin"/>
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Create Account"
+        android:background="@drawable/btn_nobg"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:layout_below="@+id/btnLogin"
+        android:layout_alignStart="@+id/btnLogin"
+        android:textSize="15dp"/>
+
+    <Button
+        android:id="@+id/btnForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Forgot Password"
+        android:background="@drawable/btn_nobg"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:textSize="15dp"
+        android:layout_below="@+id/btnLogin"
+        android:layout_alignEnd="@+id/btnLogin" />
+
+    <Button
+        android:id="@+id/btnSignFb"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        android:text="Sign in with Facebook"
+        android:background="@drawable/btn_blue_box"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:layout_below="@+id/btnSignUp"
+        android:layout_alignStart="@+id/btnSignUp"
+        android:layout_marginBottom="10dp"
+        android:textSize="17dp"/>
+
+
+    <Button
+        android:id="@+id/btnSignInGoogle"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignStart="@+id/btnSignFb"
+        android:layout_below="@+id/btnSignFb"
+        android:background="@drawable/btn_red_box"
+        android:text="Sign in with Google"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="17dp" />
+
+</RelativeLayout>

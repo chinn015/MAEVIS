@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.user.maevis.Login"
+    android:background="@drawable/bg_signup">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/maevis_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/txtFldSignUpUsername"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_below="@+id/imgLogo"
+        android:layout_alignStart="@+id/txtFldSignUpPassword"
+        android:layout_marginBottom="10dp"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Username"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldSignUpPassword"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:layout_below="@+id/txtFldSignUpUsername"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Password"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_marginBottom="10dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldFirstName"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="First Name"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldSignUpPassword"
+        android:layout_alignStart="@+id/txtFldSignUpPassword"
+        android:layout_marginBottom="10dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldLastName"
+        android:layout_width="115dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Last Name"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldSignUpPassword"
+        android:layout_toEndOf="@+id/txtFldFirstName"
+        android:layout_marginStart="10dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldEmail"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Email Address"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldFirstName"
+        android:layout_alignStart="@+id/txtFldFirstName"
+        android:layout_marginBottom="10dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldBirthdate"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Birthdate"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldEmail"
+        android:layout_alignStart="@+id/txtFldEmail"
+        android:layout_marginBottom="10dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+    <EditText
+        android:id="@+id/txtFldAddress"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPersonName"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Address"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldBirthdate"
+        android:layout_alignStart="@+id/txtFldBirthdate"
+        android:layout_marginBottom="20dp"
+        android:textCursorDrawable="@drawable/cursor_text_white" />
+
+
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="Create Account"
+        android:background="@drawable/btn_rounded"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:textSize="17dp"
+        android:layout_below="@+id/txtFldAddress"
+        android:layout_alignStart="@+id/txtFldAddress"
+        />
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/button"-->
+    <!--android:layout_width="250dp"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_below="@+id/editText"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginTop="28dp"-->
+    <!--android:layout_marginBottom="2dp"-->
+    <!--android:text="Login"-->
+    <!--android:background="@drawable/btn_selector_login"-->
+    <!--android:textColor="#FFFFFF"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:textSize="17dp"/>-->
+
+
+
+</RelativeLayout>

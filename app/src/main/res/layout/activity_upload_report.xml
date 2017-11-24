@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.user.maevis.UploadReport">
+
+    <EditText
+        android:id="@+id/txtFldLocation"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:inputType="textPersonName"
+        android:layout_marginTop="17dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorPrimary"
+        android:paddingLeft="15dp"
+        android:hint="Location"
+        android:textColorHint="#838282"
+        android:textSize="20dp"
+        android:textCursorDrawable="@drawable/cursor_text_red"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/txtFldDescription"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:lines="6"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:scrollHorizontally="false"
+        android:textColor="@color/colorPrimary"
+        android:hint="Description"
+        android:textSize="20dp"
+        android:textColorHint="#838282"
+        android:layout_marginLeft="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_red"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/txtFldLocation"
+        android:layout_alignParentStart="true"
+        android:paddingLeft="5dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:id="@+id/fab"
+        android:layout_below="@+id/txtFldDescription"
+        android:layout_alignStart="@+id/txtFldLocation"
+        android:background="#fafafa"
+        android:text="Add Photo/Video"
+        android:textSize="20dp"
+        android:textColor="#838282"
+        android:textAllCaps="false"
+        android:stateListAnimator="@null"
+        android:paddingLeft="15dp"
+        android:paddingRight="180dp"
+        android:typeface="normal"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fab">
+        <include layout="@layout/content_add_image" />
+    </RelativeLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+
+</RelativeLayout>
