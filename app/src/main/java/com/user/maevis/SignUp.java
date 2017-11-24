@@ -41,7 +41,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText txtFldBirthdate;
     private EditText txtFldAddress;
     private Button btnCreateAccount;
-    //private Button btnLogin;
     private Calendar currentDate;
     private int day, month, year;
     private int pk;
