@@ -34,7 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoadingScreeen" />
-        <activity android:name=".SignUp" />
+        <activity android:name=".SignUp"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".SelectionPage" />
 
         <!--
