@@ -20,6 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        Toast.makeText(Sidebar_HomePage.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
