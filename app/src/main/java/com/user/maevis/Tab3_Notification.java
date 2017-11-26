@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 public class Tab3_Notification extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                               Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab3_notification, container, false);
         return rootView;
     }

@@ -15,16 +15,26 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class Sidebar_HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +43,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     TabLayout tabLayout;
     private FragmentManager fragmentManager;
     private Fragment fragment = null;
-    public FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
+    static FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
+
 
     FrameLayout simpleFrameLayout;
 
@@ -44,6 +55,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             R.drawable.ic_notifications_none_black_24dp,
             R.drawable.ic_search_black_24dp
     };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +80,10 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        btnHomeLoc = (FloatingActionButton) findViewById(R.id.btnHomeLocation);
+        btnUserLoc = (FloatingActionButton) findViewById(R.id.btnUserLocation);
         btnAddReport = (FloatingActionButton) findViewById(R.id.fab);
-//        btnHomeLoc = (FloatingActionButton) findViewById(R.id.btnHomeLocation);
-//        btnUserLoc = (FloatingActionButton) findViewById(R.id.btnUserLocation);
+
 
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -80,36 +94,36 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                if (position == 1) {
-//                    btnHomeLoc.show();
-//                    btnUserLoc.show();
-//                } else {
-//                    btnHomeLoc.hide();
-//                    btnUserLoc.hide();
-//                }
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (position == 1) {
-//                    btnHomeLoc.show();
-//                    btnUserLoc.show();
-//                } else {
-//                    btnHomeLoc.hide();
-//                    btnUserLoc.hide();
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 1) {
+                    btnHomeLoc.show();
+                    btnUserLoc.show();
+                } else {
+                    btnHomeLoc.hide();
+                    btnUserLoc.hide();
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    btnHomeLoc.show();
+                    btnUserLoc.show();
+                } else {
+                    btnHomeLoc.hide();
+                    btnUserLoc.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 

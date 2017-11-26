@@ -32,7 +32,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 
@@ -41,9 +40,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
     private Location mUserLocation;
-    double userLatitude, userLongitude;
-    View view, view1;
-    FloatingActionButton btnUserLoc, btnHomeLoc;
+    static double userLatitude, userLongitude;
+    View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -86,8 +84,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
 
-        btnUserLoc = (FloatingActionButton) view.findViewById(R.id.btnUserLocation);
-        btnUserLoc.setOnClickListener(new View.OnClickListener() {
+        Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Current Location",
                         Toast.LENGTH_LONG).show();
@@ -97,10 +94,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
             }
         });
 
-
-        btnHomeLoc = (FloatingActionButton) view.findViewById(R.id.btnHomeLocation);
-
-        btnHomeLoc.setOnClickListener(new View.OnClickListener() {
+        Sidebar_HomePage.btnHomeLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Home Location",
                         Toast.LENGTH_LONG).show();
@@ -109,4 +103,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 
     }
 
+    public static double getUserLatitude() {
+        return userLatitude;
+    }
+
+    public static double getUserLongitude() {
+        return userLongitude;
+    }
 }

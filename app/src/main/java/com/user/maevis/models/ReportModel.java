@@ -8,8 +8,8 @@ public class ReportModel {
     private String reportType;
     private String reportedBy;
     private String reportDescription;
-    private String locationLatitude;
-    private String locationLongitude;
+    private double locationLatitude;
+    private double locationLongitude;
     private String location;
     private String dateTime;
 
@@ -17,14 +17,14 @@ public class ReportModel {
 
     }
 
-    public ReportModel(String reportType, String reportedBy, String reportDescription, String locationLatitude, String locationLongitude, String location, String dateTime) {
-        this.reportType = reportType;
-        this.reportedBy = reportedBy;
+    public ReportModel( String dateTime, String reportDescription, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
+        this.dateTime = dateTime;
+        this.location = location;
         this.reportDescription = reportDescription;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
-        this.location = location;
-        this.dateTime = dateTime;
+        this.reportType = reportType;
+        this.reportedBy = reportedBy;
     }
 
     public String getReportType() {
@@ -51,19 +51,19 @@ public class ReportModel {
         this.reportDescription = reportDescription;
     }
 
-    public String getLocationLatitude() {
+    public double getLocationLatitude() {
         return locationLatitude;
     }
 
-    public void setLocationLatitude(String locationLatitude) {
+    public void setLocationLatitude(double locationLatitude) {
         this.locationLatitude = locationLatitude;
     }
 
-    public String getLocationLongitude() {
+    public double getLocationLongitude() {
         return locationLongitude;
     }
 
-    public void setLocationLongitude(String locationLongitude) {
+    public void setLocationLongitude(double locationLongitude) {
         this.locationLongitude = locationLongitude;
     }
 

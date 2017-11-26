@@ -1,15 +1,18 @@
 package com.user.maevis;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,16 +22,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class UploadReport extends AppCompatActivity {
 
+    DatabaseReference FirebaseReports;
     private EditText txtFldLocation;
     private EditText txtFldDescription;
-    private ReportModel reportModel;
+    private ProgressDialog progressDialog;
 
     ImageView ivImage;
     VideoView videoView;
@@ -41,6 +48,8 @@ public class UploadReport extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+
         ivImage = (ImageView) findViewById(R.id.ivImage);
 
         Button fab = (Button) findViewById(R.id.fab);
@@ -52,12 +61,9 @@ public class UploadReport extends AppCompatActivity {
             }
         });
 
-
-        reportModel = new ReportModel();
-
         txtFldLocation = (EditText) findViewById(R.id.txtFldLocation);
-        txtFldLocation.setHint("Description ["+SelectionPage.getReportType()+"]");
         txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
+        txtFldDescription.setHint("Description ["+SelectionPage.getReportType()+"]");
     }
 
     private void SelectImage(){
@@ -131,9 +137,47 @@ public class UploadReport extends AppCompatActivity {
         if (id == R.id.action_upload_report) {
             //Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
             Toast.makeText(UploadReport.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
+            uploadReport();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void uploadReport() {
+        String dateTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        String description = txtFldDescription.getText().toString();
+        String location = txtFldLocation.getText().toString();
+        double locationLatitude = Tab2_Location.getUserLatitude();
+        double locationLongitude = Tab2_Location.getUserLongitude();
+        String reportType = SelectionPage.getReportType();
+        String reportedBy = SessionManager.getUsername();
+
+        if(TextUtils.isEmpty(description)) {
+            Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(TextUtils.isEmpty(location)) {
+            Toast.makeText(this, "Please enter location.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ReportModel reportModel = new ReportModel(dateTime, description, location, locationLatitude, locationLongitude, reportType, reportedBy);
+
+        storeReport(reportModel);
+    }
+
+    public void storeReport(ReportModel reportModel) {
+        DatabaseReference newReport = FirebaseReports.push();
+        newReport.child("DateTime").setValue(reportModel.getDateTime());
+        newReport.child("Description").setValue(reportModel.getReportDescription());
+        newReport.child("Location").setValue(reportModel.getLocation());
+        newReport.child("LocationLatitude").setValue(reportModel.getLocationLatitude());
+        newReport.child("LocationLongitude").setValue(reportModel.getLocationLongitude());
+        newReport.child("ReportType").setValue(reportModel.getReportType());
+        newReport.child("ReportedBy").setValue(reportModel.getReportedBy());
+
+        Toast.makeText(this, reportModel.getReportType()+" - "+reportModel.getReportedBy(), Toast.LENGTH_SHORT).show();
     }
 }
