@@ -12,12 +12,13 @@ public class ReportModel {
     private double locationLongitude;
     private String location;
     private String dateTime;
+    private String imageURL;
 
     public ReportModel() {
 
     }
 
-    public ReportModel( String dateTime, String reportDescription, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
+    public ReportModel( String dateTime, String reportDescription, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy, String imageURL) {
         this.dateTime = dateTime;
         this.location = location;
         this.reportDescription = reportDescription;
@@ -25,6 +26,7 @@ public class ReportModel {
         this.locationLongitude = locationLongitude;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
+        this.imageURL = imageURL;
     }
 
     public String getReportType() {
@@ -81,5 +83,13 @@ public class ReportModel {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

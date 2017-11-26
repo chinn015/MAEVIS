@@ -5,7 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -32,7 +37,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDesc());
-
+        holder.textViewDateTime.setText(listItem.getDateTime());
+        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
     }
 
     @Override
@@ -44,13 +50,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public TextView textViewHead;
         public TextView textViewDesc;
-
+        public TextView textViewDateTime;
+        public ImageView imageViewReport;
 
         public ViewHolder (View itemView){
             super(itemView);
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+            textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTime);
+            imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
         }
     }
 }

@@ -26,6 +26,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <ImageView
+                android:id="@+id/imageViewReport"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <TextView
+                android:id="@+id/textViewDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DateTime"
+                android:textSize="10sp" />
 
         </LinearLayout>
 

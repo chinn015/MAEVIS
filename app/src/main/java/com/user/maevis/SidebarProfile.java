@@ -16,7 +16,7 @@ import android.view.Window;
 
 
 public class SidebarProfile extends AppCompatActivity {
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
