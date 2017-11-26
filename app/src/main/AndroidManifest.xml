@@ -34,8 +34,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoadingScreeen" />
-        <activity android:name=".SignUp"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SignUp"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SelectionPage" />
 
         <!--
@@ -59,12 +60,22 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Sidebar_HomePage"
-            android:label="MAEVIS"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".VerifyReport"
+            android:label="Verify Report" />
 
-        <!--<activity-->
-            <!--android:name=".Tab1_Home"-->
-            <!--android:label="MAEVIS"/>-->
+        <activity
+            android:name=".SidebarProfile"
+            android:label="Profile" />
+
+        <activity
+            android:name=".SidebarHelp"
+            android:label="Help" />
+        <activity
+            android:name=".SidebarSettings"
+            android:label="Settings" />
     </application>
 
 </manifest>

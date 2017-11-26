@@ -63,7 +63,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sidebar_homepage);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -246,18 +246,40 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent i;
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (id == R.id.nav_home) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new Tab1_Home()).commit();
-        } else if (id == R.id.nav_profile) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new SidebarProfile()).commit();
-        } else if (id == R.id.nav_settings) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new SidebarSettings()).commit();
-        } else if (id == R.id.nav_help) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new SidebarHelp()).commit();
-        } else if (id == R.id.nav_share) {
+        //fragmentManager.beginTransaction().replace(R.id.content_frame, new Tab1_Home()).commit();
 
-        } else if (id == R.id.nav_logout) {
+        switch (id){
+            case R.id.nav_home :
+                i = new Intent(Sidebar_HomePage.this, Sidebar_HomePage.class);
+                startActivity(i);
+                break;
+
+            case R.id.nav_profile :
+                i = new Intent(Sidebar_HomePage.this, SidebarProfile.class);
+                startActivity(i);
+                break;
+
+            case R.id.nav_settings :
+                i = new Intent(Sidebar_HomePage.this, SidebarSettings.class);
+                startActivity(i);
+                break;
+
+            case R.id.nav_help :
+                i = new Intent(Sidebar_HomePage.this, SidebarHelp.class);
+                startActivity(i);
+                break;
+
+            case R.id.nav_share :
+                i = new Intent(Sidebar_HomePage.this, SidebarProfile.class);
+                startActivity(i);
+                break;
+
+            case R.id.nav_logout :
+                i = new Intent(Sidebar_HomePage.this, SidebarProfile.class);
+                startActivity(i);
+                break;
 
         }
 
