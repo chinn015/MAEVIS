@@ -61,6 +61,10 @@
             android:name=".Sidebar_HomePage"
             android:label="MAEVIS"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <!--<activity-->
+            <!--android:name=".Tab1_Home"-->
+            <!--android:label="MAEVIS"/>-->
     </application>
 
 </manifest>

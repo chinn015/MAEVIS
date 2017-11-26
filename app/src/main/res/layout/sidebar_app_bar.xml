@@ -44,9 +44,46 @@
         app:borderWidth="2dp"
         />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnUserLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@drawable/ic_person_black_24dp"
+        android:tint="@color/colorPrimary"
+        app:fabSize="normal"
+        android:scaleType="centerInside"
+        app:layout_anchorGravity="bottom"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/btnHomeLocation"
+        android:layout_marginStart="11dp"
+        android:layout_marginBottom="160dp"
+        android:layout_marginEnd="25dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnHomeLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@color/colorPrimary"
+        android:src="@drawable/ic_home_black_24dp"
+        app:fabSize="normal"
+        android:scaleType="center"
+        android:layout_marginTop="44dp"
+        android:layout_alignTop="@+id/btnUserLocation"
+        android:layout_alignParentEnd="true"
+        app:layout_anchorGravity="bottom"
+        android:layout_marginLeft="100dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="97dp"
+        android:layout_marginEnd="25dp"
+        />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/simpleViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 </android.support.design.widget.CoordinatorLayout>
