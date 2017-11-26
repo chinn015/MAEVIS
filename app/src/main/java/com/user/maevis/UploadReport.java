@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,8 +23,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -36,6 +43,9 @@ public class UploadReport extends AppCompatActivity {
     private EditText txtFldLocation;
     private EditText txtFldDescription;
     private ProgressDialog progressDialog;
+    private StorageReference firebaseStorage;
+    private Uri reportPhoto;
+    private String imageURL="";
 
     ImageView ivImage;
     VideoView videoView;
@@ -49,6 +59,8 @@ public class UploadReport extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+        firebaseStorage = FirebaseStorage.getInstance().getReference();
+        progressDialog = new ProgressDialog(this);
 
         ivImage = (ImageView) findViewById(R.id.ivImage);
 
@@ -106,7 +118,7 @@ public class UploadReport extends AppCompatActivity {
 
         if(resultCode== Activity.RESULT_OK){
 
-            if(requestCode==REQUEST_CAMERA){
+            /*if(requestCode==REQUEST_CAMERA){
 
                 Bundle bundle = data.getExtras();
                 final Bitmap bmp = (Bitmap) bundle.get("data");
@@ -116,11 +128,44 @@ public class UploadReport extends AppCompatActivity {
 
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
-            }
+                
+            }*/
 
+            if(requestCode==REQUEST_CAMERA || requestCode==SELECT_FILE) {
+                Uri selectedImageUri = data.getData();
+                ivImage.setImageURI(selectedImageUri);
+
+
+                //upload photo
+                progressDialog.setMessage("Uploading photo from camera.");
+                progressDialog.show();
+
+                StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
+
+                filePath.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        //imageURL.concat(downloadUrl.toString());
+                        setImageURL(downloadUrl.toString());
+
+                        Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                });
+            }
         }
     }
 
+    public void setImageURL(String imgURL) {
+        this.imageURL = imgURL;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,8 +208,7 @@ public class UploadReport extends AppCompatActivity {
             return;
         }
 
-        ReportModel reportModel = new ReportModel(dateTime, description, location, locationLatitude, locationLongitude, reportType, reportedBy);
-
+        ReportModel reportModel = new ReportModel(dateTime, description, location, locationLatitude, locationLongitude, reportType, reportedBy, this.imageURL);
         storeReport(reportModel);
     }
 
@@ -177,7 +221,9 @@ public class UploadReport extends AppCompatActivity {
         newReport.child("LocationLongitude").setValue(reportModel.getLocationLongitude());
         newReport.child("ReportType").setValue(reportModel.getReportType());
         newReport.child("ReportedBy").setValue(reportModel.getReportedBy());
+        newReport.child("ImageURL").setValue(reportModel.getImageURL());
 
-        Toast.makeText(this, reportModel.getReportType()+" - "+reportModel.getReportedBy(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, reportModel.getReportType()+" - "+reportModel.getReportedBy(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(UploadReport.this, "Report uploaded!.", Toast.LENGTH_LONG).show();
     }
 }
