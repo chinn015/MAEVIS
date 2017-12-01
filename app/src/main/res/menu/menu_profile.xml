@@ -1,14 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.user.maevis.UploadReport">
-
+    tools:context="com.user.maevis.Profile">
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title=""
-        android:icon="@drawable/ic_arrow_drop_up_black_24dp"
-        app:showAsAction="always"
-        />
-
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 </menu>

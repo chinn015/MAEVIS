@@ -10,17 +10,15 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHolder> {
 
 
     private List<ListItem> listItems;
     private Context context;
 
-    public MyAdapter(List<ListItem> listItems, Context context) {
+    public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
     }

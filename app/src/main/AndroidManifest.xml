@@ -58,50 +58,34 @@
             android:name=".UploadReport"
             android:label="Upload Report"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".Sidebar_HomePage"
             android:label="Home"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".VerifyReport"
             android:label="Verify Report" />
-
-        <activity
-            android:name=".SidebarProfile"
-            android:label="Profile"
-            android:parentActivityName=".Sidebar_HomePage">
-
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
-
-        </activity>
-
         <activity
             android:name=".SidebarHelp"
             android:label="Help"
             android:parentActivityName=".Sidebar_HomePage">
-
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".Sidebar_HomePage" />
-
         </activity>
-
         <activity
             android:name=".SidebarSettings"
             android:label="Settings"
             android:parentActivityName=".Sidebar_HomePage">
-
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".Sidebar_HomePage" />
-
         </activity>
 
+        <activity
+            android:name=".SidebarProfile"
+            android:label="Profile"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

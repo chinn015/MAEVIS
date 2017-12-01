@@ -1,39 +1,22 @@
 package com.user.maevis;
 
-import android.app.ProgressDialog;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
 
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -108,7 +91,7 @@ public class Tab1_Home extends Fragment {
         }
 
 
-        adapter = new MyAdapter(listItems, this.getActivity());
+        adapter = new TabHomeAdapter(listItems, this.getActivity());
         recyclerView.setAdapter(adapter);*/
 
         loadRecyclerViewData();
@@ -124,14 +107,15 @@ public class Tab1_Home extends Fragment {
                 //while(reports.hasNext()) {
                     //DataSnapshot report = reports.next();
 
-                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString(),
+                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
+                            " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
                             dataSnapshot.child("Description").getValue().toString(),
                             dataSnapshot.child("DateTime").getValue().toString(),
                             dataSnapshot.child("ImageURL").getValue().toString());
                     listItems.add(item);
                 //}
 
-                adapter = new MyAdapter(listItems, getContext());
+                adapter = new TabHomeAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);
             }
 
@@ -181,7 +165,7 @@ public class Tab1_Home extends Fragment {
                                 listItems.add(item);
                             }
 
-                            adapter = new MyAdapter(listItems, getContext());
+                            adapter = new TabHomeAdapter(listItems, getContext());
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
