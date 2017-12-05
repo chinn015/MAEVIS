@@ -1,6 +1,8 @@
 package com.user.maevis;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ public class SidebarProfile extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
+    static FloatingActionButton btnAddReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,16 @@ public class SidebarProfile extends AppCompatActivity {
 //        if (navView != null){
 //            setupDrawerContent(navView);
 //        }
+
+        btnAddReport = (FloatingActionButton) findViewById(R.id.fab);
+
+
+        btnAddReport.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(getApplication(), SelectionPage.class);
+                startActivity(i);
+            }
+        });
 
         viewPager = (ViewPager)findViewById(R.id.tab_viewpager);
         if (viewPager != null){

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="110dp"
+        android:layout_height="90dp"
+        app:srcCompat="@drawable/user1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:id="@+id/btnChangeProfilePic"
+        android:layout_width="43dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:drawableStart="@android:drawable/ic_menu_camera"
+        android:layout_marginBottom="22dp"
+        android:layout_alignBottom="@+id/imgLogo"
+        android:layout_toEndOf="@+id/imgLogo" />
+
+    <TextView
+        android:id="@+id/txtViewUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USERNAME"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="140dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/txtFldEditUsername"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:backgroundTint="@color/colorAccent"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/txtViewUsername"
+        android:layout_marginStart="35dp"
+        android:background="@drawable/txtfld_rounded"/>
+
+    <TextView
+        android:id="@+id/txtViewPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="PASSWORD"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/txtFldEditUsername"
+        android:layout_alignEnd="@+id/txtViewUsername" />
+
+    <EditText
+        android:id="@+id/txtFldEditPassword"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:backgroundTint="@color/colorAccent"
+        android:inputType="textPassword"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/txtViewPassword"
+        android:layout_marginStart="35dp" />
+
+    <TextView
+        android:id="@+id/txtViewFirstname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FIRST NAME"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/txtFldEditPassword"
+        android:layout_alignStart="@+id/txtViewPassword"
+        android:layout_marginTop="12dp" />
+
+    <EditText
+        android:id="@+id/txtFldEditFirstname"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_below="@+id/txtViewFirstname"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="35dp" />
+
+    <TextView
+        android:id="@+id/txtViewLastname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LAST NAME"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/txtFldEditFirstname"
+        android:layout_alignEnd="@+id/txtViewFirstname" />
+
+
+    <EditText
+        android:id="@+id/txtFldEditLastname"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_below="@+id/txtViewLastname"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="35dp" />
+
+    <TextView
+        android:id="@+id/txtViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EMAIL ADDRESS"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/txtFldEditLastname"
+        android:layout_alignStart="@+id/txtViewLastname"
+        android:layout_marginTop="11dp" />
+
+
+    <EditText
+        android:id="@+id/txtFldEditEmail"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_red"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_below="@+id/txtViewEmail"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="35dp"/>
+
+    <TextView
+        android:id="@+id/txtViewAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADDRESS"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/txtFldEditEmail"
+        android:layout_alignStart="@+id/txtViewEmail"
+        android:layout_marginTop="13dp" />
+
+    <EditText
+        android:id="@+id/txtFldEditAddress"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_red"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_below="@+id/txtViewAddress"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginBottom="50dp"/>
+
+
+</RelativeLayout>
