@@ -1,157 +1,140 @@
+/*
+ * Copyright (C) 2017
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.user.maevis;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+public class SidebarProfile extends AppCompatActivity
+	implements AppBarLayout.OnOffsetChangedListener {
 
-public class SidebarProfile extends AppCompatActivity {
+	private static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
+	private boolean mIsAvatarShown = true;
 
-    private DrawerLayout drawerLayout;
-    private ViewPager viewPager;
-    static FloatingActionButton btnAddReport;
+	private ImageView mProfileImage;
+	private int mMaxScrollSize;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.sidebar_profile);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.sidebar_profile);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
-        setSupportActionBar(toolbar);
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.materialup_tabs);
+		ViewPager viewPager  = (ViewPager) findViewById(R.id.tab_viewpager);
+		AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
+		mProfileImage = (ImageView) findViewById(R.id.materialup_profile_image);
 
-        final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_action_name);
-        ab.setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.materialup_toolbar);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override public void onClick(View v) {
+				onBackPressed();
+			}
+		});
 
-        ab.setTitle("My Profile");
+		appbarLayout.addOnOffsetChangedListener(this);
+		mMaxScrollSize = appbarLayout.getTotalScrollRange();
 
-//        NavigationView navView = (NavigationView) findViewById(R.id.navigation_view);
-//        if (navView != null){
-//            setupDrawerContent(navView);
-//        }
-
-        btnAddReport = (FloatingActionButton) findViewById(R.id.fab);
-
-
-        btnAddReport.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getApplication(), SelectionPage.class);
-                startActivity(i);
-            }
-        });
-
-        viewPager = (ViewPager)findViewById(R.id.tab_viewpager);
-        if (viewPager != null){
-            setupViewPager(viewPager);
-        }
+//		viewPager.setAdapter(new TabsAdapter(getSupportFragmentManager()));
+		viewPager = (ViewPager)findViewById(R.id.tab_viewpager);
+		if (viewPager != null){
+			setupViewPager(viewPager);
+		}
+		tabLayout.setupWithViewPager(viewPager);
+	}
 
 
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
+	private void setupViewPager(ViewPager viewPager){
+		SidebarProfile.ViewPagerAdapter adapter = new SidebarProfile.ViewPagerAdapter(getSupportFragmentManager());
+		adapter.addFrag(new SidebarProfileTimeline(), "Timeline");
+		adapter.addFrag(new SidebarProfileMedia(), "Photos");
+		adapter.addFrag(new SidebarProfileMedia(), "Videos");
+		viewPager.setAdapter(adapter);
+	}
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+	static class ViewPagerAdapter extends FragmentPagerAdapter {
+		private final List<Fragment> mFragmentList = new ArrayList<>();
+		private final List<String> mFragmentTitleList = new ArrayList<>();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+		public ViewPagerAdapter(FragmentManager manager){
+			super(manager);
+		}
 
-            }
+		@Override
+		public Fragment getItem(int position) {
+			return mFragmentList.get(position);
+		}
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+		@Override
+		public int getCount() {
+			return mFragmentList.size();
+		}
 
-            }
-        });
+		public void addFrag(Fragment fragment, String title){
+			mFragmentList.add(fragment);
+			mFragmentTitleList.add(title);
+		}
 
-    }
-
-    private void setupViewPager(ViewPager viewPager){
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new Tab1_Home(), "Timeline");
-        adapter.addFrag(new Tab4_Search(), "Photos");
-        adapter.addFrag(new Tab4_Search(), "Videos");
-        viewPager.setAdapter(adapter);
-    }
-
-    static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager){
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFrag(Fragment fragment, String title){
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position){
-            return mFragmentTitleList.get(position);
-        }
-    }
+		@Override
+		public CharSequence getPageTitle(int position){
+			return mFragmentTitleList.get(position);
+		}
+	}
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+	public static void start(Context c) {
+		c.startActivity(new Intent(c, SidebarProfile.class));
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+	@Override
+	public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+		if (mMaxScrollSize == 0)
+			mMaxScrollSize = appBarLayout.getTotalScrollRange();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+		int percentage = (Math.abs(i)) * 100 / mMaxScrollSize;
 
-        switch (id){
-            case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    drawerLayout.openDrawer(GravityCompat.START);
-                }
+		if (percentage >= PERCENTAGE_TO_ANIMATE_AVATAR && mIsAvatarShown) {
+			mIsAvatarShown = false;
 
-                return true;
-        }
+			mProfileImage.animate()
+				.scaleY(0).scaleX(0)
+				.setDuration(200)
+				.start();
+		}
 
-        return super.onOptionsItemSelected(item);
-    }
+		if (percentage <= PERCENTAGE_TO_ANIMATE_AVATAR && !mIsAvatarShown) {
+			mIsAvatarShown = true;
+
+			mProfileImage.animate()
+				.scaleY(1).scaleX(1)
+				.start();
+		}
+	}
+
 }

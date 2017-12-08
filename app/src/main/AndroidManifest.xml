@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Login"
+            android:name=".LoadingScreeen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoadingScreeen" />
+
+        <activity
+            android:name=".Login"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".SignUp"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -66,14 +69,6 @@
             android:name=".VerifyReport"
             android:label="Verify Report" />
         <activity
-            android:name=".SidebarHelp"
-            android:label="Help"
-            android:parentActivityName=".Sidebar_HomePage">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
-        </activity>
-        <activity
             android:name=".SidebarSettings"
             android:label="Settings"
             android:parentActivityName=".Sidebar_HomePage">
@@ -82,10 +77,10 @@
                 android:value=".Sidebar_HomePage" />
         </activity>
 
-        <activity
-            android:name=".SidebarProfile"
-            android:label="Profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SidebarHelp"/>
+
+        <activity android:name=".SidebarProfile"/>
+
     </application>
 
 </manifest>
