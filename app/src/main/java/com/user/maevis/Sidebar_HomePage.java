@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.user.maevis.session.SessionManager;
@@ -34,6 +35,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private Fragment fragment = null;
     static FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
     private ViewPager viewPager;
+    TextView profileName;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -75,8 +77,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 startActivity(i);
             }
         });
+        
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        profileName = (TextView) headerView.findViewById(R.id.txtViewProfileName);
+        profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

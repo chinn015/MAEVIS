@@ -21,7 +21,7 @@
 			android:id="@+id/flexible.example.collapsing"
 			android:layout_width="match_parent"
 			android:layout_height="300dp"
-			app:title="@string/flexible_title"
+			app:title="MAEVIS"
 			app:expandedTitleMarginBottom="94dp"
 			app:layout_scrollFlags="scroll|exitUntilCollapsed"
 			app:expandedTitleTextAppearance="@style/CollapsingTextAppearance.Inverse"

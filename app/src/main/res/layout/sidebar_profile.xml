@@ -59,6 +59,7 @@
 				android:layout_height="wrap_content"
 				android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
 				android:text="User"
+				android:id="@id/txtViewProfileName"
 				/>
 			​
 			<TextView
@@ -116,7 +117,7 @@
 		/>
 
 	<de.hdodenhof.circleimageview.CircleImageView
-		android:id="@+id/materialup.profile_image"
+		android:id="@+id/imgViewProfilePic"
 		android:layout_width="96dp"
 		android:layout_height="96dp"
 		android:layout_gravity="center_horizontal"

@@ -14,14 +14,14 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/circleView"
+        android:id="@+id/imgViewProfilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:src="@drawable/user1" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/txtViewProfileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"

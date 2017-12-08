@@ -29,6 +29,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,7 @@ public class SidebarProfile extends AppCompatActivity
 	FloatingActionButton btnAddReport;
 	private ImageView mProfileImage;
 	private int mMaxScrollSize;
+	TextView profileName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,10 @@ public class SidebarProfile extends AppCompatActivity
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.materialup_tabs);
 		ViewPager viewPager  = (ViewPager) findViewById(R.id.tab_viewpager);
 		AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
-		mProfileImage = (ImageView) findViewById(R.id.materialup_profile_image);
+		mProfileImage = (ImageView) findViewById(R.id.imgViewProfilePic);
+
+		profileName=(TextView)findViewById(R.id.txtViewProfileName);
+		profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.materialup_toolbar);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
