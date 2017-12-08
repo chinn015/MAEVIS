@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,7 +38,7 @@ public class SidebarProfile extends AppCompatActivity
 
 	private static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
 	private boolean mIsAvatarShown = true;
-
+	FloatingActionButton btnAddReport;
 	private ImageView mProfileImage;
 	private int mMaxScrollSize;
 
@@ -55,6 +56,14 @@ public class SidebarProfile extends AppCompatActivity
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
 				onBackPressed();
+			}
+		});
+
+		btnAddReport = (FloatingActionButton) findViewById(R.id.btnAddReport);
+		btnAddReport.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent i = new Intent(getApplication(), SelectionPage.class);
+				startActivity(i);
 			}
 		});
 

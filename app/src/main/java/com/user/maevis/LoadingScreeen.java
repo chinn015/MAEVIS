@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 public class LoadingScreeen extends AppCompatActivity {
     private static final String TAG = LoadingScreeen.class.getSimpleName();
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
+    private final int SPLASH_DISPLAY_LENGTH = 5000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
