@@ -1,5 +1,7 @@
 package com.user.maevis;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -15,8 +17,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -70,7 +74,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         btnUserLoc = (FloatingActionButton) findViewById(R.id.btnUserLocation);
         btnAddReport = (FloatingActionButton) findViewById(R.id.fab);
 
-
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(getApplication(), SelectionPage.class);
@@ -86,15 +89,15 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
-                            break;
+                        break;
                     case 1: toolbar.setTitle("Location");
-                            break;
+                        break;
                     case 2: toolbar.setTitle("Notification");
-                            break;
+                        break;
                     case 3: toolbar.setTitle("Search");
-                            break;
+                        break;
                 }
-                
+
                 if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
@@ -220,6 +223,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.sidebar, menu);
+        //getMenuInflater().inflate(R.menu.menu_search, menu);
+
         return true;
     }
 
