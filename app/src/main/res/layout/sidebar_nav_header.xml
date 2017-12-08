@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:textSize="16dp"
-        android:text="Hey"
+        android:text="User"
         android:layout_gravity="center"
         android:textColor="@color/colorAccent"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
