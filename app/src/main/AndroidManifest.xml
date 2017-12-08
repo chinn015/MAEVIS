@@ -63,7 +63,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Sidebar_HomePage"
-            android:label="Home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".VerifyReport"

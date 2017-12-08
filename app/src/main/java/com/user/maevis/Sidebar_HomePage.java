@@ -34,10 +34,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private FragmentManager fragmentManager;
     private Fragment fragment = null;
     static FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
-
-
-    FrameLayout simpleFrameLayout;
-
     private ViewPager viewPager;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
@@ -88,6 +84,17 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                switch (position) {
+                    case 0: toolbar.setTitle("Home");
+                            break;
+                    case 1: toolbar.setTitle("Location");
+                            break;
+                    case 2: toolbar.setTitle("Notification");
+                            break;
+                    case 3: toolbar.setTitle("Search");
+                            break;
+                }
+                
                 if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
