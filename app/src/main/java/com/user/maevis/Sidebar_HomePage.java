@@ -1,7 +1,5 @@
 package com.user.maevis;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -17,13 +15,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.user.maevis.session.SessionManager;
@@ -274,12 +269,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_share :
-                i = new Intent(Sidebar_HomePage.this, SidebarHelp.class);
+                i = new Intent(Sidebar_HomePage.this, SidebarShare.class);
                 startActivity(i);
                 break;
 
             case R.id.nav_logout :
-                i = new Intent(Sidebar_HomePage.this, SidebarHelp.class);
+                i = new Intent(Sidebar_HomePage.this, SidebarShare.class);
                 startActivity(i);
                 break;
 
