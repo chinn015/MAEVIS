@@ -45,6 +45,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
+                Intent i;
+                i = new Intent(context, ReportPage.class);
+                context.startActivity(i);
             }
         });
     }

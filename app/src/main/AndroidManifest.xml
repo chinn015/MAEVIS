@@ -33,10 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Login"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SignUp"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -63,10 +62,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Sidebar_HomePage"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".VerifyReport"
-            android:label="Verify Report" />
+            android:label="Verify Report"
+            android:parentActivityName=".Sidebar_HomePage">
+            <meta-data
+                android:name="android.support.PARENT.ACTIVITY"
+                android:value=".Sidebar_HomePage" />
+        </activity>
         <activity
             android:name=".SidebarSettings"
             android:label="Settings"
@@ -75,12 +79,16 @@
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".Sidebar_HomePage" />
         </activity>
-
-        <activity android:name=".SidebarShare"/>
-
-        <activity android:name=".SidebarProfile"/>
-
-        <activity android:name=".SidebarHelp"/>
+        <activity android:name=".SidebarShare" />
+        <activity android:name=".SidebarProfile" />
+        <activity android:name=".SidebarHelp" />
+        <activity android:name=".ReportPage"
+            android:label="Report"
+            android:parentActivityName=".Sidebar_HomePage">
+            <meta-data
+                android:name="android.support.PARENT.ACTIVITY"
+                android:value=".Sidebar_HomePage" />
+        </activity>
     </application>
 
 </manifest>

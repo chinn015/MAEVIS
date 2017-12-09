@@ -34,8 +34,8 @@ public class Tab3_Notification extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab1_home, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        View rootView = inflater.inflate(R.layout.tab3_notification, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewNotif);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
