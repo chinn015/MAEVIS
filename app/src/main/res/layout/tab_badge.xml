@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <!--<TextView-->
+        <!--android:id="@+id/tab_badge"-->
+        <!--android:layout_width="17dp"-->
+        <!--android:layout_height="17dp"-->
+        <!--android:background="@drawable/badge_background"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:textColor="@color/colorPrimary"-->
+        <!--android:textSize="12sp"-->
+        <!--android:textStyle="bold"-->
+        <!--/>-->
+
+    <TextView
+        android:id="@+id/tab_badge"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/badge_background"
+        android:gravity="center"
+        android:text="9+"
+        android:textColor="@color/colorPrimary"
+        android:textSize="11sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/tab_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginStart="15dp"
+        android:drawableStart="@drawable/icon_notif"
+        android:drawableTint="@color/colorAccent"
+        android:textAppearance="@style/Widget.AppCompat.Light.ActionBar.TabText"
+        android:layout_toEndOf="@+id/tab_badge"/>
+
+</FrameLayout>
