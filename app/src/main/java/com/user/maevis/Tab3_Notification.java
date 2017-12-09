@@ -7,12 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class Tab3_Notification extends Fragment {
     //private static final String URL_DATA="https://simplifiedcoding.net/demos/marvel/";
     private static final String URL_DATA="https://maevis-ecd17.firebaseio.com/Reports";
     private DatabaseReference FirebaseReports;
+    //static int noOfReports;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,15 +43,7 @@ public class Tab3_Notification extends Fragment {
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
-        /*for(int i = 0; i <= 10; i++){
-            ListItem listItem = new ListItem("heading " + i, "Lorem ipsum dummyasdassdassdasdasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-            listItems.add(listItem);
-        }
-
-
-        adapter = new TabHomeAdapter(listItems, this.getActivity());
-        recyclerView.setAdapter(adapter);*/
-
+        countReports();
         loadRecyclerViewData();
 
         return rootView;
@@ -57,16 +53,12 @@ public class Tab3_Notification extends Fragment {
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Iterator<DataSnapshot> reports = dataSnapshot.getChildren().iterator();
-                //while(reports.hasNext()) {
-                //DataSnapshot report = reports.next();
 
                 ListNotif item = new ListNotif(dataSnapshot.child("ReportedBy").getValue().toString() + " reported a " +
                         dataSnapshot.child("ReportType").getValue().toString() + " at " +
                         dataSnapshot.child("Location").getValue().toString(),
                         dataSnapshot.child("DateTime").getValue().toString());
                 listItems.add(item);
-                //}
 
                 adapter = new TabNotifAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);
@@ -94,4 +86,28 @@ public class Tab3_Notification extends Fragment {
         });
 
     }
+
+    public void countReports() {
+        DatabaseReference fbDb = null;
+        if (fbDb == null) {
+            fbDb = FirebaseDatabase.getInstance().getReference();
+        }
+
+        fbDb.child("Reports").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // get total number of reports
+                int noOfReports =  (int) dataSnapshot.getChildrenCount();
+                Sidebar_HomePage.badge.updateTabBadge(noOfReports);
+                Toast.makeText(getActivity(), "no of reports : " + noOfReports, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 }

@@ -36,6 +36,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     static FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
     private ViewPager viewPager;
     TextView profileName;
+    static TabNotifBadge badge;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -150,8 +151,10 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(2).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
         tabLayout.getTabAt(2).setCustomView(R.layout.tab_badge);
-        TabNotifBadge badge1 = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
-        badge1.updateTabBadge(12);
+        badge = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
+        //badge.updateTabBadge(7);
+        //badge.updateTabBadge(Tab3_Notification.noOfReports);
+
 
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(3).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
