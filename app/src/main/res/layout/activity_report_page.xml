@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.user.maevis.VerifyReport">
+    tools:context="com.user.maevis.ReportPage">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -32,10 +32,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="70dp"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="4dp"
+        android:id="@+id/cardView">
 
         <LinearLayout
-            android:id="@+id/verifyReportLayout"
+            android:id="@+id/viewReportLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -75,34 +76,12 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:id="@+id/btnVerifyReport"
-        android:text="Verify"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
-        android:layout_marginEnd="200dp"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="20dp"
-        android:textAllCaps="false"/>
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:id="@+id/btnDeclineReport"
-        android:text="Decline"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="20dp"
-        android:textAllCaps="false"
-        android:backgroundTint="#464646"
-        android:textColor="@color/colorAccent" />
-
-
+    <include
+        layout="@layout/list_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_below="@+id/cardView"
+        android:layout_alignStart="@+id/cardView" />
 
 </RelativeLayout>
