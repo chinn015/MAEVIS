@@ -36,6 +36,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     static FloatingActionButton btnAddReport, btnHomeLoc, btnUserLoc;
     private ViewPager viewPager;
     TextView profileName;
+    static TabNotifBadge badge;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -77,7 +78,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 startActivity(i);
             }
         });
-        
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
@@ -90,13 +91,13 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
-                        break;
+                            break;
                     case 1: toolbar.setTitle("Location");
-                        break;
+                            break;
                     case 2: toolbar.setTitle("Notification");
-                        break;
+                            break;
                     case 3: toolbar.setTitle("Search");
-                        break;
+                            break;
                 }
 
                 if (position == 1) {
@@ -140,6 +141,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     }
 
     private void setupTabIcons() {
+
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(0).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
 
@@ -148,6 +150,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(2).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
+        tabLayout.getTabAt(2).setCustomView(R.layout.tab_badge);
+        badge = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
+        //badge.updateTabBadge(7);
+        //badge.updateTabBadge(Tab3_Notification.noOfReports);
+
 
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(3).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
@@ -157,8 +164,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             if (tab != null) tab.setCustomView(R.layout.custom_tab);
         }
     }
-
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter{
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -189,10 +194,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             //  return mFragmentTitleList.get(position);
             return null;
         }
-
-
     }
-
 
     private void initInstancesDrawer() {
 
