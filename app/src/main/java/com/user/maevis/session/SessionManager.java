@@ -3,6 +3,8 @@ package com.user.maevis.session;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.HashMap;
 
 /**
@@ -15,6 +17,9 @@ public class SessionManager {
     private static SharedPreferences.Editor sessionEditor;
     private static Context sessionContext;
     private static int PRIVATE_MODE = 0;
+
+    private static FirebaseAuth firebaseAuth;
+    //private FirebaseAuth.AuthStateListener authStateListener;
 
     public static final String PREF_NAME ="MAEVIS SESSION";
     public static final String KEY_USERID = "SESSION_USERID";
@@ -32,6 +37,7 @@ public class SessionManager {
         this.sessionContext = context;
         sessionPreferences = sessionContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         sessionEditor = sessionPreferences.edit();
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address) {
@@ -65,7 +71,7 @@ public class SessionManager {
         return sessionPreferences.getBoolean(KEY_STATUS, false);
     }
 
-    public void clearSession() {
+    public static void clearSession() {
         sessionEditor.clear();
         sessionEditor.commit();
     }
@@ -92,5 +98,13 @@ public class SessionManager {
 
     public static String getAddress() {
         return sessionPreferences.getString(KEY_ADDRESS, null);
+    }
+
+    public static FirebaseAuth getFirebaseAuth() {
+        return firebaseAuth;
+    }
+
+    public static void setFirebaseAuth(FirebaseAuth firebaseAuth) {
+        SessionManager.firebaseAuth = firebaseAuth;
     }
 }

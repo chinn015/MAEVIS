@@ -282,7 +282,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_logout :
-                i = new Intent(Sidebar_HomePage.this, SidebarShare.class);
+                SessionManager.clearSession();
+                SessionManager.getFirebaseAuth().signOut();
+                Toast.makeText(Sidebar_HomePage.this, "Logged out.", Toast.LENGTH_LONG).show();
+
+                i = new Intent(Sidebar_HomePage.this, LoadingScreeen.class);
                 startActivity(i);
                 break;
 

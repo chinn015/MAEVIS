@@ -69,7 +69,9 @@ public class Tab1_Home extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
-    RecyclerView.LayoutManager layoutManager;
+    //RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
+
     //private static final String URL_DATA="https://simplifiedcoding.net/demos/marvel/";
     private static final String URL_DATA="https://maevis-ecd17.firebaseio.com/Reports";
     private DatabaseReference FirebaseReports;
@@ -79,7 +81,13 @@ public class Tab1_Home extends Fragment {
         View rootView = inflater.inflate(R.layout.tab1_home, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+        layoutManager = new LinearLayoutManager(this.getActivity());
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
+
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         listItems = new ArrayList<>();
 
@@ -100,20 +108,17 @@ public class Tab1_Home extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseReports.addChildEventListener(new ChildEventListener() {
+        FirebaseReports.orderByChild("DateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Iterator<DataSnapshot> reports = dataSnapshot.getChildren().iterator();
-                //while(reports.hasNext()) {
-                    //DataSnapshot report = reports.next();
+                ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
+                        " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
+                        dataSnapshot.child("Description").getValue().toString(),
+                        dataSnapshot.child("DateTime").getValue().toString(),
+                        dataSnapshot.child("ImageURL").getValue().toString());
 
-                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
-                            " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
-                            dataSnapshot.child("Description").getValue().toString(),
-                            dataSnapshot.child("DateTime").getValue().toString(),
-                            dataSnapshot.child("ImageURL").getValue().toString());
-                    listItems.add(item);
-                //}
+
+                listItems.add(item);
 
                 adapter = new TabHomeAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);
@@ -139,6 +144,48 @@ public class Tab1_Home extends Fragment {
 
             }
         });
+
+        /*FirebaseReports.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //Iterator<DataSnapshot> reports = dataSnapshot.getChildren().iterator();
+                //while(reports.hasNext()) {
+                    //DataSnapshot report = reports.next();
+
+                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
+                            " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
+                            dataSnapshot.child("Description").getValue().toString(),
+                            dataSnapshot.child("DateTime").getValue().toString(),
+                            dataSnapshot.child("ImageURL").getValue().toString());
+                    listItems.add(item);
+
+
+                //}
+
+                adapter = new TabHomeAdapter(listItems, getContext());
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
 
 
         /*final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());

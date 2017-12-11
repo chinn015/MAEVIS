@@ -2,6 +2,7 @@ package com.user.maevis;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -15,6 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,8 +34,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private TextView txtVwCreateAcc;
     private EditText txtFldLoginUsername, txtFldLoginPassword;
     private Button btnLogin, btnSignInFb, btnSignInGoogle;
-    private FirebaseAuth firebaseAuth;
-    //private FirebaseAuth.AuthStateListener authStateListener;
+    //private static FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
     private DatabaseReference firebaseUsers;
     private ProgressDialog progressDialog;
 
@@ -56,7 +60,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         btnSignInGoogle = (Button) findViewById(R.id.btnSignInGoogle);
 
         //firebase references
-        firebaseAuth = FirebaseAuth.getInstance();
+        //firebaseAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
 
         progressDialog = new ProgressDialog(this); //instantiate a progress diaglog
@@ -69,22 +73,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         btnSignInGoogle.setOnClickListener(this);
         txtVwCreateAcc.setOnClickListener(this);
 
-        /*authStateListener = new FirebaseAuth.AuthStateListener() {
+        authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null) {
                     finish();
-                    startActivity(new Intent(Login.this, HomePage.class));
+                    startActivity(new Intent(Login.this, Sidebar_HomePage.class));
                 }
             }
-        };*/
+        };
     }
 
-    /*@Override
+    @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
-    }*/
+        SessionManager.getFirebaseAuth().addAuthStateListener(authStateListener);
+    }
 
     /*public void onSignUp(View v){
         if(v.getId() == R.id.btnSignUp){
@@ -154,11 +158,26 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                         SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress);
                         HashMap<String, String> user = UserSession.getUserSessionDetails();
-                        //Toast.makeText(Login.this, "Logged in as: "+dataSnapshot.child(username).child("Username").getValue().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Logged in as: "+dataSnapshot.child(username).child("Username").getValue().toString(), Toast.LENGTH_SHORT).show();
                         //Toast.makeText(Login.this, "Logged in as: "+user.get(SessionManager.KEY_FIRSTNAME)+" "+user.get(SessionManager.KEY_LASTNAME));
 
-                        finish();
-                        startActivity(new Intent(Login.this, Sidebar_HomePage.class));
+                        progressDialog.setMessage("Logging in.");
+                        progressDialog.show();
+
+                        SessionManager.getFirebaseAuth().signInWithEmailAndPassword(sEmail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(!task.isSuccessful()) {
+                                    Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
+                                }
+                            }
+                        });
+
+                        /*finish();
+                        startActivity(new Intent(Login.this, Sidebar_HomePage.class));*/
 
                         /*firebaseAuth.signInWithEmailAndPassword(userModel.getEmail(), userModel.getPassword())
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
