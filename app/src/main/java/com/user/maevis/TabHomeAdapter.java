@@ -20,6 +20,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
 
     private List<ListItem> listItems;
     private Context context;
+    private static ListItem clickedItem = null;
 
     public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -36,20 +37,30 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
+
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDesc());
-        holder.textViewDateTime.setText(listItem.getDateTime());
+        holder.textViewDateTime.setText(listItem.getDisplayDateTime());
         Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
+                setClickedItem(listItem);
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);
             }
         });
+    }
+
+    public static ListItem getClickedItem() {
+        return clickedItem;
+    }
+
+    public static void setClickedItem(ListItem clickedItem) {
+        TabHomeAdapter.clickedItem = clickedItem;
     }
 
     @Override

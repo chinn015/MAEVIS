@@ -54,10 +54,10 @@ public class Tab3_Notification extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                ListNotif item = new ListNotif(dataSnapshot.child("ReportedBy").getValue().toString() + " reported a " +
-                        dataSnapshot.child("ReportType").getValue().toString() + " at " +
-                        dataSnapshot.child("Location").getValue().toString(),
-                        dataSnapshot.child("DateTime").getValue().toString());
+                ListNotif item = new ListNotif(dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
+                        dataSnapshot.child("reportType").getValue().toString() + " at " +
+                        dataSnapshot.child("location").getValue().toString(),
+                        dataSnapshot.child("dateTime").getValue().toString());
                 listItems.add(item);
 
                 adapter = new TabNotifAdapter(listItems, getContext());

@@ -77,9 +77,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         if(mUserLocation == null){
             user_location = new LatLng(10.316590, 123.897093);
             mMap.addMarker(new MarkerOptions().position(user_location).title("Cebu City"));
+            //mMap.addMarker(new MarkerOptions().position(new LatLng(15.316590, 130.897093)).title("Cebu City"));
         }else{
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).title("My Location"));
+            //mMap.addMarker(new MarkerOptions().position(new LatLng(15.316590, 130.897093)).title("Cebu City"));
         }
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);

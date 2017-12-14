@@ -91,13 +91,13 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
-                            break;
+                        break;
                     case 1: toolbar.setTitle("Location");
-                            break;
+                        break;
                     case 2: toolbar.setTitle("Notification");
-                            break;
+                        break;
                     case 3: toolbar.setTitle("Search");
-                            break;
+                        break;
                 }
 
                 if (position == 1) {
@@ -298,4 +298,3 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     }
 
 }
-
