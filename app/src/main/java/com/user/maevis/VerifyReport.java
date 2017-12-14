@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 public class VerifyReport extends AppCompatActivity implements View.OnClickListener {
@@ -19,6 +22,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     private Button btnVerifyReport;
     private Button btnDeclineReport;
+
+    private DatabaseReference FirebaseReports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +47,32 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         btnVerifyReport = (Button) findViewById(R.id.btnVerifyReport);
         btnDeclineReport = (Button) findViewById(R.id.btnDeclineReport);
+
+        btnVerifyReport.setOnClickListener(this);
+        btnDeclineReport.setOnClickListener(this);
+
+        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
     }
 
     @Override
     public void onClick(View v) {
         if(v==btnVerifyReport) {
+            Toast.makeText(VerifyReport.this, "VERIFY REPORT!!!: ", Toast.LENGTH_SHORT).show();
+            //verifyReport();
             return;
         }
 
         if(v==btnDeclineReport) {
+            Toast.makeText(VerifyReport.this, "DECLINE REPORT!!!: ", Toast.LENGTH_SHORT).show();
             return;
         }
     }
+
+    public void verifyReport() {
+        //while(FirebaseReports ) {
+          Toast.makeText(VerifyReport.this, "Firebase Key: ", Toast.LENGTH_SHORT).show();
+        //}
+    }
+
+
 }

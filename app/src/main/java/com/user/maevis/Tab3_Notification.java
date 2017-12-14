@@ -27,8 +27,7 @@ public class Tab3_Notification extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<ListNotif> listItems;
-    private List<ListItemCompleteData> listItemCompleteData;
+    private List<ListItem> listItems;
     private LinearLayoutManager layoutManager;
 
     //RecyclerView.LayoutManager layoutManager;
@@ -50,7 +49,6 @@ public class Tab3_Notification extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         listItems = new ArrayList<>();
-        listItemCompleteData = new ArrayList<>();
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
@@ -117,7 +115,7 @@ public class Tab3_Notification extends Fragment {
                     locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
                 }
 
-                ListNotif item = new ListNotif(dataSnapshot.getKey().toString(),
+                ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
                         dataSnapshot.child("reportType").getValue().toString() + " at " +
                         dataSnapshot.child("location").getValue().toString(),
@@ -127,28 +125,16 @@ public class Tab3_Notification extends Fragment {
                         dataSnapshot.child("location").getValue().toString(),
                         locationLatitude,
                         locationLongitude,
+                        dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
                         formatDateTime);
 
                 listItems.add(item);
 
-                /*ListItemCompleteData reportCompleteData = new ListItemCompleteData(dataSnapshot.getKey().toString(),
-                        dataSnapshot.child("dateTime").getValue().toString(),
-                        dataSnapshot.child("description").getValue().toString(),
-                        dataSnapshot.child("imageURL").getValue().toString(),
-                        dataSnapshot.child("location").getValue().toString(),
-                        locationLatitude,
-                        locationLongitude,
-                        dataSnapshot.child("reportType").getValue().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
-
-                listItemCompleteData.add(reportCompleteData);*/
-
-                Collections.sort(listItems, new Comparator<ListNotif>() {
+                Collections.sort(listItems, new Comparator<ListItem>() {
                     @Override
-                    public int compare(ListNotif o1, ListNotif o2) {
+                    public int compare(ListItem o1, ListItem o2) {
                         if (o1.getDateTime() == null || o2.getDateTime() == null) {
                             return 0;
                         }
