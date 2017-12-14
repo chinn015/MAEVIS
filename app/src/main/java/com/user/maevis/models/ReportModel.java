@@ -5,52 +5,77 @@ package com.user.maevis.models;
  */
 
 public class ReportModel {
-    private String reportType;
-    private String reportedBy;
-    private String reportDescription;
+
+    private String dateTime;
+    private String description;
+    private String imageURL;
+    private String location;
     private double locationLatitude;
     private double locationLongitude;
-    private String location;
-    private String dateTime;
-    private String imageURL;
+    private String reportType;
+    private String reportedBy;
 
     public ReportModel() {
 
     }
 
-    public ReportModel( String dateTime, String reportDescription, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy, String imageURL) {
+    /*public ReportModel( String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
         this.dateTime = dateTime;
         this.location = location;
-        this.reportDescription = reportDescription;
+        this.description = description;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
         this.imageURL = imageURL;
-    }
+    }*/
 
-    public String getReportType() {
-        return reportType;
-    }
+    //CONSTRUCTOR
 
-    public void setReportType(String reportType) {
+    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
+        this.dateTime = dateTime;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.location = location;
+        this.locationLatitude = locationLatitude;
+        this.locationLongitude = locationLongitude;
         this.reportType = reportType;
-    }
-
-    public String getReportedBy() {
-        return reportedBy;
-    }
-
-    public void setReportedBy(String reportedBy) {
         this.reportedBy = reportedBy;
     }
 
-    public String getReportDescription() {
-        return reportDescription;
+
+    //GETTER SETTERS
+
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setReportDescription(String reportDescription) {
-        this.reportDescription = reportDescription;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public double getLocationLatitude() {
@@ -69,27 +94,19 @@ public class ReportModel {
         this.locationLongitude = locationLongitude;
     }
 
-    public String getLocation() {
-        return location;
+    public String getReportType() {
+        return reportType;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getReportedBy() {
+        return reportedBy;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setReportedBy(String reportedBy) {
+        this.reportedBy = reportedBy;
     }
 }

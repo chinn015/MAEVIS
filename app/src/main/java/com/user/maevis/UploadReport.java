@@ -34,7 +34,10 @@ import com.google.firebase.storage.UploadTask;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class UploadReport extends AppCompatActivity {
@@ -45,7 +48,7 @@ public class UploadReport extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private StorageReference firebaseStorage;
     private Uri reportPhoto;
-    private String imageURL="";
+    private static String imageURL="";
 
     ImageView ivImage;
     VideoView videoView;
@@ -75,7 +78,7 @@ public class UploadReport extends AppCompatActivity {
 
         txtFldLocation = (EditText) findViewById(R.id.txtFldLocation);
         txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
-        txtFldDescription.setHint("Description ["+SelectionPage.getReportType()+"]");
+        txtFldDescription.setHint("Description ["+SelectionPage.getReportType()+SessionManager.getFirstName()+"]");
     }
 
     private void SelectImage(){
@@ -128,7 +131,7 @@ public class UploadReport extends AppCompatActivity {
 
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
-                
+
             }*/
 
             if(requestCode==REQUEST_CAMERA || requestCode==SELECT_FILE) {
@@ -149,7 +152,8 @@ public class UploadReport extends AppCompatActivity {
                         //imageURL.concat(downloadUrl.toString());
                         setImageURL(downloadUrl.toString());
 
-                        Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadReport.this, "Sent! "+getImageURL(), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -165,6 +169,10 @@ public class UploadReport extends AppCompatActivity {
 
     public void setImageURL(String imgURL) {
         this.imageURL = imgURL;
+    }
+
+    public String getImageURL() {
+        return this.imageURL;
     }
 
     @Override
@@ -183,6 +191,10 @@ public class UploadReport extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
             Toast.makeText(UploadReport.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
             uploadReport();
+
+            //finish();
+            //startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
+
             return true;
         }
 
@@ -190,7 +202,10 @@ public class UploadReport extends AppCompatActivity {
     }
 
     public void uploadReport() {
-        String dateTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+        String dateTime = formatter.format(today);
+
         String description = txtFldDescription.getText().toString();
         String location = txtFldLocation.getText().toString();
         double locationLatitude = Tab2_Location.getUserLatitude();
@@ -208,22 +223,13 @@ public class UploadReport extends AppCompatActivity {
             return;
         }
 
-        ReportModel reportModel = new ReportModel(dateTime, description, location, locationLatitude, locationLongitude, reportType, reportedBy, this.imageURL);
-        storeReport(reportModel);
-    }
+        ReportModel reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, reportType, reportedBy);
 
-    public void storeReport(ReportModel reportModel) {
         DatabaseReference newReport = FirebaseReports.push();
-        newReport.child("DateTime").setValue(reportModel.getDateTime());
-        newReport.child("Description").setValue(reportModel.getReportDescription());
-        newReport.child("Location").setValue(reportModel.getLocation());
-        newReport.child("LocationLatitude").setValue(reportModel.getLocationLatitude());
-        newReport.child("LocationLongitude").setValue(reportModel.getLocationLongitude());
-        newReport.child("ReportType").setValue(reportModel.getReportType());
-        newReport.child("ReportedBy").setValue(reportModel.getReportedBy());
-        newReport.child("ImageURL").setValue(reportModel.getImageURL());
+        newReport.setValue(reportModel);
 
-        //Toast.makeText(this, reportModel.getReportType()+" - "+reportModel.getReportedBy(), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(UploadReport.this, "Report uploaded!.", Toast.LENGTH_LONG).show();
+        Toast.makeText(UploadReport.this, "Report sent!.", Toast.LENGTH_LONG).show();
+        finish();
+        startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
     }
 }

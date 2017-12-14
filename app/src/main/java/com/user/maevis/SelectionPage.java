@@ -73,6 +73,7 @@ public class SelectionPage extends Activity implements View.OnClickListener {
         }
 
         Log.v("E_VALUE", "Report Type: "+this.getReportType());
+        finish();
         startActivity(new Intent(SelectionPage.this, UploadReport.class));
     }
 
