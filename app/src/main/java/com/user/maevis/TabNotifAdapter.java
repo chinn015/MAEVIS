@@ -19,6 +19,9 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
 
 
     private List<ListNotif> listItems;
+    private static ListNotif clickedItem = null;
+    /*private List<ListItemCompleteData> listItemsCompleteData;
+    private static ListItemCompleteData clickedItemCompleteData = null;*/
     private Context context;
 
     public TabNotifAdapter(List<ListNotif> listItems, Context context) {
@@ -35,15 +38,21 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListNotif listItem = listItems.get(position);
+        //final ListItemCompleteData listItemCompleteData = listItemsCompleteData.get(position);
 
+        //details to be displayed in Notification Tab
         holder.textViewHead.setText(listItem.getHead());
-        holder.textViewDateTime.setText(listItem.getDateTime());
-//        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
+        holder.textViewDateTime.setText(listItem.getDisplayDateTime());
+
+        /*holder.textViewDesc.setText(listItem.getDesc());
+        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/
 
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
+                setClickedItem(listItem);
+                //setClickedItemCompleteData(listItemCompleteData);
                 Intent i;
                 i = new Intent(context, VerifyReport.class);
                 context.startActivity(i);
@@ -59,20 +68,30 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewHead;
-        public TextView textViewDesc;
+        //public TextView textViewDesc;
         public TextView textViewDateTime;
-//        public ImageView imageViewReport;
+        public ImageView imageViewReport;
         public LinearLayout notifReportLayout;
-
 
         public ViewHolder (View itemView){
             super(itemView);
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHeadNotif);
+            //textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTimeNotif);
-//            imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReportNotif);
+            imageViewReport = (ImageView) itemView.findViewById(R.id.viewNotifImage);
             notifReportLayout = (LinearLayout) itemView.findViewById(R.id.notifReportLayout);
 
         }
+    }
+
+
+    //GETTER SETTER
+    public static ListNotif getClickedItem() {
+        return clickedItem;
+    }
+
+    public static void setClickedItem(ListNotif clickedItem) {
+        TabNotifAdapter.clickedItem = clickedItem;
     }
 }
