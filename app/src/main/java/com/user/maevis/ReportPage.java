@@ -33,7 +33,7 @@ public class ReportPage extends AppCompatActivity {
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
 
         viewReportHead.setText(TabHomeAdapter.getClickedItem().getHead());
-        viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDesc());
+        viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDescription());
         viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDateTime());
         Picasso.with(getApplicationContext()).load(TabHomeAdapter.getClickedItem().getImageURL()).into(viewReportImage);
     }

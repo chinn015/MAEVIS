@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -47,13 +49,84 @@ public class SidebarProfileTimeline extends Fragment {
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
 
-                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
-                            " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
-                            dataSnapshot.child("Description").getValue().toString(),
-                            dataSnapshot.child("DateTime").getValue().toString(),
-                            dataSnapshot.child("ImageURL").getValue().toString());
-                    listItems.add(item);
+                String year  = reportDateTime.substring(0,4);
+                String monthNum = reportDateTime.substring(5,7);
+                String day = reportDateTime.substring(8,10);
+
+                String month="";
+                switch (monthNum) {
+                    case "01": month = "JAN"; break;
+                    case "02": month = "FEB"; break;
+                    case "03": month = "MAR"; break;
+                    case "04": month = "APR"; break;
+                    case "05": month = "MAY"; break;
+                    case "06": month = "JUN"; break;
+                    case "07": month = "JUL"; break;
+                    case "08": month = "AUG"; break;
+                    case "09": month = "SEP"; break;
+                    case "10": month = "OCT"; break;
+                    case "11": month = "NOV"; break;
+                    case "12": month = "DEC"; break;
+                }
+
+                String time = reportDateTime.substring(11, reportDateTime.length());
+                String hour = time.substring(0, 2);
+                int hr = Integer.parseInt(hour);
+                if(hr > 9) {
+                    hour = time.substring(0, 2);
+                } else {
+                    hour = time.substring(1, 2);
+                }
+                String min = time.substring(3,5);
+                String period = time.substring(9, time.length());
+
+                String formatDateTime = hour+":"+min+" "+period+" - "+month+" "+day+" "+year;
+
+                //parse Long to Double for Latitude and Longitude values
+                double locationLatitude = 0.0000;
+                Object locLat = dataSnapshot.child("locationLatitude").getValue();
+                if (locLat instanceof Long) {
+                    locationLatitude = ((Long) locLat).doubleValue();
+                } else {
+                    locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
+                }
+
+                double locationLongitude = 0.0000;
+                Object locLong = dataSnapshot.child("locationLongitude").getValue();
+                if (locLong instanceof Long) {
+                    locationLongitude = ((Long) locLong).doubleValue();
+                } else {
+                    locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
+                }
+
+                ListItem item = new ListItem(dataSnapshot.getKey().toString(),
+                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
+                                dataSnapshot.child("reportType").getValue().toString() + " at " +
+                                dataSnapshot.child("location").getValue().toString(),
+                        dataSnapshot.child("dateTime").getValue().toString(),
+                        dataSnapshot.child("description").getValue().toString(),
+                        dataSnapshot.child("imageURL").getValue().toString(),
+                        dataSnapshot.child("location").getValue().toString(),
+                        locationLatitude,
+                        locationLongitude,
+                        dataSnapshot.child("reportStatus").getValue().toString(),
+                        dataSnapshot.child("reportType").getValue().toString(),
+                        dataSnapshot.child("reportedBy").getValue().toString(),
+                        formatDateTime);
+
+                listItems.add(item);
+
+                Collections.sort(listItems, new Comparator<ListItem>() {
+                    @Override
+                    public int compare(ListItem o1, ListItem o2) {
+                        if (o1.getDateTime() == null || o2.getDateTime() == null) {
+                            return 0;
+                        }
+                        return o1.getDateTime().compareTo(o2.getDateTime());
+                    }
+                });
 
                 adapter = new TabHomeAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);

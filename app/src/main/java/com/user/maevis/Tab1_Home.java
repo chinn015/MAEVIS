@@ -96,20 +96,9 @@ public class Tab1_Home extends Fragment {
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
 
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-
         listItems = new ArrayList<>();
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
-
-        /*for(int i = 0; i <= 10; i++){
-            ListItem listItem = new ListItem("heading " + i, "Lorem ipsum dummyasdassdassdasdasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-            listItems.add(listItem);
-        }
-
-
-        adapter = new TabHomeAdapter(listItems, this.getActivity());
-        recyclerView.setAdapter(adapter);*/
 
         loadRecyclerViewData();
 
@@ -142,10 +131,6 @@ public class Tab1_Home extends Fragment {
                     case "12": month = "DEC"; break;
                 }
 
-                /*String hour = "";
-                String min = "";
-                String period = "";*/
-
                 String time = reportDateTime.substring(11, reportDateTime.length());
                 String hour = time.substring(0, 2);
                 int hr = Integer.parseInt(hour);
@@ -157,26 +142,43 @@ public class Tab1_Home extends Fragment {
                 String min = time.substring(3,5);
                 String period = time.substring(9, time.length());
 
-                /*if(time.length()==10) {
-                    hour = time.substring(0,1);
-                    min = time.substring(2,4);
-                    period = time.substring(8,time.length());
-                } else if(time.length()==11){
-                    hour = time.substring(0,2);
-                    min = time.substring(3,5);
-                    period = time.substring(9, time.length());
-                }*/
-
                 String formatDateTime = hour+":"+min+" "+period+" - "+month+" "+day+" "+year;
 
-                ListItem item = new ListItem(dataSnapshot.child("reportedBy").getValue().toString() +
-                        " reported a " + dataSnapshot.child("reportType").getValue().toString() ,
-                        dataSnapshot.child("description").getValue().toString(),
+                //parse Long to Double for Latitude and Longitude values
+                double locationLatitude = 0.0000;
+                Object locLat = dataSnapshot.child("locationLatitude").getValue();
+                if (locLat instanceof Long) {
+                    locationLatitude = ((Long) locLat).doubleValue();
+                } else {
+                    locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
+                }
+
+                double locationLongitude = 0.0000;
+                Object locLong = dataSnapshot.child("locationLongitude").getValue();
+                if (locLong instanceof Long) {
+                    locationLongitude = ((Long) locLong).doubleValue();
+                } else {
+                    locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
+                }
+
+                ListItem item = new ListItem(dataSnapshot.getKey().toString(),
+                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
+                        dataSnapshot.child("reportType").getValue().toString() + " at " +
+                        dataSnapshot.child("location").getValue().toString(),
                         dataSnapshot.child("dateTime").getValue().toString(),
+                        dataSnapshot.child("description").getValue().toString(),
                         dataSnapshot.child("imageURL").getValue().toString(),
+                        dataSnapshot.child("location").getValue().toString(),
+                        locationLatitude,
+                        locationLongitude,
+                        dataSnapshot.child("reportStatus").getValue().toString(),
+                        dataSnapshot.child("reportType").getValue().toString(),
+                        dataSnapshot.child("reportedBy").getValue().toString(),
                         formatDateTime);
 
-                listItems.add(item);
+                if(item.getReportStatus().equals("Verified")) {
+                    listItems.add(item);
+                }
 
                 Collections.sort(listItems, new Comparator<ListItem>() {
                     @Override

@@ -4,31 +4,124 @@ package com.user.maevis;
 import java.util.Date;
 
 public class ListItem implements Comparable<ListItem> {
-
+    private String reportID;
     private String head;
-    private String desc;
-    private String imageURL;
     private String dateTime;
+    private String description;
+    private String imageURL;
+    private String location;
+    private double locationLatitude;
+    private double locationLongitude;
+    private String reportStatus;
+    private String reportType;
+    private String reportedBy;
     private String displayDateTime; //date sorting shit
 
-    /*public ListItem(String head, String desc, String imageURL) {
-        this.head = head;
-        this.desc = desc;
-        this.imageURL = imageURL;
-    }*/
 
-    public ListItem(String head, String desc, String dateTime, String imageURL) {
+    //CONSTRUCTORS
+
+
+    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
+        this.reportID = reportID;
         this.head = head;
-        this.desc = desc;
         this.dateTime = dateTime;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.location = location;
+        this.locationLatitude = locationLatitude;
+        this.locationLongitude = locationLongitude;
+        this.reportStatus = reportStatus;
+        this.reportType = reportType;
+        this.reportedBy = reportedBy;
+        this.displayDateTime = displayDateTime;
+    }
+
+    //GETTER SETTER
+    public String getReportID() {
+        return reportID;
+    }
+
+    public void setReportID(String reportID) {
+        this.reportID = reportID;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
 
-    public ListItem(String head, String desc, String dateTime, String imageURL, String displayDateTime) {
-        this.head = head;
-        this.desc = desc;
-        this.dateTime = dateTime;
-        this.imageURL = imageURL;
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public double getLocationLatitude() {
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(double locationLatitude) {
+        this.locationLatitude = locationLatitude;
+    }
+
+    public double getLocationLongitude() {
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(double locationLongitude) {
+        this.locationLongitude = locationLongitude;
+    }
+
+    public String getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(String reportStatus) {
+        this.reportStatus = reportStatus;
+    }
+
+    public String getReportType() {
+        return reportType;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
+    }
+
+    public String getReportedBy() {
+        return reportedBy;
+    }
+
+    public void setReportedBy(String reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public String getDisplayDateTime() {
+        return displayDateTime;
+    }
+
+    public void setDisplayDateTime(String displayDateTime) {
         this.displayDateTime = displayDateTime;
     }
 
@@ -36,26 +129,8 @@ public class ListItem implements Comparable<ListItem> {
         return head;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public String getDateTime() {
-        return dateTime;
-    }
-
-
-    //date sorting shit
-    public String getDisplayDateTime() {
-        return displayDateTime;
-    }
-
-    public void setDisplayDateTime(String datetime) {
-        this.displayDateTime = datetime;
+    public void setHead(String head) {
+        this.head = head;
     }
 
     public int compareTo(ListItem li) {

@@ -18,13 +18,11 @@ import java.util.List;
 public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHolder> {
 
 
-    private List<ListNotif> listItems;
-    private static ListNotif clickedItem = null;
-    /*private List<ListItemCompleteData> listItemsCompleteData;
-    private static ListItemCompleteData clickedItemCompleteData = null;*/
+    private List<ListItem> listItems;
+    private static ListItem clickedItem = null;
     private Context context;
 
-    public TabNotifAdapter(List<ListNotif> listItems, Context context) {
+    public TabNotifAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
     }
@@ -37,8 +35,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final ListNotif listItem = listItems.get(position);
-        //final ListItemCompleteData listItemCompleteData = listItemsCompleteData.get(position);
+        final ListItem listItem = listItems.get(position);
 
         //details to be displayed in Notification Tab
         holder.textViewHead.setText(listItem.getHead());
@@ -52,7 +49,6 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
                 setClickedItem(listItem);
-                //setClickedItemCompleteData(listItemCompleteData);
                 Intent i;
                 i = new Intent(context, VerifyReport.class);
                 context.startActivity(i);
@@ -87,11 +83,11 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
 
 
     //GETTER SETTER
-    public static ListNotif getClickedItem() {
+    public static ListItem getClickedItem() {
         return clickedItem;
     }
 
-    public static void setClickedItem(ListNotif clickedItem) {
+    public static void setClickedItem(ListItem clickedItem) {
         TabNotifAdapter.clickedItem = clickedItem;
     }
 }

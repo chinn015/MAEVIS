@@ -38,7 +38,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         final ListItem listItem = listItems.get(position);
 
         holder.textViewHead.setText(listItem.getHead());
-        holder.textViewDesc.setText(listItem.getDesc());
+        holder.textViewDesc.setText(listItem.getDescription());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
         Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
 
