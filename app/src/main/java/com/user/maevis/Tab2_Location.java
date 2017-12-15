@@ -38,6 +38,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.user.maevis.models.FirebaseDatabaseManager;
 
 import android.widget.Toast;
 
@@ -66,12 +70,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
                     Toast.LENGTH_LONG).show();
         }
 
-
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         SupportMapFragment fragment = new SupportMapFragment();
         transaction.add(R.id.map, fragment);
         transaction.commit();
+
 
         fragment.getMapAsync(this);
         return view;
@@ -90,9 +94,17 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 150, 150, false);
 
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.3171367, 123.9125538)).visible(true).alpha(0.8f).title("Static - Location3").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.90)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
+        for(int x=0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
+            ListItem verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
+            double vLatitude = verifiedReport.getLocationLatitude();
+            double vLongitude = verifiedReport.getLocationLongitude();
+            String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
+            mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
+        }
 
         if(mUserLocation == null){
             user_location = new LatLng(10.316590, 123.897093);
@@ -106,7 +118,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Current Location",
+                Toast.makeText(getActivity(), "LatLng: "+mUserLocation.getLatitude()+" "+mUserLocation.getLongitude(),
                         Toast.LENGTH_LONG).show();
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
