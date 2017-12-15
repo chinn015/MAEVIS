@@ -76,6 +76,10 @@ public class SessionManager {
         sessionEditor.commit();
     }
 
+    public static String getUserID() {
+        return sessionPreferences.getString(KEY_USERID, null);
+    }
+
     public static String getUsername() {
         return sessionPreferences.getString(KEY_USERNAME, null);
     }

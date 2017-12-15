@@ -211,7 +211,7 @@ public class UploadReport extends AppCompatActivity {
         double locationLatitude = Tab2_Location.getUserLatitude();
         double locationLongitude = Tab2_Location.getUserLongitude();
         String reportType = SelectionPage.getReportType();
-        String reportedBy = SessionManager.getUsername();
+        String reportedBy = SessionManager.getUserID();
 
         if(TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
@@ -223,7 +223,7 @@ public class UploadReport extends AppCompatActivity {
             return;
         }
 
-        ReportModel reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, reportType, reportedBy);
+        ReportModel reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, "Pending", reportType, reportedBy);
 
         DatabaseReference newReport = FirebaseReports.push();
         newReport.setValue(reportModel);

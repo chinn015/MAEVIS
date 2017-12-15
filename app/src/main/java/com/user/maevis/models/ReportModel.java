@@ -12,6 +12,7 @@ public class ReportModel {
     private String location;
     private double locationLatitude;
     private double locationLongitude;
+    private String reportStatus;
     private String reportType;
     private String reportedBy;
 
@@ -19,33 +20,21 @@ public class ReportModel {
 
     }
 
-    /*public ReportModel( String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
-        this.dateTime = dateTime;
-        this.location = location;
-        this.description = description;
-        this.locationLatitude = locationLatitude;
-        this.locationLongitude = locationLongitude;
-        this.reportType = reportType;
-        this.reportedBy = reportedBy;
-        this.imageURL = imageURL;
-    }*/
-
     //CONSTRUCTOR
-
-    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportType, String reportedBy) {
+    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportStatus, String reportType, String reportedBy) {
         this.dateTime = dateTime;
         this.description = description;
         this.imageURL = imageURL;
         this.location = location;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
+        this.reportStatus = reportStatus;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
     }
 
 
     //GETTER SETTERS
-
     public String getDateTime() {
         return dateTime;
     }
@@ -92,6 +81,14 @@ public class ReportModel {
 
     public void setLocationLongitude(double locationLongitude) {
         this.locationLongitude = locationLongitude;
+    }
+
+    public String getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(String reportStatus) {
+        this.reportStatus = reportStatus;
     }
 
     public String getReportType() {
