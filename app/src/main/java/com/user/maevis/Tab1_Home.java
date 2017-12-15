@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -30,60 +31,14 @@ import java.util.List;
 
 
 public class Tab1_Home extends Fragment {
-    /*
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayAdapter adapter;
-    private DatabaseReference FirebaseReports;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mRecyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewReports);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
-
-        FirebaseReports.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator<DataSnapshot> reports = dataSnapshot.getChildren().iterator();
-                Toast.makeText(getActivity(), "Total Number of Users: "+dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
-                while(reports.hasNext()) {
-                    DataSnapshot report = reports.next();
-                    ArrayList<HashMap<String, String>> allReports = new ArrayList<HashMap<String, String>>();
-                    HashMap<String, String> reportItem = new HashMap<String, String>();
-                    reportItem.put("DateTime", report.child("DateTime").getValue().toString());
-                    reportItem.put("Description", report.child("Description").getValue().toString());
-                    reportItem.put("Location", report.child("Location").getValue().toString());
-                    reportItem.put("LocationLatitude", report.child("LocationLatitude").getValue().toString());
-                    reportItem.put("LocationLongitude", report.child("LocationLongitude").getValue().toString());
-                    reportItem.put("ReportType", report.child("ReportType").getValue().toString());
-                    reportItem.put("ReportedBy", report.child("ReportedBy").getValue().toString());
-                    allReports.add(reportItem);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }*/
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
-    //RecyclerView.LayoutManager layoutManager;
     private LinearLayoutManager layoutManager;
 
-    //private static final String URL_DATA="https://simplifiedcoding.net/demos/marvel/";
-    private static final String URL_DATA="https://maevis-ecd17.firebaseio.com/Reports";
     private DatabaseReference FirebaseReports;
+    private DatabaseReference FirebaseUsers;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +53,10 @@ public class Tab1_Home extends Fragment {
 
         listItems = new ArrayList<>();
 
+        FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+
+
 
         loadRecyclerViewData();
 
@@ -106,7 +64,7 @@ public class Tab1_Home extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseReports.orderByChild("DateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
@@ -161,7 +119,34 @@ public class Tab1_Home extends Fragment {
                     locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
                 }
 
+                String reportedByFN="FirstName";
+                String reportedByLN="LastName";
+
+                for(int x=0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
+                    UserItem userItem = FirebaseDatabaseManager.getUserItems().get(x);
+
+                    if(userItem.getUserID().equals(dataSnapshot.child("reportedBy").getValue().toString())) {
+                        reportedByFN = userItem.getFirstName();
+                        reportedByLN = userItem.getLastName();
+                    }
+                }
+
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
+                        reportedByFN+" "+reportedByLN+" reported a " +
+                                dataSnapshot.child("reportType").getValue().toString() + " at " +
+                                dataSnapshot.child("location").getValue().toString(),
+                        dataSnapshot.child("dateTime").getValue().toString(),
+                        dataSnapshot.child("description").getValue().toString(),
+                        dataSnapshot.child("imageURL").getValue().toString(),
+                        dataSnapshot.child("location").getValue().toString(),
+                        locationLatitude,
+                        locationLongitude,
+                        dataSnapshot.child("reportStatus").getValue().toString(),
+                        dataSnapshot.child("reportType").getValue().toString(),
+                        dataSnapshot.child("reportedBy").getValue().toString(),
+                        formatDateTime);
+
+                /*ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
                         dataSnapshot.child("reportType").getValue().toString() + " at " +
                         dataSnapshot.child("location").getValue().toString(),
@@ -174,13 +159,25 @@ public class Tab1_Home extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime);*/
 
                 if(item.getReportStatus().equals("Verified")) {
                     listItems.add(item);
                 }
 
                 Collections.sort(listItems, new Comparator<ListItem>() {
+                    @Override
+                    public int compare(ListItem o1, ListItem o2) {
+                        if (o1.getDateTime() == null || o2.getDateTime() == null) {
+                            return 0;
+                        }
+                        return o1.getDateTime().compareTo(o2.getDateTime());
+                    }
+                });
+
+
+                FirebaseDatabaseManager.getListItems().add(item);
+                Collections.sort(FirebaseDatabaseManager.getListItems(), new Comparator<ListItem>() {
                     @Override
                     public int compare(ListItem o1, ListItem o2) {
                         if (o1.getDateTime() == null || o2.getDateTime() == null) {

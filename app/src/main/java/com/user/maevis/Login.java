@@ -20,14 +20,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -143,8 +147,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
 
         firebaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
