@@ -86,13 +86,13 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         final LatLng user_location;
         BitmapDrawable bitmapReport, bitmapUser, bitmapHome;
 
-        bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_accident_marker);
+        bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_fire);
         Bitmap report = bitmapReport.getBitmap();
         Bitmap reportMarker = Bitmap.createScaledBitmap(report, 150, 150, false);
 
-        bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_user_marker);
+        bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
-        Bitmap userMarker = Bitmap.createScaledBitmap(user, 150, 150, false);
+        Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
