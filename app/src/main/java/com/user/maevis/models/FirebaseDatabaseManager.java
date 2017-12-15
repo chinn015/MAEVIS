@@ -17,6 +17,7 @@ public class FirebaseDatabaseManager {
     public static final DatabaseReference FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
     private static List<ListItem> listItems;
+    private static List<ListItem> verifiedReports;
     private static List<UserItem> userItems;
 
     public FirebaseDatabaseManager() {
@@ -25,6 +26,7 @@ public class FirebaseDatabaseManager {
 
     public static void initializeFirebaseDatabaseManager() {
         listItems = new ArrayList<>(); //List of all Reports
+        verifiedReports = new ArrayList<>(); //List of all verified Reports
         userItems = new ArrayList<>(); //List of all Users
     }
 
@@ -45,9 +47,15 @@ public class FirebaseDatabaseManager {
         FirebaseDatabaseManager.userItems = userItems;
     }
 
+    public static List<ListItem> getVerifiedReports() {
+        return verifiedReports;
+    }
 
+    public static void setVerifiedReports(List<ListItem> verifiedReports) {
+        FirebaseDatabaseManager.verifiedReports = verifiedReports;
+    }
 
-    //FUNCTIONS THAT CAN BE USED GLOBALLY
+//FUNCTIONS THAT CAN BE USED GLOBALLY
 
     //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
     public static String formatDate(String dateToFormat) {
@@ -89,11 +97,11 @@ public class FirebaseDatabaseManager {
 
     //convert object value to double for LocationLatitude and LocationLongitude
     public static double parseLongToDouble(Object valueToParse) {
-        double doubleValue=0.00;
+        double doubleValue;
 
-        if (valueToParse instanceof Long) {
-            doubleValue = ((Long) valueToParse).doubleValue();
-        }
+        String str = valueToParse.toString();
+        //doubleValue = Double.valueOf(str).doubleValue();
+        doubleValue = Double.parseDouble(str);
 
         return doubleValue;
     }
