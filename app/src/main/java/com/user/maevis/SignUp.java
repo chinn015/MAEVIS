@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.user.maevis.models.UserModel;
@@ -154,7 +155,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         }
 
         //final UserModel userModel = new UserModel(email, username, password);
-        final UserModel userModel = new UserModel(username, password, email, firstName, lastName, birthdate, address);
+        //final UserModel userModel = new UserModel(username, password, email, firstName, lastName, birthdate, address);
+        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, "Regular User", username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -164,10 +166,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
-
                         if(task.isSuccessful()) {
+                            FirebaseUser user = task.getResult().getUser();
+                            DatabaseReference newUser = FirebaseUsers.child(user.getUid());
+                            newUser.setValue(userModel);
+
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            storeData(userModel);
+
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));
                         } else {
@@ -175,17 +180,5 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         }
                     }
                 });
-    }
-
-    public void storeData(UserModel userModel) {
-        DatabaseReference newUser = FirebaseUsers.child(userModel.getUsername());
-        newUser.setValue(true);
-        newUser.child("Username").setValue(userModel.getUsername());
-        newUser.child("Password").setValue(userModel.getPassword());
-        newUser.child("Email Address").setValue(userModel.getEmail());
-        newUser.child("First Name").setValue(userModel.getFirstName());
-        newUser.child("Last Name").setValue(userModel.getLastName());
-        newUser.child("Birthdate").setValue(userModel.getBirthdate());
-        newUser.child("Address").setValue(userModel.getAddress());
     }
 }
