@@ -4,7 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_gravity="center"
 	android:layout_width="match_parent"
-	android:layout_height="200dp"
+	android:layout_height="220dp"
 	android:layout_marginRight="8dp"
 	android:layout_marginLeft="8dp"
 	android:layout_marginBottom="4dp"
@@ -12,16 +12,50 @@
 	app:cardCornerRadius="4dp"
 	>
 
-	<TextView
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:fontFamily="sans-serif-light"
-		android:padding="8dp"
-		android:text="@string/lorem"
-		android:lineSpacingExtra="4dp"
-		android:ellipsize="end"
-		/>
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="5dp"
+		android:id="@+id/photoReportLayout">
+
+		<ImageView
+			android:id="@+id/photoReport"
+			android:layout_width="match_parent"
+			android:layout_height="200dp"
+			/>
+
+	</LinearLayout>
+
 </android.support.v7.widget.CardView>
+
+	<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<android.support.v7.widget.CardView-->
+	<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+	<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+	<!--android:layout_gravity="center"-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="200dp"-->
+	<!--android:layout_marginRight="8dp"-->
+	<!--android:layout_marginLeft="8dp"-->
+	<!--android:layout_marginBottom="4dp"-->
+	<!--android:layout_marginTop="4dp"-->
+	<!--app:cardCornerRadius="4dp"-->
+	<!--&gt;-->
+
+	<!--&lt;!&ndash;<TextView&ndash;&gt;-->
+		<!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:fontFamily="sans-serif-light"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:padding="8dp"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:text="@string/lorem"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:lineSpacingExtra="4dp"&ndash;&gt;-->
+		<!--&lt;!&ndash;android:ellipsize="end"&ndash;&gt;-->
+		<!--&lt;!&ndash;/>&ndash;&gt;-->
+
+<!--</android.support.v7.widget.CardView>-->
+
+
 
 
 
