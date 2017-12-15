@@ -1,7 +1,11 @@
 package com.user.maevis;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -153,5 +157,4 @@ public class Tab3_Notification extends Fragment {
         });
 
     }
-
 }
