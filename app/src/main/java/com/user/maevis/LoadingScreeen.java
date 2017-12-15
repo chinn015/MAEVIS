@@ -85,55 +85,14 @@ public class LoadingScreeen extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
 
-                String year  = reportDateTime.substring(0,4);
-                String monthNum = reportDateTime.substring(5,7);
-                String day = reportDateTime.substring(8,10);
-
-                String month="";
-                switch (monthNum) {
-                    case "01": month = "JAN"; break;
-                    case "02": month = "FEB"; break;
-                    case "03": month = "MAR"; break;
-                    case "04": month = "APR"; break;
-                    case "05": month = "MAY"; break;
-                    case "06": month = "JUN"; break;
-                    case "07": month = "JUL"; break;
-                    case "08": month = "AUG"; break;
-                    case "09": month = "SEP"; break;
-                    case "10": month = "OCT"; break;
-                    case "11": month = "NOV"; break;
-                    case "12": month = "DEC"; break;
-                }
-
-                String time = reportDateTime.substring(11, reportDateTime.length());
-                String hour = time.substring(0, 2);
-                int hr = Integer.parseInt(hour);
-                if(hr > 9) {
-                    hour = time.substring(0, 2);
-                } else {
-                    hour = time.substring(1, 2);
-                }
-                String min = time.substring(3,5);
-                String period = time.substring(9, time.length());
-
-                String formatDateTime = hour+":"+min+" "+period+" - "+month+" "+day+" "+year;
+                //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
+                String formatDateTime = FirebaseDatabaseManager.formatDate(reportDateTime);
 
                 //parse Long to Double for Latitude and Longitude values
-                double locationLatitude = 0.0000;
-                Object locLat = dataSnapshot.child("locationLatitude").getValue();
-                if (locLat instanceof Long) {
-                    locationLatitude = ((Long) locLat).doubleValue();
-                } else {
-                    locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
-                }
-
+                double locationLatitude = 0.000;
                 double locationLongitude = 0.0000;
-                Object locLong = dataSnapshot.child("locationLongitude").getValue();
-                if (locLong instanceof Long) {
-                    locationLongitude = ((Long) locLong).doubleValue();
-                } else {
-                    locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
-                }
+                locationLatitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLatitude").getValue());
+                locationLongitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLongitude").getValue());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +

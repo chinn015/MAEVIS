@@ -56,83 +56,31 @@ public class Tab1_Home extends Fragment {
         FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
-
-
         loadRecyclerViewData();
 
         return rootView;
     }
 
     private void loadRecyclerViewData() {
-        FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
 
-                String year  = reportDateTime.substring(0,4);
-                String monthNum = reportDateTime.substring(5,7);
-                String day = reportDateTime.substring(8,10);
-
-                String month="";
-                switch (monthNum) {
-                    case "01": month = "JAN"; break;
-                    case "02": month = "FEB"; break;
-                    case "03": month = "MAR"; break;
-                    case "04": month = "APR"; break;
-                    case "05": month = "MAY"; break;
-                    case "06": month = "JUN"; break;
-                    case "07": month = "JUL"; break;
-                    case "08": month = "AUG"; break;
-                    case "09": month = "SEP"; break;
-                    case "10": month = "OCT"; break;
-                    case "11": month = "NOV"; break;
-                    case "12": month = "DEC"; break;
-                }
-
-                String time = reportDateTime.substring(11, reportDateTime.length());
-                String hour = time.substring(0, 2);
-                int hr = Integer.parseInt(hour);
-                if(hr > 9) {
-                    hour = time.substring(0, 2);
-                } else {
-                    hour = time.substring(1, 2);
-                }
-                String min = time.substring(3,5);
-                String period = time.substring(9, time.length());
-
-                String formatDateTime = hour+":"+min+" "+period+" - "+month+" "+day+" "+year;
+                //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
+                String formatDateTime = FirebaseDatabaseManager.formatDate(reportDateTime);
 
                 //parse Long to Double for Latitude and Longitude values
-                double locationLatitude = 0.0000;
-                Object locLat = dataSnapshot.child("locationLatitude").getValue();
-                if (locLat instanceof Long) {
-                    locationLatitude = ((Long) locLat).doubleValue();
-                } else {
-                    locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
-                }
-
+                double locationLatitude = 0.000;
                 double locationLongitude = 0.0000;
-                Object locLong = dataSnapshot.child("locationLongitude").getValue();
-                if (locLong instanceof Long) {
-                    locationLongitude = ((Long) locLong).doubleValue();
-                } else {
-                    locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
-                }
+                locationLatitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLatitude").getValue());
+                locationLongitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLongitude").getValue());
 
-                String reportedByFN="FirstName";
-                String reportedByLN="LastName";
-
-                for(int x=0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
-                    UserItem userItem = FirebaseDatabaseManager.getUserItems().get(x);
-
-                    if(userItem.getUserID().equals(dataSnapshot.child("reportedBy").getValue().toString())) {
-                        reportedByFN = userItem.getFirstName();
-                        reportedByLN = userItem.getLastName();
-                    }
-                }
+                //retrieve full name
+                String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-                        reportedByFN+" "+reportedByLN+" reported a " +
+                        fullName+" reported a " +
                                 dataSnapshot.child("reportType").getValue().toString() + " at " +
                                 dataSnapshot.child("location").getValue().toString(),
                         dataSnapshot.child("dateTime").getValue().toString(),
@@ -146,38 +94,12 @@ public class Tab1_Home extends Fragment {
                         dataSnapshot.child("reportedBy").getValue().toString(),
                         formatDateTime);
 
-                /*ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
-                        dataSnapshot.child("reportType").getValue().toString() + " at " +
-                        dataSnapshot.child("location").getValue().toString(),
-                        dataSnapshot.child("dateTime").getValue().toString(),
-                        dataSnapshot.child("description").getValue().toString(),
-                        dataSnapshot.child("imageURL").getValue().toString(),
-                        dataSnapshot.child("location").getValue().toString(),
-                        locationLatitude,
-                        locationLongitude,
-                        dataSnapshot.child("reportStatus").getValue().toString(),
-                        dataSnapshot.child("reportType").getValue().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);*/
-
+                //add all Verified reports to a List to be displayed
                 if(item.getReportStatus().equals("Verified")) {
                     listItems.add(item);
                 }
 
                 Collections.sort(listItems, new Comparator<ListItem>() {
-                    @Override
-                    public int compare(ListItem o1, ListItem o2) {
-                        if (o1.getDateTime() == null || o2.getDateTime() == null) {
-                            return 0;
-                        }
-                        return o1.getDateTime().compareTo(o2.getDateTime());
-                    }
-                });
-
-
-                FirebaseDatabaseManager.getListItems().add(item);
-                Collections.sort(FirebaseDatabaseManager.getListItems(), new Comparator<ListItem>() {
                     @Override
                     public int compare(ListItem o1, ListItem o2) {
                         if (o1.getDateTime() == null || o2.getDateTime() == null) {
