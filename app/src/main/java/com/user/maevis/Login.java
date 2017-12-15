@@ -29,6 +29,7 @@ import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
     private TextView txtVwCreateAcc;
@@ -143,70 +144,49 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+
+
         firebaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(username).exists()) {
-                    if(dataSnapshot.child(username).child("Password").getValue().toString().equals(password)) {
-                        String sUserID = dataSnapshot.getKey().toString();
-                        String sUsername = dataSnapshot.child(username).child("Username").getValue().toString();
-                        String sEmail = dataSnapshot.child(username).child("Email Address").getValue().toString();
-                        String sFirstName = dataSnapshot.child(username).child("First Name").getValue().toString();
-                        String sLastName = dataSnapshot.child(username).child("Last Name").getValue().toString();
-                        String sBirthdate = dataSnapshot.child(username).child("Birthdate").getValue().toString();
-                        String sAddress = dataSnapshot.child(username).child("Address").getValue().toString();
+                Iterator<DataSnapshot> users = dataSnapshot.getChildren().iterator();
+
+                while(users.hasNext()) {
+                    DataSnapshot user = users.next();
+
+                    if(user.child("username").getValue().toString().equals(username) &&
+                       user.child("password").getValue().toString().equals(password)) {
+                        String sUserID = user.getKey().toString();
+                        String sUsername = user.child("username").getValue().toString();
+                        String sEmail = user.child("email").getValue().toString();
+                        String sFirstName = user.child("firstName").getValue().toString();
+                        String sLastName = user.child("lastName").getValue().toString();
+                        String sBirthdate = user.child("birthdate").getValue().toString();
+                        String sAddress = user.child("address").getValue().toString();
 
                         SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress);
-                        HashMap<String, String> user = UserSession.getUserSessionDetails();
-                        Toast.makeText(Login.this, "Logged in as: "+dataSnapshot.child(username).child("Username").getValue().toString(), Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(Login.this, "Logged in as: "+user.get(SessionManager.KEY_FIRSTNAME)+" "+user.get(SessionManager.KEY_LASTNAME));
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
 
-                        SessionManager.getFirebaseAuth().signInWithEmailAndPassword(sEmail, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        SessionManager.getFirebaseAuth().signInWithEmailAndPassword(SessionManager.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(!task.isSuccessful()) {
                                     Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "Logged in as: "+SessionManager.getFirstName()+" "+SessionManager.getLastName(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
                                     progressDialog.dismiss();
                                 }
                             }
                         });
 
-                        /*finish();
-                        startActivity(new Intent(Login.this, Sidebar_HomePage.class));*/
-
-                        /*firebaseAuth.signInWithEmailAndPassword(userModel.getEmail(), userModel.getPassword())
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if(!task.isSuccessful()){
-                                            Toast.makeText(Login.this, "Login failed.", Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });*/
-                    } else {
-                        Toast.makeText(Login.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if(!users.hasNext()) {
+                        Toast.makeText(Login.this, "Account not found. Please double-check and try again.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(Login.this, "Invalid Username.", Toast.LENGTH_SHORT).show();
                 }
-
-                /*Iterator<DataSnapshot> users = dataSnapshot.getChildren().iterator();
-                Toast.makeText(Login.this, "Total Number of Users: "+dataSnapshot.getChildrenCount(), Toast.LENGTH_SHORT).show();
-                while(users.hasNext()) {
-                    DataSnapshot user = users.next();
-
-                    if(user.child("Username").getValue().toString().equals(username) &&
-                            user.child("Password").getValue().toString().equals(password)) {
-                        userModel.setUsername(user.child("Username").getValue().toString());
-                        userModel.setPassword(user.child("Password").getValue().toString());
-                    }
-
-                }*/
             }
 
             @Override

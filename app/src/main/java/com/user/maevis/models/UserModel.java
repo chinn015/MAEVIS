@@ -6,24 +6,27 @@ package com.user.maevis.models;
 
 public class UserModel {
 
-    private String userID;
-    private String username;
-    private String password;
+    //private String userID;
+    private String address;
+    private String birthdate;
     private String email;
     private String firstName;
     private String lastName;
-    private String birthdate;
-    private String address;
+    private String password;
+    private String userType;
+    private String username;
 
     //Constructor
-    public UserModel(String username, String password, String email, String firstName, String lastName, String birthdate, String address) {
-        this.username = username;
-        this.password = password;
+
+    public UserModel(String address, String birthdate, String email, String firstName, String lastName, String password, String userType, String username) {
+        this.address = address;
+        this.birthdate = birthdate;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthdate = birthdate;
-        this.address = address;
+        this.password = password;
+        this.userType = userType;
+        this.username = username;
     }
 
     public UserModel(String email, String username, String password) {
@@ -37,13 +40,6 @@ public class UserModel {
     }
 
     //Getter Setters
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
 
     public String getUsername() {
         return username;
