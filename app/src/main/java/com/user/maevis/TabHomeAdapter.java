@@ -37,7 +37,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
-
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDesc());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());

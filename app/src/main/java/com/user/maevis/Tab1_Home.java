@@ -120,7 +120,6 @@ public class Tab1_Home extends Fragment {
         FirebaseReports.orderByChild("DateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
 
                 String year  = reportDateTime.substring(0,4);
