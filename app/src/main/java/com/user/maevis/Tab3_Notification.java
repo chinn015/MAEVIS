@@ -57,7 +57,6 @@ public class Tab3_Notification extends Fragment {
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
-        countReports();
         loadRecyclerViewData();
 
         return rootView;
@@ -125,29 +124,6 @@ public class Tab3_Notification extends Fragment {
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    public void countReports() {
-        DatabaseReference fbDb = null;
-        if (fbDb == null) {
-            fbDb = FirebaseDatabase.getInstance().getReference();
-        }
-
-        fbDb.child("Reports").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // get total number of reports
-                int noOfReports =  (int) dataSnapshot.getChildrenCount();
-                Sidebar_HomePage.badge.updateTabBadge(noOfReports);
-                Toast.makeText(getActivity(), "no of reports : " + noOfReports, Toast.LENGTH_LONG).show();
             }
 
             @Override

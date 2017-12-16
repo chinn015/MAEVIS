@@ -25,6 +25,9 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
@@ -41,6 +44,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private ViewPager viewPager;
     TextView profileName;
     static TabNotifBadge badge;
+    static int noOfReports;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -72,7 +76,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         btnHomeLoc = (FloatingActionButton) findViewById(R.id.btnHomeLocation);
         btnUserLoc = (FloatingActionButton) findViewById(R.id.btnUserLocation);
-        btnAddReport = (FloatingActionButton) findViewById(R.id.fab);
+        btnAddReport = (FloatingActionButton) findViewById(R.id.btnAddReport);
 
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -153,6 +157,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         badge = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
         //badge.updateTabBadge(7);
         //badge.updateTabBadge(Tab3_Notification.noOfReports);
+        countReports();
 
 
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
@@ -294,6 +299,30 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void countReports() {
+        DatabaseReference dataRef = null;
+        if (dataRef == null) {
+            dataRef = FirebaseDatabase.getInstance().getReference();
+        }
+
+        dataRef.child("Reports").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // get total number of reports
+                noOfReports =  (int) dataSnapshot.getChildrenCount();
+                Sidebar_HomePage.badge.updateTabBadge(noOfReports);
+                //Toast.makeText(getApplication(), "no of reports : " + noOfReports, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 }
