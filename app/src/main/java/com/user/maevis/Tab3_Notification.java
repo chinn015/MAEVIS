@@ -60,7 +60,7 @@ public class Tab3_Notification extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseReports.addChildEventListener(new ChildEventListener() {
+        FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
@@ -94,7 +94,7 @@ public class Tab3_Notification extends Fragment {
 
                 listItems.add(item);
 
-                Collections.sort(listItems, new Comparator<ListItem>() {
+                /*Collections.sort(listItems, new Comparator<ListItem>() {
                     @Override
                     public int compare(ListItem o1, ListItem o2) {
                         if (o1.getDateTime() == null || o2.getDateTime() == null) {
@@ -102,7 +102,7 @@ public class Tab3_Notification extends Fragment {
                         }
                         return o1.getDateTime().compareTo(o2.getDateTime());
                     }
-                });
+                });*/
 
                 adapter = new TabNotifAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);

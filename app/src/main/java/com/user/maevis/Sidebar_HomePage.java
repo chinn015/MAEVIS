@@ -22,6 +22,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
@@ -123,10 +127,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
-
     }
-
-
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
