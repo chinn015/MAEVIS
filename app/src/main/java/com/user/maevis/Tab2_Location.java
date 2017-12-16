@@ -66,6 +66,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
             userLatitude = mUserLocation.getLatitude();
             userLongitude = mUserLocation.getLongitude();
         }else{
+            userLatitude = 10.316590;
+            userLongitude = 123.897093;
             Toast.makeText(getActivity(), "Location not found.",
                     Toast.LENGTH_LONG).show();
         }
@@ -107,7 +109,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         }
 
         if(mUserLocation == null){
-            user_location = new LatLng(10.316590, 123.897093);
+            user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
         }else{
             user_location = new LatLng(userLatitude, userLongitude);
@@ -118,7 +120,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "LatLng: "+mUserLocation.getLatitude()+" "+mUserLocation.getLongitude(),
+                Toast.makeText(getActivity(), "LatLng: "+ getUserLatitude() +" "+ getUserLongitude(),
                         Toast.LENGTH_LONG).show();
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
