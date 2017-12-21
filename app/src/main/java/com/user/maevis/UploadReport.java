@@ -1,7 +1,10 @@
 package com.user.maevis;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +13,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -42,13 +48,16 @@ import java.util.HashMap;
 
 public class UploadReport extends AppCompatActivity {
 
-    DatabaseReference FirebaseReports;
+    DatabaseReference FirebaseReports, FirebaseUsers;
     private EditText txtFldLocation;
     private EditText txtFldDescription;
     private ProgressDialog progressDialog;
     private StorageReference firebaseStorage;
     private Uri reportPhoto;
     private static String imageURL="";
+
+    public static ReportModel reportModel;
+    public static DatabaseReference newReport;
 
     ImageView ivImage;
     VideoView videoView;
@@ -62,6 +71,8 @@ public class UploadReport extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+        FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
+
         firebaseStorage = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
 
@@ -223,13 +234,38 @@ public class UploadReport extends AppCompatActivity {
             return;
         }
 
-        ReportModel reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, "Pending", reportType, reportedBy);
+        reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, "Pending", reportType, reportedBy);
 
-        DatabaseReference newReport = FirebaseReports.push();
+        newReport = FirebaseReports.push();
         newReport.setValue(reportModel);
 
         Toast.makeText(UploadReport.this, "Report sent!.", Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
+
+        showNotification();
+    }
+
+    public void showNotification(){
+        String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.maevis_logo5);
+        builder.setContentTitle(reportModel.getReportType() + " Report");
+        builder.setContentText(fullName + " reported a " +  reportModel.getReportType()
+                + " Report" + " at " + reportModel.getLocation());
+        builder.setAutoCancel(true);
+
+        Intent i = new Intent(this, Notification.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(Notification.class);
+        stackBuilder.addNextIntent(i);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(0, builder.build());
+        return;
     }
 }
