@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -35,6 +36,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,6 +47,8 @@ import com.google.firebase.database.DatabaseError;
 import com.user.maevis.models.FirebaseDatabaseManager;
 
 import android.widget.Toast;
+
+import static android.R.attr.radius;
 
 
 public class Tab2_Location extends Fragment implements OnMapReadyCallback {
@@ -86,15 +91,29 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         final LatLng user_location;
-        BitmapDrawable bitmapReport, bitmapUser, bitmapHome;
-
-        bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_fire);
-        Bitmap report = bitmapReport.getBitmap();
-        Bitmap reportMarker = Bitmap.createScaledBitmap(report, 150, 150, false);
+        BitmapDrawable bitmapUser, bitmapHome;
+        BitmapDrawable[] bitmapReports = new BitmapDrawable[3];
+        Bitmap[] reports = new Bitmap[3];
+        Bitmap[] reportMarker = new Bitmap[3];
+        int[] reportIcons = {
+                R.drawable.ic_marker_fire,
+                R.drawable.ic_marker_flood,
+                R.drawable.ic_marker_accident
+        };
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
+
+        for (int x = 0; x < 3; x++){
+            bitmapReports[x] = (BitmapDrawable)getResources().getDrawable(reportIcons[x]);
+            reports[x] = bitmapReports[x].getBitmap();
+            reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
+        }
+
+        // bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_fire);
+        //Bitmap report = bitmapReport.getBitmap();
+        //Bitmap reportMarker = Bitmap.createScaledBitmap(report, 150, 150, false);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
@@ -105,7 +124,21 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
             double vLatitude = verifiedReport.getLocationLatitude();
             double vLongitude = verifiedReport.getLocationLongitude();
             String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
-            mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
+
+            switch (verifiedReport.getReportType()) {
+                case "Fire":
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
+                    break;
+
+                case "Flood":
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
+                    break;
+
+                case "Vehicular Accident":
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
+                    break;
+
+            }
         }
 
         if(mUserLocation == null){
@@ -117,6 +150,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         }
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
+
+        Circle circle =  mMap.addCircle(new CircleOptions()
+                .center(user_location)
+                .radius(1000)
+                .strokeColor(Color.parseColor("#8c6b1913"))
+                .fillColor(Color.parseColor("#5089534f")));
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
