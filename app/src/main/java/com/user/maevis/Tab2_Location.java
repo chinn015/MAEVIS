@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -119,10 +120,30 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(10.3171367, 123.9125538)).visible(true).alpha(0.8f).title("Static - Location3").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
 
+        /*set marker for user's location*/
+        if(mUserLocation == null){
+            user_location = new LatLng(userLatitude, userLongitude);
+            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
+        }else{
+            user_location = new LatLng(userLatitude, userLongitude);
+            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
+        }
+
+//        Circle circle =  mMap.addCircle(new CircleOptions()
+//                .center(user_location)
+//                .radius(1000)
+//                .strokeColor(Color.parseColor("#8c6b1913"))
+//                .fillColor(Color.parseColor("#5089534f")));
+        
         for(int x=0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
             ListItem verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
             double vLatitude = verifiedReport.getLocationLatitude();
             double vLongitude = verifiedReport.getLocationLongitude();
+            float distance, limit_distance;
+
+            limit_distance = 1000;
+            Location report_locations = new Location("1");
+            Location current_location = new Location("2");
             String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
 
             switch (verifiedReport.getReportType()) {
@@ -137,25 +158,26 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
                 case "Vehicular Accident":
                     mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
                     break;
-
             }
-        }
 
-        if(mUserLocation == null){
-            user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }else{
-            user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
+            report_locations.setLatitude(vLatitude);
+            report_locations.setLongitude(vLongitude);
+
+            current_location.setLatitude(userLatitude);
+            current_location.setLongitude(userLongitude);
+
+            //Returns the approximate distance in meters between the current location and the given report location.
+            distance = current_location.distanceTo(report_locations);
+
+            if(distance <= limit_distance){
+                Toast.makeText(getContext(), "Inside " + distance, Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getContext(), "Outside " + distance, Toast.LENGTH_LONG).show();
+            }
+
         }
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
-
-        Circle circle =  mMap.addCircle(new CircleOptions()
-                .center(user_location)
-                .radius(1000)
-                .strokeColor(Color.parseColor("#8c6b1913"))
-                .fillColor(Color.parseColor("#5089534f")));
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -173,6 +195,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
                         Toast.LENGTH_LONG).show();
             }
         });
+
 
     }
 
