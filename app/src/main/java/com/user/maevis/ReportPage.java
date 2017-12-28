@@ -32,9 +32,16 @@ public class ReportPage extends AppCompatActivity {
         viewReportDateTime = (TextView) findViewById(R.id.viewReportDateTime);
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
 
-        viewReportHead.setText(TabHomeAdapter.getClickedItem().getHead());
-        viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDescription());
-        viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDateTime());
-        Picasso.with(getApplicationContext()).load(TabHomeAdapter.getClickedItem().getImageURL()).into(viewReportImage);
+        if(TabHomeAdapter.getClickedItem() != null) {
+            viewReportHead.setText(TabHomeAdapter.getClickedItem().getHead());
+            viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDescription());
+            viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDateTime());
+            Picasso.with(getApplicationContext()).load(TabHomeAdapter.getClickedItem().getImageURL()).into(viewReportImage);
+        }else{
+            viewReportHead.setText(Tab2_Location.verifiedReport.getHead());
+            viewReportDesc.setText(Tab2_Location.verifiedReport.getDescription());
+            viewReportDateTime.setText(Tab2_Location.verifiedReport.getDateTime());
+            Picasso.with(getApplicationContext()).load(Tab2_Location.verifiedReport.getImageURL()).into(viewReportImage);
+        }
     }
 }
