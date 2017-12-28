@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         //public TextView textViewDesc;
         public TextView textViewDateTime;
         public ImageView imageViewReport;
-        public LinearLayout notifReportLayout;
+        public RelativeLayout notifReportLayout;
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -76,7 +77,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             //textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTimeNotif);
             imageViewReport = (ImageView) itemView.findViewById(R.id.viewNotifImage);
-            notifReportLayout = (LinearLayout) itemView.findViewById(R.id.notifReportLayout);
+            notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
 
         }
     }
