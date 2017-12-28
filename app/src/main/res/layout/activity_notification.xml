@@ -32,18 +32,17 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="70dp"
-        app:cardCornerRadius="4dp"
-        android:id="@+id/cardView">
+        app:cardCornerRadius="4dp">
 
         <LinearLayout
-            android:id="@+id/viewReportLayout"
+            android:id="@+id/verifyReportLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="15dp">
 
             <TextView
-                android:id="@+id/viewReportHead"
+                android:id="@+id/viewNotifHead"
                 android:text="Heading"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
@@ -51,7 +50,7 @@
                 android:textSize="15dp" />
 
             <TextView
-                android:id="@+id/viewReportDateTime"
+                android:id="@+id/viewNotifDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -60,14 +59,14 @@
                 />
 
             <TextView
-                android:id="@+id/viewReportDesc"
+                android:id="@+id/viewNotifDesc"
                 android:text="Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
 
             <ImageView
-                android:id="@+id/viewReportImage"
+                android:id="@+id/viewNotifImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="40dp"
@@ -75,5 +74,35 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:id="@+id/btnVerifyReport"
+        android:text="Verify"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:id="@+id/btnDeclineReport"
+        android:text="Decline"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="65dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:textAllCaps="false"
+        android:backgroundTint="#464646"
+        android:textColor="@color/colorAccent" />
+
+
 
 </RelativeLayout>
