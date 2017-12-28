@@ -213,14 +213,16 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        Toast.makeText(getContext(), marker.getTitle(),Toast.LENGTH_LONG).show();
-        marker.getId();
+        String markerId;
         Intent i;
+
+        markerId = marker.getId().replaceAll("[^\\d.]", "");
+        Toast.makeText(getContext(), markerId, Toast.LENGTH_LONG).show();
+        verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(Integer.parseInt(markerId)-1);
+
         i = new Intent(getContext(), ReportPage.class);
         startActivity(i);
         return true;
-
     }
 
     public static double getUserLatitude() {
