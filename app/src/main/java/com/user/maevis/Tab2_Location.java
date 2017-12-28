@@ -50,14 +50,16 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import android.widget.Toast;
 
 import static android.R.attr.radius;
+import static android.R.attr.start;
 
 
-public class Tab2_Location extends Fragment implements OnMapReadyCallback {
+public class Tab2_Location extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
     private Location mUserLocation;
     static double userLatitude, userLongitude;
+    static ListItem verifiedReport;
     View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +85,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
         SupportMapFragment fragment = new SupportMapFragment();
         transaction.add(R.id.map, fragment);
         transaction.commit();
-
 
         fragment.getMapAsync(this);
         return view;
@@ -134,9 +135,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 //                .radius(1000)
 //                .strokeColor(Color.parseColor("#8c6b1913"))
 //                .fillColor(Color.parseColor("#5089534f")));
-        
+
+        mMap.setOnMarkerClickListener(this);
+
         for(int x=0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
-            ListItem verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
+            verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
             double vLatitude = verifiedReport.getLocationLatitude();
             double vLongitude = verifiedReport.getLocationLongitude();
             float distance, limit_distance;
@@ -148,15 +151,24 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
 
             switch (verifiedReport.getReportType()) {
                 case "Fire":
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(vLatitude, vLongitude))
+                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
                     break;
 
                 case "Flood":
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(vLatitude, vLongitude))
+                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
                     break;
 
                 case "Vehicular Accident":
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(vLatitude, vLongitude)).visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude).icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(vLatitude, vLongitude))
+                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
                     break;
             }
 
@@ -196,6 +208,18 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback {
             }
         });
 
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Toast.makeText(getContext(), marker.getTitle(),Toast.LENGTH_LONG).show();
+        marker.getId();
+        Intent i;
+        i = new Intent(getContext(), ReportPage.class);
+        startActivity(i);
+        return true;
 
     }
 
