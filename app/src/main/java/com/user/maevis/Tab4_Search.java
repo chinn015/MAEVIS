@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -80,9 +81,10 @@ public class Tab4_Search extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v==btnShowNotif) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-            builder.setSmallIcon(R.drawable.maevis_logo5);
+            builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
             builder.setContentTitle("MAEVIS");
             builder.setContentText("maevis notification");
+            builder.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
             Intent i = new Intent(getContext(), Notification.class);
 

@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -249,7 +250,8 @@ public class UploadReport extends AppCompatActivity {
     public void showNotification(){
         String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.maevis_logo5);
+        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
+        builder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
         builder.setContentTitle(reportModel.getReportType() + " Report");
         builder.setContentText(fullName + " reported a " +  reportModel.getReportType()
                 + " Report" + " at " + reportModel.getLocation());
