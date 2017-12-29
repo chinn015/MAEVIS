@@ -7,8 +7,8 @@
     android:layout_height="80dp"
     android:layout_marginRight="4dp"
     android:layout_marginLeft="4dp"
-    android:layout_marginBottom="2dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="1dp"
     app:cardCornerRadius="4dp"
     >
 
@@ -24,7 +24,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
-            android:src="@drawable/user1"
+            android:src="@drawable/img_user"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -32,17 +32,16 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="7dp"
             android:layout_toRightOf="@+id/user_photo"
             android:layout_toEndOf="@+id/user_photo">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="report type"
+            <ImageView
                 android:id="@+id/reportType"
-                android:paddingLeft="5dp"
-                android:textSize="12dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/btn_fire"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true" />
 
@@ -51,10 +50,20 @@
                 android:layout_height="wrap_content"
                 android:text="datetime"
                 android:id="@+id/textViewDateTimeNotif"
-                android:layout_alignBottom="@+id/reportType"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:textSize="12dp"/>
+                android:paddingLeft="5dp"
+                android:textSize="12dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/reportType" />
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="datetime"-->
+                <!--android:id="@+id/textViewDateTimeNotif"-->
+                <!--android:layout_alignBottom="@+id/reportType"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:textSize="12dp"/>-->
 
             <TextView
                 android:id="@+id/textViewHeadNotif"

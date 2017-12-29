@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 import java.util.List;
@@ -43,13 +44,13 @@ public class TabMediaAdapter extends RecyclerView.Adapter<TabMediaAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageViewReport;
-        public LinearLayout photoReportLayout;
+        public RelativeLayout photoReportLayout;
 
         public ViewHolder (View itemView){
             super(itemView);
 
             imageViewReport = (ImageView) itemView.findViewById(R.id.photoReport);
-            photoReportLayout = (LinearLayout) itemView.findViewById(R.id.notifReportLayout);
+            photoReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
 
         }
     }
