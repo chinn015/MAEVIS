@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,12 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     private List<ListItem> listItems;
     private static ListItem clickedItem = null;
     private Context context;
+    int[] reportIcons = {
+            R.mipmap.btn_fire,
+            R.mipmap.btn_flood,
+            R.mipmap.btn_accident
+    };
+
 
     public TabNotifAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -40,6 +47,20 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         //details to be displayed in Notification Tab
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
+
+        switch(listItem.getReportType()){
+            case "Fire":
+                    Picasso.with(context).load(reportIcons[0]).into(holder.imageReportType);
+                    break;
+
+            case "Flood":
+                    Picasso.with(context).load(reportIcons[1]).into(holder.imageReportType);
+                    break;
+
+            case "Vehicular Accident":
+                    Picasso.with(context).load(reportIcons[2]).into(holder.imageReportType);
+                    break;
+        }
 
         /*holder.textViewDesc.setText(listItem.getDesc());
         Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/
@@ -67,7 +88,9 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         //public TextView textViewDesc;
         public TextView textViewDateTime;
         public ImageView imageViewReport;
-        public LinearLayout notifReportLayout;
+        public RelativeLayout notifReportLayout;
+        public ImageView imageReportType;
+
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -76,7 +99,9 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             //textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTimeNotif);
             imageViewReport = (ImageView) itemView.findViewById(R.id.viewNotifImage);
-            notifReportLayout = (LinearLayout) itemView.findViewById(R.id.notifReportLayout);
+            notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
+            imageReportType = (ImageView) itemView.findViewById(R.id.reportType);
+
 
         }
     }
