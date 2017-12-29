@@ -1,18 +1,9 @@
 package com.user.maevis;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,8 +11,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
+import com.user.maevis.controllers.Notification;
 
 public class Tab4_Search extends Fragment implements View.OnClickListener {
     private Button btnShowNotif;
@@ -80,24 +71,8 @@ public class Tab4_Search extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v==btnShowNotif) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-            builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
-            builder.setContentTitle("MAEVIS");
-            builder.setContentText("maevis notification");
-            builder.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-
-            Intent i = new Intent(getContext(), Notification.class);
-
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
-            stackBuilder.addParentStack(Notification.class);
-            stackBuilder.addNextIntent(i);
-
-            PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(pendingIntent);
-
-            NotificationManager nm = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(0, builder.build());
-            return;
+            Notification.alertNotification(getContext());
+            Notification.vibrateNotif(getContext());
         }
     }
 

@@ -118,8 +118,8 @@
 
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/imgViewProfilePic"
-		android:layout_width="96dp"
-		android:layout_height="96dp"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
 		android:layout_gravity="center_horizontal"
 		android:src="@drawable/img_user"
 		app:layout_anchor="@id/materialup.title_container"
@@ -129,5 +129,5 @@
 		app:layout_scrollFlags="scroll"
 		app:layout_anchorGravity="top|center_horizontal"
 		/>
-	
+
 </android.support.design.widget.CoordinatorLayout>

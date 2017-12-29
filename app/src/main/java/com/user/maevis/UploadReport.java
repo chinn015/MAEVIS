@@ -7,10 +7,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -31,21 +29,19 @@ import android.widget.VideoView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.user.maevis.controllers.Notification;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 public class UploadReport extends AppCompatActivity {
 
@@ -244,10 +240,11 @@ public class UploadReport extends AppCompatActivity {
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
 
-        showNotification();
+        Notification.showNotification(getApplication());
+        Notification.vibrateNotification(getApplication());
     }
 
-    public void showNotification(){
+   /* public void showNotification(){
         String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
@@ -257,10 +254,10 @@ public class UploadReport extends AppCompatActivity {
                 + " Report" + " at " + reportModel.getLocation());
         builder.setAutoCancel(true);
 
-        Intent i = new Intent(this, Notification.class);
+        Intent i = new Intent(this, NotificationView.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(Notification.class);
+        stackBuilder.addParentStack(NotificationView.class);
         stackBuilder.addNextIntent(i);
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -268,6 +265,5 @@ public class UploadReport extends AppCompatActivity {
 
         NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(0, builder.build());
-        return;
-    }
+    }*/
 }
