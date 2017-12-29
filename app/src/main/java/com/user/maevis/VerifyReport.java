@@ -29,6 +29,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private TextView viewNotifDesc;
     private TextView viewNotifDateTime;
     private ImageView viewNotifImage;
+    private ImageView viewNotifReportType;
 
     private Button btnVerifyReport;
     private Button btnDeclineReport;
@@ -50,12 +51,22 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         viewNotifDesc = (TextView) findViewById(R.id.viewNotifDesc);
         viewNotifDateTime = (TextView) findViewById(R.id.viewNotifDateTime);
         viewNotifImage = (ImageView) findViewById(R.id.viewNotifImage);
+        viewNotifReportType = (ImageView) findViewById(R.id.viewReportType);
+
 
         //display details of clicked item
         viewNotifHead.setText(TabNotifAdapter.getClickedItem().getHead());
         viewNotifDesc.setText(TabNotifAdapter.getClickedItem().getDescription());
         viewNotifDateTime.setText(TabNotifAdapter.getClickedItem().getDisplayDateTime());
-        Picasso.with(getApplicationContext()).load(TabNotifAdapter.getClickedItem().getImageURL()).into(viewNotifImage);
+        Picasso.with(getApplicationContext())
+                .load(TabNotifAdapter.getClickedItem().getImageURL())
+                .fit()
+                .into(viewNotifImage);
+
+        Picasso.with(getApplicationContext())
+                .load(ListItem.setReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
+                .into(viewNotifReportType);
+
 
         btnVerifyReport = (Button) findViewById(R.id.btnVerifyReport);
         btnDeclineReport = (Button) findViewById(R.id.btnDeclineReport);
