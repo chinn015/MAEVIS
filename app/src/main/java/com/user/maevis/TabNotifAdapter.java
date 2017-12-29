@@ -44,7 +44,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
-        //details to be displayed in Notification Tab
+        //details to be displayed in NotificationView Tab
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
 

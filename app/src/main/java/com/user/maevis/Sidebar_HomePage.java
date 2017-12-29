@@ -100,7 +100,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         break;
                     case 1: toolbar.setTitle("Location");
                         break;
-                    case 2: toolbar.setTitle("Notification");
+                    case 2: toolbar.setTitle("NotificationView");
                         break;
                     case 3: toolbar.setTitle("Search");
                         break;

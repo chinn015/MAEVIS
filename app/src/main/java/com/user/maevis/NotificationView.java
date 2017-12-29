@@ -1,6 +1,5 @@
 package com.user.maevis;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-public class Notification extends AppCompatActivity implements View.OnClickListener{
+public class NotificationView extends AppCompatActivity implements View.OnClickListener{
     private TextView viewNotifHead;
     private TextView viewNotifDesc;
     private TextView viewNotifDateTime;
@@ -176,18 +175,18 @@ public class Notification extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v==btnVerifyReport) {
-            Toast.makeText(Notification.this, "Report verified.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NotificationView.this, "Report verified.", Toast.LENGTH_SHORT).show();
             FirebaseReports.child(UploadReport.newReport.getKey()).child("reportStatus").setValue("Verified");
             finish();
-            startActivity(new Intent(Notification.this, Sidebar_HomePage.class));
+            startActivity(new Intent(NotificationView.this, Sidebar_HomePage.class));
             return;
         }
 
         if(v==btnDeclineReport) {
-            Toast.makeText(Notification.this, "Report declined.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NotificationView.this, "Report declined.", Toast.LENGTH_SHORT).show();
             FirebaseReports.child(UploadReport.newReport.getKey()).child("reportStatus").setValue("Declined");
             finish();
-            startActivity(new Intent(Notification.this, Sidebar_HomePage.class));
+            startActivity(new Intent(NotificationView.this, Sidebar_HomePage.class));
             return;
         }
     }
