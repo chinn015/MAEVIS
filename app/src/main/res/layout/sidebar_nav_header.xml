@@ -13,12 +13,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <!--<ImageView-->
+        <!--android:id="@+id/imgViewProfilePic"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:src="@drawable/user1" />-->
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgViewProfilePic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/user1" />
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/img_user"
+        android:elevation="8dp"
+        app:border_width="2dp"
+        app:border_color="#FFF"
+        app:layout_scrollFlags="scroll"
+        app:layout_anchorGravity="top|center_horizontal"
+        />
 
     <TextView
         android:id="@+id/txtViewProfileName"
