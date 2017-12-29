@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.FirebaseDatabaseManager;
 
 import java.util.List;
 
@@ -40,7 +42,12 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDescription());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
-        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
+        Picasso.with(context)
+                .load(listItem.getImageURL())
+                .fit()
+                .into(holder.imageViewReport);
+
+        Picasso.with(context).load(listItem.setReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -73,7 +80,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         public TextView textViewDesc;
         public TextView textViewDateTime;
         public ImageView imageViewReport;
-        public LinearLayout reportLayout;
+        public RelativeLayout reportLayout;
+        public ImageView imageReportType;
+
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -82,7 +91,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTime);
             imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
-            reportLayout = (LinearLayout) itemView.findViewById(R.id.reportLayout);
+            reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
+            imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
+
         }
     }
 }

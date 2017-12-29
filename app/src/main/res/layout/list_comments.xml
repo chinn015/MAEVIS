@@ -23,10 +23,10 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="left"
-            android:src="@drawable/user1"
+            android:src="@drawable/img_user"
             android:elevation="8dp"
             app:border_width="2dp"
-            app:border_color="@color/colorPrimaryDark"
+            app:border_color="@color/colorAccent"
             app:layout_scrollFlags="scroll"
             app:layout_anchorGravity="top|center_horizontal"
             />
