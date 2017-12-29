@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.FirebaseDatabaseManager;
 
 import org.w3c.dom.Text;
 
@@ -17,6 +18,7 @@ public class ReportPage extends AppCompatActivity {
     private TextView viewReportDesc;
     private TextView viewReportDateTime;
     private ImageView viewReportImage;
+    private ImageView viewReportType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +33,31 @@ public class ReportPage extends AppCompatActivity {
         viewReportDesc = (TextView) findViewById(R.id.viewReportDesc);
         viewReportDateTime = (TextView) findViewById(R.id.viewReportDateTime);
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
+        viewReportType = (ImageView) findViewById(R.id.viewReportType);
 
         if(TabHomeAdapter.getClickedItem() != null) {
             viewReportHead.setText(TabHomeAdapter.getClickedItem().getHead());
             viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDescription());
-            viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDateTime());
-            Picasso.with(getApplicationContext()).load(TabHomeAdapter.getClickedItem().getImageURL()).into(viewReportImage);
+            viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(TabHomeAdapter.getClickedItem().getImageURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.setReportTypeImage(TabHomeAdapter.getClickedItem().getReportType()))
+                    .into(viewReportType);
+
         }else{
             viewReportHead.setText(Tab2_Location.verifiedReport.getHead());
             viewReportDesc.setText(Tab2_Location.verifiedReport.getDescription());
-            viewReportDateTime.setText(Tab2_Location.verifiedReport.getDateTime());
-            Picasso.with(getApplicationContext()).load(Tab2_Location.verifiedReport.getImageURL()).into(viewReportImage);
+            viewReportDateTime.setText(Tab2_Location.verifiedReport.getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(Tab2_Location.verifiedReport.getImageURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.setReportTypeImage(Tab2_Location.verifiedReport.getReportType()))
+                    .into(viewReportType);
         }
     }
 }

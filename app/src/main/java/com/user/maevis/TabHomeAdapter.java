@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.FirebaseDatabaseManager;
 
 import java.util.List;
 
@@ -22,11 +23,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     private List<ListItem> listItems;
     private Context context;
     private static ListItem clickedItem = null;
-    int[] reportIcons = {
-            R.mipmap.btn_fire,
-            R.mipmap.btn_flood,
-            R.mipmap.btn_accident
-    };
 
     public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -51,19 +47,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 .fit()
                 .into(holder.imageViewReport);
 
-        switch(listItem.getReportType()){
-            case "Fire":
-                Picasso.with(context).load(reportIcons[0]).into(holder.imageReportType);
-                break;
-
-            case "Flood":
-                Picasso.with(context).load(reportIcons[1]).into(holder.imageReportType);
-                break;
-
-            case "Vehicular Accident":
-                Picasso.with(context).load(reportIcons[2]).into(holder.imageReportType);
-                break;
-        }
+        Picasso.with(context).load(listItem.setReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override

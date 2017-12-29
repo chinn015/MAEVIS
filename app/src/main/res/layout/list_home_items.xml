@@ -79,7 +79,7 @@
                 android:text="Hello World"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textColor="#000" />
-            
+
         </RelativeLayout>
 
         <ImageView
