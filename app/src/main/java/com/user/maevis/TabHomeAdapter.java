@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,11 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     private List<ListItem> listItems;
     private Context context;
     private static ListItem clickedItem = null;
+    int[] reportIcons = {
+            R.mipmap.btn_fire,
+            R.mipmap.btn_flood,
+            R.mipmap.btn_accident
+    };
 
     public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -40,7 +46,24 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDescription());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
-        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
+        Picasso.with(context)
+                .load(listItem.getImageURL())
+                .fit()
+                .into(holder.imageViewReport);
+
+        switch(listItem.getReportType()){
+            case "Fire":
+                Picasso.with(context).load(reportIcons[0]).into(holder.imageReportType);
+                break;
+
+            case "Flood":
+                Picasso.with(context).load(reportIcons[1]).into(holder.imageReportType);
+                break;
+
+            case "Vehicular Accident":
+                Picasso.with(context).load(reportIcons[2]).into(holder.imageReportType);
+                break;
+        }
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -73,7 +96,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         public TextView textViewDesc;
         public TextView textViewDateTime;
         public ImageView imageViewReport;
-        public LinearLayout reportLayout;
+        public RelativeLayout reportLayout;
+        public ImageView imageReportType;
+
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -82,7 +107,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTime);
             imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
-            reportLayout = (LinearLayout) itemView.findViewById(R.id.reportLayout);
+            reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
+            imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
+
         }
     }
 }

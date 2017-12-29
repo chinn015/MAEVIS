@@ -5,50 +5,106 @@
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="350dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginTop="2dp"
     app:cardCornerRadius="4dp"
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/reportLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:background="@drawable/selector"
+        android:padding="10dp">
 
-        <TextView
-            android:id="@+id/textViewHead"
-            android:text="Heading"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgViewProfilePic"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"
+            android:elevation="8dp"
+            android:src="@drawable/img_user"
+            app:border_color="#FFF"
+            app:border_width="2dp"
+            app:layout_anchorGravity="top|center_horizontal"
+            app:layout_scrollFlags="scroll" />
+
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp" />
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/imgViewProfilePic"
+            android:padding="7dp">
 
-        <TextView
-            android:id="@+id/textViewDateTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="DateTime"
-            android:textSize="10sp"
-            />
+            <ImageView
+                android:id="@+id/reportHomeType"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textViewHead"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/btn_fire" />
 
-        <TextView
-            android:id="@+id/textViewDesc"
-            android:text="Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            <TextView
+                android:id="@+id/textViewDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/reportHomeType"
+                android:layout_toEndOf="@+id/reportHomeType"
+                android:paddingLeft="5dp"
+                android:text="datetime"
+                android:textSize="12dp" />
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="datetime"-->
+            <!--android:id="@+id/textViewDateTimeNotif"-->
+            <!--android:layout_alignBottom="@+id/reportType"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:textSize="12dp"/>-->
+
+            <TextView
+                android:id="@+id/textViewHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:maxLines="2"
+                android:paddingLeft="5dp"
+                android:paddingTop="2dp"
+                android:text="Hello World"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="#000" />
+            
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/imageViewReport"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="40dp"/>
+            android:layout_height="210dp"
+            android:src="@drawable/img_fire"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/textViewDesc"
+            android:layout_alignParentStart="true" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textViewDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/imgViewProfilePic"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp" />
+
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
+
+
+
