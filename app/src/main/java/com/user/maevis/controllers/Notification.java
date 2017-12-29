@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -20,14 +21,17 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 
 public class Notification {
 
-    //partial notification
+    //partial notification code
     public static void alertNotification(Context context){
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
-        builder.setContentTitle("MAEVIS");
-        builder.setContentText("maevis notification");
-        builder.setColor(ContextCompat.getColor(context, R.color.colorPrimary));
+        builder.setLights(Color.BLUE, 500, 500)
+                .setSmallIcon(R.drawable.ic_notif_maevis_logo)
+                .setContentTitle("MAEVIS")
+                .setContentText("maevis notification")
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setAutoCancel(true)
+                .setOngoing(true);
 
         Intent i = new Intent(context, NotificationView.class);
 
@@ -43,18 +47,19 @@ public class Notification {
 
     }
 
-
     //notification with data
     public static void showNotification(Application app){
 
         String fullName = FirebaseDatabaseManager.getFullName(UploadReport.reportModel.getReportedBy());
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(app);
-        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
-        builder.setColor(ContextCompat.getColor(app, R.color.colorPrimary));
-        builder.setContentTitle(UploadReport.reportModel.getReportType() + " Report");
-        builder.setContentText(fullName + " reported a " +  UploadReport.reportModel.getReportType()
+        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo)
+                .setColor(ContextCompat.getColor(app, R.color.colorPrimary))
+                .setContentTitle(UploadReport.reportModel.getReportType() + " Report")
+                .setLights(0xff00ff00, 500, 500)
+                .setAutoCancel(true)
+                .setContentText(fullName + " reported a " +  UploadReport.reportModel.getReportType()
                 + " Report" + " at " + UploadReport.reportModel.getLocation());
-        builder.setAutoCancel(true);
 
         Intent i = new Intent(app, NotificationView.class);
 
@@ -86,7 +91,7 @@ public class Notification {
 
     }
 
-    //partial
+    //partial code
     public static void vibrateNotif(Context context){
         // Get instance of Vibrator from current Context
         Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -102,6 +107,4 @@ public class Notification {
         vib.vibrate(pattern, -1);
 
     }
-
-
 }
