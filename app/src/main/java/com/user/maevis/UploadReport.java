@@ -1,19 +1,13 @@
 package com.user.maevis;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,8 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.user.maevis.controllers.Notification;
-import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -240,8 +233,8 @@ public class UploadReport extends AppCompatActivity {
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
 
-        Notification.showNotification(getApplication());
-        Notification.vibrateNotification(getApplication());
+        cNotification.showVerifyReportNotification(getApplication());
+        cNotification.vibrateNotification(getApplication());
     }
 
    /* public void showNotification(){
