@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.user.maevis.controllers.Notification;
+import com.user.maevis.controllers.cNotification;
 
 public class Tab4_Search extends Fragment implements View.OnClickListener {
     private Button btnShowNotif;
@@ -71,8 +71,8 @@ public class Tab4_Search extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v==btnShowNotif) {
-            Notification.alertNotification(getContext());
-            Notification.vibrateNotif(getContext());
+            cNotification.alertNotification(getContext());
+            cNotification.vibrateNotif(getContext());
         }
     }
 

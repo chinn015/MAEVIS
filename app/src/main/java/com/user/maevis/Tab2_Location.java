@@ -1,56 +1,30 @@
 package com.user.maevis;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.widget.Button;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
 
 import android.widget.Toast;
-
-import static android.R.attr.radius;
-import static android.R.attr.start;
 
 
 public class Tab2_Location extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -182,9 +156,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             distance = current_location.distanceTo(report_locations);
 
             if(distance <= limit_distance){
-                Toast.makeText(getContext(), "Inside " + distance, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                cNotification.showViewReportNotification(getContext(), verifiedReport);
+                cNotification.vibrateNotif(getContext());
             }else{
-                Toast.makeText(getContext(), "Outside " + distance, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
             }
 
         }
