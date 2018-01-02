@@ -44,6 +44,7 @@ public class NotificationView extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         viewNotifHead = (TextView) findViewById(R.id.viewNotifHead);
         viewNotifDesc = (TextView) findViewById(R.id.viewNotifDesc);
         viewNotifDateTime = (TextView) findViewById(R.id.viewNotifDateTime);
