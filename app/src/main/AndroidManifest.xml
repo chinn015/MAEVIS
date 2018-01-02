@@ -73,7 +73,13 @@
         <activity
             android:name=".UploadReport"
             android:label="Upload Report"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".SelectionPage">
+            <meta-data
+                android:name="android.support.PARENT.ACTIVITY"
+                android:value=".SelectionPage" />
+        </activity>
+
         <activity
             android:name=".Sidebar_HomePage"
             android:theme="@style/AppTheme.NoActionBar" />
