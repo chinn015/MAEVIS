@@ -120,7 +120,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
-                } else {
+                } else if (position == 2) {
+                    Sidebar_HomePage.badge.updateTabBadge(0);
+                    btnHomeLoc.hide();
+                    btnUserLoc.hide();
+                }else{
                     btnHomeLoc.hide();
                     btnUserLoc.hide();
                 }
@@ -131,6 +135,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -158,7 +163,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         //badge.updateTabBadge(7);
         //badge.updateTabBadge(Tab3_Notification.noOfReports);
         countReports();
-
 
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(3).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
