@@ -193,8 +193,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         Intent i;
 
         markerId = marker.getId().replaceAll("[^\\d.]", "");
-        Toast.makeText(getContext(), markerId, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), markerId, Toast.LENGTH_LONG).show();
         verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(Integer.parseInt(markerId)-1);
+
+        Toast.makeText(getContext(), "("+markerId+") "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()), Toast.LENGTH_LONG).show();
 
         i = new Intent(getContext(), ReportPage.class);
         startActivity(i);
