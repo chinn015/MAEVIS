@@ -1,6 +1,7 @@
 package com.user.maevis;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.user.maevis.controllers.cNotification;
+import com.user.maevis.models.FirebaseDatabaseManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -189,7 +195,40 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v==btnVerifyReport) {
             Toast.makeText(VerifyReport.this, "Report verified.", Toast.LENGTH_SHORT).show();
+            ListItem clickedReportBasis = TabNotifAdapter.getClickedItem();
+            //FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
+
+            for(int x = 0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
+                ListItem verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
+                double vLatitude = verifiedReport.getLocationLatitude();
+                double vLongitude = verifiedReport.getLocationLongitude();
+                float distance, limit_distance;
+
+                limit_distance = 300;
+                Location report_locations = new Location("1");
+                Location verify_location = new Location("2");
+                String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
+
+                report_locations.setLatitude(vLatitude);
+                report_locations.setLongitude(vLongitude);
+
+                verify_location.setLatitude(verifiedReport.getLocationLatitude());
+                verify_location.setLongitude(verifiedReport.getLocationLongitude());
+
+                //Returns the approximate distance in meters between the current location and the given report location.
+                distance = verify_location.distanceTo(report_locations);
+
+                if(distance <= limit_distance){
+                    if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), verifiedReport.getDateTime())) {
+                        if (verifiedReport.getReportType().equals(clickedReportBasis.getReportType())) {
+                            FirebaseReports.child(verifiedReport.getReportID()).child("reportStatus").setValue("Verified-Official");
+                        }
+                    }
+                }
+            }
+
             FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
+
             finish();
             startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
             return;

@@ -55,6 +55,8 @@ public class FirebaseDatabaseManager {
         FirebaseDatabaseManager.verifiedReports = verifiedReports;
     }
 
+
+
 //FUNCTIONS THAT CAN BE USED GLOBALLY
 
     //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
@@ -118,10 +120,62 @@ public class FirebaseDatabaseManager {
             if(userItem.getUserID().equals(userID)) {
                 reportedByFN = userItem.getFirstName();
                 reportedByLN = userItem.getLastName();
+                //fullName = reportedByFN+" "+reportedByLN;
+                //fullName="ReporterID: "+userID+"   userItemLN: "+userItem.getLastName();
             }
         }
 
         fullName = reportedByFN+" "+reportedByLN;
         return fullName;
+    }
+
+    //returns (yyyy-mm-dd) date format from inputted (yyyy-mm-dd hh:mm:ss A)
+    public static String getDate(String inputDate) {
+        String date = inputDate.substring(0,10);
+
+        return date;
+    }
+
+    //returns (hh:mm:ss A) date format from inputted (yyyy-mm-dd hh:mm:ss A)
+    public static String getTime(String inputDate) {
+        String time = inputDate.substring(11, 19);
+
+        return time;
+    }
+
+    //returns the number of minutes as an Integer value from inputted time format (hh:mm:ss A)
+    public static int convertTimeToMinutes(String time) {
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int min = Integer.parseInt(time.substring(3, 5));
+        int minutes = min + (hour*60);
+
+        return minutes;
+    }
+
+    //returns TRUE if dateTimeToVerify is of the same date and within 30mins before and 30mins after dateTimeBasis
+    //dateTimeBasis - the dateTime of the report clicked/chosen to be verified by the admin
+    //dateTimeToVerify - the dateTime of the report redundancies to be merged by the system
+    public static boolean isWithinTimeRange(String dateTimeBasis, String dateTimeToVerify) {
+        boolean status = false;
+
+        String dateBasis = getDate(dateTimeBasis);
+        String dateToVerify = getDate(dateTimeToVerify);
+        String timeBasisString = getTime(dateTimeBasis);
+        String timeToVerifyString = getTime(dateTimeToVerify);
+        int timeBasis = convertTimeToMinutes(timeBasisString);
+        int timeToVerify = convertTimeToMinutes(timeToVerifyString);
+
+        if(dateBasis.equals(dateToVerify)) {
+            if((timeToVerify >= (timeBasis-30) && timeToVerify <= (timeBasis))  || (timeToVerify <= (timeBasis+30) && timeToVerify >= (timeBasis))) {
+                if(timeToVerify >= (timeBasis-30) && timeToVerify <= (timeBasis)) {
+                    status = true;
+                }
+                if(timeToVerify <= (timeBasis+30) && timeToVerify >= (timeBasis)) {
+                    status = true;
+                }
+            }
+        }
+
+        return status;
     }
 }
