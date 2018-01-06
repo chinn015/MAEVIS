@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.user.maevis.models.DeviceModel;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
@@ -41,7 +43,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private Button btnLogin, btnSignInFb, btnSignInGoogle;
     //private static FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private DatabaseReference firebaseUsers;
+    private DatabaseReference firebaseUsers, firebaseDevice;
+    public static DatabaseReference newDevice;
     private ProgressDialog progressDialog;
 
     UserModel userModel;
@@ -67,6 +70,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //firebase references
         //firebaseAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
+        firebaseDevice = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Device");
 
         progressDialog = new ProgressDialog(this); //instantiate a progress diaglog
 
@@ -135,15 +139,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         final String username = txtFldLoginUsername.getText().toString();
         final String password = txtFldLoginPassword.getText().toString();
 
-        Log.v("E_VALUE", "Username: "+username+"  ||  Password: "+password);
+        Log.v("E_VALUE", "Username: " + username + "  ||  Password: " + password);
 
         //validations
-        if(TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(username)) {
             Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -152,12 +156,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot> users = dataSnapshot.getChildren().iterator();
+                DeviceModel deviceModel;
 
-                while(users.hasNext()) {
+                while (users.hasNext()) {
                     DataSnapshot user = users.next();
 
-                    if(user.child("username").getValue().toString().equals(username) &&
-                       user.child("password").getValue().toString().equals(password)) {
+                    if (user.child("username").getValue().toString().equals(username) &&
+                            user.child("password").getValue().toString().equals(password)) {
                         String sUserID = user.getKey().toString();
                         String sUsername = user.child("username").getValue().toString();
                         String sEmail = user.child("email").getValue().toString();
@@ -165,8 +170,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sLastName = user.child("lastName").getValue().toString();
                         String sBirthdate = user.child("birthdate").getValue().toString();
                         String sAddress = user.child("address").getValue().toString();
+                        String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress);
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sDeviceToken);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
@@ -174,20 +180,29 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         SessionManager.getFirebaseAuth().signInWithEmailAndPassword(SessionManager.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(!task.isSuccessful()) {
+                                if (!task.isSuccessful()) {
                                     Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(Login.this, "Logged in as: "+SessionManager.getFirstName()+" "+SessionManager.getLastName(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName(), Toast.LENGTH_SHORT).show();
                                     //Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
                                     progressDialog.dismiss();
                                 }
                             }
                         });
 
+                        Log.d("token", SessionManager.getKeyDeviceToken());
+                        deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
+                        newDevice = firebaseDevice.push();
+                        newDevice.setValue(deviceModel);
+
+
                         return;
-                    } else if(!users.hasNext()) {
+
+                    } else if (!users.hasNext()) {
                         Toast.makeText(Login.this, "Account not found. Please double-check and try again.", Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
             }
 
@@ -196,7 +211,49 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+
+//        firebaseDevice.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                DeviceModel deviceModel;
+//                DeviceModel device = new DeviceModel(
+//                        dataSnapshot.child("deviceToken").getValue().toString(),
+//                        dataSnapshot.child("deviceUser").getValue().toString()
+//                       );
+//
+//                if(device.getDeviceToken().equals(SessionManager.getKeyDeviceToken())){
+//                    Log.d("token-session", SessionManager.getKeyDeviceToken());
+//                    Log.d("token-db", device.getDeviceToken());
+//                } else {
+//                    deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
+//                    newDevice = firebaseDevice.push();
+//                    newDevice.setValue(deviceModel);
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
     }
+
 }
 
 

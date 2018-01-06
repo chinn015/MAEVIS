@@ -1,6 +1,9 @@
 package com.user.maevis;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.user.maevis.controllers.FirebaseInstanceIdNotif;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
@@ -45,6 +50,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     TextView profileName;
     static TabNotifBadge badge;
     static int noOfReports;
+    private BroadcastReceiver broadcastReceiver;
+
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -135,7 +142,17 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
-        
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+            }
+        };
+
+        Log.d("token", SessionManager.getKeyDeviceToken());
+        registerReceiver(broadcastReceiver, new IntentFilter(FirebaseInstanceIdNotif.TOKEN_BROADCAST));
+
+
 
         //store data to Lists
         //initialize Firebase Database Manager

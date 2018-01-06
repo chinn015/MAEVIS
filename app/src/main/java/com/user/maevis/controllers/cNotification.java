@@ -119,8 +119,8 @@ public class cNotification {
                         + " near your location.")
                         .setAutoCancel(true)
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(pic));
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                        //.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(pic));
 
         Intent intent = new Intent(context, ReportPage.class);
         PendingIntent launchIntent = PendingIntent.getActivity(context, 0, intent, 0);
