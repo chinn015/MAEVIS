@@ -244,7 +244,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             //Get latLng from String
             address = coder.getFromLocationName(homeAddress,1);
 
-            if(address != null) {
+            if(address != null || !address.isEmpty()) {
                 location = address.get(0);
                 latLng = new LatLng(location.getLatitude(), location.getLongitude());
             }else{

@@ -99,7 +99,10 @@
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".Sidebar_HomePage" />
         </activity>
-        <activity android:name=".SidebarShare" />
+        <activity
+            android:name=".SidebarHotline"
+            android:label="Emergency Hotline"
+            />
         <activity android:name=".SidebarProfile" />
         <activity android:name=".SidebarHelp" />
         <activity android:name=".ReportPage"
