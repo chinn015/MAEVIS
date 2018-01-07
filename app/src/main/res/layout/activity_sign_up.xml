@@ -120,7 +120,7 @@
         android:background="@drawable/txtfld_rounded"
         android:textColor="#FFFFFF"
         android:paddingLeft="15dp"
-        android:hint="Address"
+        android:hint="Address [Street, Brgy, City]"
         android:textColorHint="#FFFFFF"
         android:textSize="17dp"
         android:layout_below="@+id/txtFldBirthdate"

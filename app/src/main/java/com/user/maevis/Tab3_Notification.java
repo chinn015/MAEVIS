@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,8 +113,11 @@ public class Tab3_Notification extends Fragment {
                 distance = current_location.distanceTo(report_locations);
 
                 if(distance <= limit_distance) {
-                    Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                    Log.d("Inside Notif: ", FirebaseDatabaseManager.getFullName(item.getReportedBy()));
                     listItems.add(item);
+                }else{
+                    Log.d("Outside Notif: ", FirebaseDatabaseManager.getFullName(item.getReportedBy()));
                 }
 
                 /*Collections.sort(listItems, new Comparator<ListItem>() {

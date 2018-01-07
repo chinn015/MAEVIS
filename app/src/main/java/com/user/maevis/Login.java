@@ -172,7 +172,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sAddress = user.child("address").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sDeviceToken);
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
@@ -190,10 +190,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             }
                         });
 
-                        Log.d("token", SessionManager.getKeyDeviceToken());
+
+                        Log.d("token", sDeviceToken);
+                        /*
                         deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
                         newDevice = firebaseDevice.push();
                         newDevice.setValue(deviceModel);
+                        */
 
 
                         return;

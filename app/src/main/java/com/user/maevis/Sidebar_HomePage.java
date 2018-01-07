@@ -50,7 +50,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     TextView profileName;
     static TabNotifBadge badge;
     static int noOfReports;
-    private BroadcastReceiver broadcastReceiver;
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
@@ -142,17 +141,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-            }
-        };
-
-        Log.d("token", SessionManager.getKeyDeviceToken());
-        registerReceiver(broadcastReceiver, new IntentFilter(FirebaseInstanceIdNotif.TOKEN_BROADCAST));
-
-
 
         //store data to Lists
         //initialize Firebase Database Manager
