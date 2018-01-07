@@ -104,7 +104,6 @@ public class cNotification {
 
 
         // Bitmap pic = getBitmapfromUrl(nearbyReport.getImageURL());
-        Bitmap pic = BitmapFactory.decodeResource(context.getResources(), R.drawable.img_fire);
         Log.e("image-url", nearbyReport.getImageURL());
 
         String fullName = FirebaseDatabaseManager.getFullName(nearbyReport.getReportedBy());
