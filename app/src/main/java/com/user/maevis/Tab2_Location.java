@@ -43,6 +43,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     private Location mUserLocation;
     static double userLatitude, userLongitude;
     static ListItem verifiedReport;
+    static String userLocAddress;
     View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             Toast.makeText(getActivity(), "Location not found.",
                     Toast.LENGTH_LONG).show();
         }
+
+        userLocAddress = getUserLocAddress(userLatitude, userLongitude);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -104,14 +107,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
         }
 
-        // bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_fire);
-        //Bitmap report = bitmapReport.getBitmap();
-        //Bitmap reportMarker = Bitmap.createScaledBitmap(report, 150, 150, false);
-
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.3171367, 123.9125538)).visible(true).alpha(0.8f).title("Static - Location3").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-
         /*set marker for user's location*/
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
@@ -122,7 +117,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         }
 
          /*set marker for home location*/
-        home_location = getHomeLocation(SessionManager.getAddress());
+        home_location = getHomeAddress(SessionManager.getAddress());
         mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(0.8f).title("Home Location").icon(BitmapDescriptorFactory.fromBitmap(homeMarker)));
 
         mMap.setOnMarkerClickListener(this);
@@ -239,20 +234,23 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         return userLongitude;
     }
 
-    public LatLng getHomeLocation(String homeAddress){
-        Geocoder coder = new Geocoder(getContext());
+    public LatLng getHomeAddress(String homeAddress){
+        Geocoder coder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> address;
         Address location;
         LatLng latLng = new LatLng(10.316590, 123.897093);
-
 
         try {
             //Get latLng from String
             address = coder.getFromLocationName(homeAddress,1);
 
-            //Lets take first possibility from the all possibilities.
-            location = address.get(0);
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            if(address != null) {
+                location = address.get(0);
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            }else{
+                latLng = new LatLng(10.316590, 123.897093);
+            }
+
             for(int x = 0; x < address.size(); x++){
                 Log.d("address", address.get(x).toString());
             }
@@ -263,4 +261,22 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
         return latLng;
     }
+
+    public String getUserLocAddress (double userLatitude, double userLongitude){
+        String fullAddress = "No Location Found.";
+        Geocoder geocoder;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(userLatitude, userLongitude, 1);
+            fullAddress = addresses.get(0).getAddressLine(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullAddress;
+    }
+
 }

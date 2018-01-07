@@ -141,14 +141,13 @@ public class ListItem implements Comparable<ListItem> {
         return getDateTime().compareTo(li.getDateTime());
     }
 
-    public static int setReportTypeImage(String reportType){
+    public static int getReportTypeImage(String reportType){
+        int ret = 0;
         int[] reportIcons = {
                 R.mipmap.btn_fire,
                 R.mipmap.btn_flood,
                 R.mipmap.btn_accident
         };
-
-        int ret = 0;
 
         switch(reportType){
             case "Fire":
@@ -165,5 +164,31 @@ public class ListItem implements Comparable<ListItem> {
         }
 
         return ret;
+    }
+
+    public static int getReportMarkerImage(String reportType){
+        int retIcon = 0;
+        int[] reportIcons = {
+                R.drawable.ic_marker_fire,
+                R.drawable.ic_marker_flood,
+                R.drawable.ic_marker_accident,
+        };
+
+        switch (reportType){
+
+            case "Fire" :
+                retIcon = reportIcons[0];
+                break;
+
+            case "Flood" :
+                retIcon = reportIcons[1];
+                break;
+
+            case "Vehicular Accident" :
+                retIcon = reportIcons[2];
+                break;
+        }
+
+        return retIcon;
     }
 }

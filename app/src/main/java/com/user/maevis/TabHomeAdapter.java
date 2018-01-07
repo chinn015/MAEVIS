@@ -47,7 +47,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 .fit()
                 .into(holder.imageViewReport);
 
-        Picasso.with(context).load(listItem.setReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
+        Picasso.with(context).load(listItem.getReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override

@@ -70,7 +70,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
                 .into(viewNotifImage);
 
         Picasso.with(getApplicationContext())
-                .load(ListItem.setReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
+                .load(ListItem.getReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
                 .into(viewNotifReportType);
 
 

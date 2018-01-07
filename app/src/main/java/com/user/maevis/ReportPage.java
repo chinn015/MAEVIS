@@ -44,7 +44,7 @@ public class ReportPage extends AppCompatActivity {
                     .fit()
                     .into(viewReportImage);
             Picasso.with(getApplicationContext())
-                    .load(ListItem.setReportTypeImage(TabHomeAdapter.getClickedItem().getReportType()))
+                    .load(ListItem.getReportTypeImage(TabHomeAdapter.getClickedItem().getReportType()))
                     .into(viewReportType);
 
         }else{
@@ -56,7 +56,7 @@ public class ReportPage extends AppCompatActivity {
                     .fit()
                     .into(viewReportImage);
             Picasso.with(getApplicationContext())
-                    .load(ListItem.setReportTypeImage(Tab2_Location.verifiedReport.getReportType()))
+                    .load(ListItem.getReportTypeImage(Tab2_Location.verifiedReport.getReportType()))
                     .into(viewReportType);
         }
     }
