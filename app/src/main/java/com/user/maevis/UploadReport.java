@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -28,7 +31,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.user.maevis.controllers.cNotification;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -36,22 +41,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import me.grantland.widget.AutofitTextView;
+
 public class UploadReport extends AppCompatActivity {
 
     DatabaseReference FirebaseReports, FirebaseUsers;
-    private EditText txtFldLocation;
+    private AutofitTextView txtFldLocation;
     private EditText txtFldDescription;
     private ProgressDialog progressDialog;
     private StorageReference firebaseStorage;
     private Uri reportPhoto;
-    private static String imageURL="";
+    private static String imageURL = "";
+
 
     public static ReportModel reportModel;
     public static DatabaseReference newReport;
 
-    ImageView ivImage;
+    ImageView ivImage, ivReportType;
     VideoView videoView;
-    Integer REQUEST_CAMERA=1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE=0;
+    Integer REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +86,19 @@ public class UploadReport extends AppCompatActivity {
             }
         });
 
-        txtFldLocation = (EditText) findViewById(R.id.txtFldLocation);
+        txtFldLocation = (AutofitTextView) findViewById(R.id.txtFldLocation);
         txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
-        txtFldDescription.setHint("Description ["+SelectionPage.getReportType()+SessionManager.getFirstName()+"]");
+        txtFldDescription.setHint("Write something about this report. [" + SelectionPage.getReportType() + "]");
+        txtFldLocation.setText(Tab2_Location.userLocAddress);
+        ivReportType = (ImageView) findViewById(R.id.reportIconType);
+        Picasso.with(getApplicationContext())
+                .load(ListItem.getReportMarkerImage(SelectionPage.getReportType()))
+                .into(ivReportType);
     }
 
-    private void SelectImage(){
+    private void SelectImage() {
 
-        final CharSequence[] items={"Camera","Gallery", "Cancel"};
+        final CharSequence[] items = {"Camera", "Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(UploadReport.this);
         builder.setTitle("Add Image");
@@ -118,10 +131,10 @@ public class UploadReport extends AppCompatActivity {
     }
 
     @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode,data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode== Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
 
             /*if(requestCode==REQUEST_CAMERA){
 
@@ -136,7 +149,7 @@ public class UploadReport extends AppCompatActivity {
 
             }*/
 
-            if(requestCode==REQUEST_CAMERA || requestCode==SELECT_FILE) {
+            if (requestCode == REQUEST_CAMERA || requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
 
@@ -155,7 +168,7 @@ public class UploadReport extends AppCompatActivity {
                         setImageURL(downloadUrl.toString());
 
                         //Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
-                        Toast.makeText(UploadReport.this, "Sent! "+getImageURL(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadReport.this, "Sent! " + getImageURL(), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -191,7 +204,7 @@ public class UploadReport extends AppCompatActivity {
 
         if (id == R.id.action_upload_report) {
             //Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
-            Toast.makeText(UploadReport.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(UploadReport.this, "Logged in " + SessionManager.isLoggedIn() + " as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName(), Toast.LENGTH_LONG).show();
             uploadReport();
 
             //finish();
@@ -215,12 +228,12 @@ public class UploadReport extends AppCompatActivity {
         String reportType = SelectionPage.getReportType();
         String reportedBy = SessionManager.getUserID();
 
-        if(TextUtils.isEmpty(description)) {
+        if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(location)) {
+        if (TextUtils.isEmpty(location)) {
             Toast.makeText(this, "Please enter location.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -234,30 +247,8 @@ public class UploadReport extends AppCompatActivity {
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
 
-        cNotification.showVerifyReportNotification(getApplication());
-        cNotification.vibrateNotification(getApplication());
+        //cNotification.showVerifyReportNotification(getApplication());
+        //cNotification.vibrateNotification(getApplication());
     }
 
-   /* public void showNotification(){
-        String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo);
-        builder.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-        builder.setContentTitle(reportModel.getReportType() + " Report");
-        builder.setContentText(fullName + " reported a " +  reportModel.getReportType()
-                + " Report" + " at " + reportModel.getLocation());
-        builder.setAutoCancel(true);
-
-        Intent i = new Intent(this, NotificationView.class);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(NotificationView.class);
-        stackBuilder.addNextIntent(i);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        NotificationManager nm = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(0, builder.build());
-    }*/
 }

@@ -2,12 +2,14 @@ package com.user.maevis;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +97,28 @@ public class Tab3_Notification extends Fragment {
                         dataSnapshot.child("reportedBy").getValue().toString(),
                         formatDateTime);
 
-                listItems.add(item);
+
+                float distance, limit_distance;
+
+                limit_distance = 1000;
+                Location report_locations = new Location("1");
+                Location current_location = new Location("2");
+
+                report_locations.setLatitude(item.getLocationLatitude());
+                report_locations.setLongitude(item.getLocationLongitude());
+
+                current_location.setLatitude(Tab2_Location.userLatitude);
+                current_location.setLongitude(Tab2_Location.userLongitude);
+
+                distance = current_location.distanceTo(report_locations);
+
+                if(distance <= limit_distance) {
+                    //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                    Log.d("Inside Notif: ", FirebaseDatabaseManager.getFullName(item.getReportedBy()));
+                    listItems.add(item);
+                }else{
+                    Log.d("Outside Notif: ", FirebaseDatabaseManager.getFullName(item.getReportedBy()));
+                }
 
                 /*Collections.sort(listItems, new Comparator<ListItem>() {
                     @Override

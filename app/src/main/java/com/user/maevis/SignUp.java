@@ -25,7 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.user.maevis.models.UserModel;
+import com.user.maevis.session.SessionManager;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
@@ -118,6 +120,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String lastName = txtFldLastName.getText().toString();
         String birthdate = txtFldBirthdate.getText().toString();
         String address = txtFldAddress.getText().toString();
+        String userType = "Regular User";
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
 
         if(TextUtils.isEmpty(username)) {
             Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
@@ -156,7 +161,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         //final UserModel userModel = new UserModel(email, username, password);
         //final UserModel userModel = new UserModel(username, password, email, firstName, lastName, birthdate, address);
-        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, "Regular User", username);
+        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, userType, username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -172,6 +177,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress());
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));

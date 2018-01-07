@@ -21,8 +21,7 @@ public class TabNotifBadge extends AppCompatTextView {
         if (badgeNumber > 0) {
             target.setVisibility(View.VISIBLE);
             ((TextView) target).setText(Integer.toString(badgeNumber));
-        }
-        else {
+        } else {
             target.setVisibility(View.GONE);
         }
     }

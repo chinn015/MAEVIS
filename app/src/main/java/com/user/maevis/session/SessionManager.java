@@ -31,6 +31,7 @@ public class SessionManager {
     public static final String KEY_BIRTHDATE = "SESSION_BIRTHDATE";
     public static final String KEY_ADDRESS = "SESSION_ADDRESS";
     public static final String KEY_STATUS = "SESSION_STATUS";
+    public static final String KEY_DEVICE_TOKEN = "SESSION_DEVICE_TOKEN";
 
     //CONSTRUCTOR
     public SessionManager(Context context) {
@@ -49,6 +50,7 @@ public class SessionManager {
         sessionEditor.putString(KEY_BIRTHDATE, birthdate);
         sessionEditor.putString(KEY_ADDRESS, address);
         sessionEditor.putBoolean(KEY_STATUS, true);
+        //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
 
         sessionEditor.commit();
     }
@@ -62,6 +64,7 @@ public class SessionManager {
         user.put(KEY_LASTNAME, sessionPreferences.getString(KEY_LASTNAME, null));
         user.put(KEY_BIRTHDATE, sessionPreferences.getString(KEY_BIRTHDATE, null));
         user.put(KEY_ADDRESS, sessionPreferences.getString(KEY_ADDRESS, null));
+        //user.put(KEY_DEVICE_TOKEN, sessionPreferences.getString(KEY_DEVICE_TOKEN, null));
 
         return user;
     }
@@ -110,5 +113,9 @@ public class SessionManager {
 
     public static void setFirebaseAuth(FirebaseAuth firebaseAuth) {
         SessionManager.firebaseAuth = firebaseAuth;
+    }
+
+    public static String getKeyDeviceToken() {
+        return sessionPreferences.getString(KEY_DEVICE_TOKEN, null);
     }
 }

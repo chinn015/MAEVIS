@@ -3,11 +3,14 @@ package com.user.maevis;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +26,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.UserModel;
+import com.user.maevis.session.SessionManager;
 
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class Tab2_Location extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -34,6 +43,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     private Location mUserLocation;
     static double userLatitude, userLongitude;
     static ListItem verifiedReport;
+    static String userLocAddress;
     View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +64,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
                     Toast.LENGTH_LONG).show();
         }
 
+        userLocAddress = getUserLocAddress(userLatitude, userLongitude);
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         SupportMapFragment fragment = new SupportMapFragment();
@@ -67,6 +79,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         final LatLng user_location;
+        final LatLng home_location;
         BitmapDrawable bitmapUser, bitmapHome;
         BitmapDrawable[] bitmapReports = new BitmapDrawable[3];
         Bitmap[] reports = new Bitmap[3];
@@ -74,26 +87,25 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         int[] reportIcons = {
                 R.drawable.ic_marker_fire,
                 R.drawable.ic_marker_flood,
-                R.drawable.ic_marker_accident
+                R.drawable.ic_marker_accident,
+                R.drawable.ic_marker_user,
+                R.drawable.ic_marker_home
         };
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
+        bitmapHome = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_home);
+        Bitmap home = bitmapHome.getBitmap();
+        Bitmap homeMarker = Bitmap.createScaledBitmap(home, 160, 160, false);
+
+
         for (int x = 0; x < 3; x++){
             bitmapReports[x] = (BitmapDrawable)getResources().getDrawable(reportIcons[x]);
             reports[x] = bitmapReports[x].getBitmap();
             reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
         }
-
-        // bitmapReport = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_fire);
-        //Bitmap report = bitmapReport.getBitmap();
-        //Bitmap reportMarker = Bitmap.createScaledBitmap(report, 150, 150, false);
-
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.315000, 123.888899)).visible(true).alpha(0.8f).title("Location1").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.317000, 123.900000)).visible(true).alpha(0.8f).title("Location2").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(10.3171367, 123.9125538)).visible(true).alpha(0.8f).title("Static - Location3").icon(BitmapDescriptorFactory.fromBitmap(reportMarker)));
 
         /*set marker for user's location*/
         if(mUserLocation == null){
@@ -104,11 +116,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
         }
 
-//        Circle circle =  mMap.addCircle(new CircleOptions()
-//                .center(user_location)
-//                .radius(1000)
-//                .strokeColor(Color.parseColor("#8c6b1913"))
-//                .fillColor(Color.parseColor("#5089534f")));
+         /*set marker for home location*/
+        home_location = getHomeAddress(SessionManager.getAddress());
+        mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(0.8f).title("Home Location").icon(BitmapDescriptorFactory.fromBitmap(homeMarker)));
 
         mMap.setOnMarkerClickListener(this);
 
@@ -157,10 +167,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
             if(distance <= limit_distance){
                 Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                Log.d("Inside: ", FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()));
                 cNotification.showViewReportNotification(getContext(), verifiedReport);
                 cNotification.vibrateNotif(getContext());
             }else{
                 Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
+                Log.d("Outside: ", FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()));
             }
 
         }
@@ -169,7 +181,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "LatLng: "+ getUserLatitude() +" "+ getUserLongitude(),
+                Toast.makeText(getActivity(), "My Location",
                         Toast.LENGTH_LONG).show();
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -179,8 +191,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
         Sidebar_HomePage.btnHomeLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Home Location",
+                Toast.makeText(getActivity(), "Home Location : " + SessionManager.getAddress(),
                         Toast.LENGTH_LONG).show();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(home_location).zoom(17).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
 
@@ -191,15 +205,24 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     public boolean onMarkerClick(Marker marker) {
         String markerId;
         Intent i;
+        int id;
 
         markerId = marker.getId().replaceAll("[^\\d.]", "");
+        id = Integer.parseInt(markerId) - 2;
         //Toast.makeText(getContext(), markerId, Toast.LENGTH_LONG).show();
-        verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(Integer.parseInt(markerId)-1);
+       // Toast.makeText(getContext(), "("+markerId+") "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()), Toast.LENGTH_LONG).show();
 
-        Toast.makeText(getContext(), "("+markerId+") "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()), Toast.LENGTH_LONG).show();
+        if( id != -1 && id != -2){
+            Toast.makeText(getContext(), "("+id+") "+FirebaseDatabaseManager.getVerifiedReports().get(id).getReportType(), Toast.LENGTH_LONG).show();
+            verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(id);
+            i = new Intent(getContext(), ReportPage.class);
+            startActivity(i);
+        }else if( id == 0 ){
+            marker.setTitle("My Location");
+        }else{
+            marker.setTitle("Home Location");
+        }
 
-        i = new Intent(getContext(), ReportPage.class);
-        startActivity(i);
         return true;
     }
 
@@ -210,4 +233,50 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     public static double getUserLongitude() {
         return userLongitude;
     }
+
+    public LatLng getHomeAddress(String homeAddress){
+        Geocoder coder = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> address;
+        Address location;
+        LatLng latLng = new LatLng(10.316590, 123.897093);
+
+        try {
+            //Get latLng from String
+            address = coder.getFromLocationName(homeAddress,1);
+
+            if(address != null || !address.isEmpty()) {
+                location = address.get(0);
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            }else{
+                latLng = new LatLng(10.316590, 123.897093);
+            }
+
+            for(int x = 0; x < address.size(); x++){
+                Log.d("address", address.get(x).toString());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return latLng;
+    }
+
+    public String getUserLocAddress (double userLatitude, double userLongitude){
+        String fullAddress = "No Location Found.";
+        Geocoder geocoder;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(userLatitude, userLongitude, 1);
+            fullAddress = addresses.get(0).getAddressLine(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullAddress;
+    }
+
 }

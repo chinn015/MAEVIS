@@ -24,7 +24,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class SidebarShare extends AppCompatActivity
+public class SidebarHotline extends AppCompatActivity
 	implements AppBarLayout.OnOffsetChangedListener {
 	private static final int PERCENTAGE_TO_SHOW_IMAGE = 20;
 	private View mFab;
@@ -34,7 +34,7 @@ public class SidebarShare extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sidebar_share);
+		setContentView(R.layout.sidebar_hotline);
 
 		mFab = findViewById(R.id.flexible_example_fab);
 
@@ -74,6 +74,6 @@ public class SidebarShare extends AppCompatActivity
 	}
 
 	public static void start(Context c) {
-		c.startActivity(new Intent(c, SidebarShare.class));
+		c.startActivity(new Intent(c, SidebarHotline.class));
 	}
 }

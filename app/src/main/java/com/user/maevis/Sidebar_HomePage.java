@@ -45,6 +45,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     TextView profileName;
     static TabNotifBadge badge;
     static int noOfReports;
+
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -120,7 +121,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
-                } else {
+                } else if (position == 2) {
+                    Sidebar_HomePage.badge.updateTabBadge(0);
+                    btnHomeLoc.hide();
+                    btnUserLoc.hide();
+                }else{
                     btnHomeLoc.hide();
                     btnUserLoc.hide();
                 }
@@ -131,7 +136,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
-
 
         //store data to Lists
         //initialize Firebase Database Manager
@@ -260,7 +264,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         //badge.updateTabBadge(Tab3_Notification.noOfReports);
         countReports();
 
-
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(3).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
 
@@ -361,10 +364,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         //fragmentManager.beginTransaction().replace(R.id.content_frame, new Tab1_Home()).commit();
 
         switch (id){
+            /*
             case R.id.nav_home :
                 i = new Intent(Sidebar_HomePage.this, Sidebar_HomePage.class);
                 startActivity(i);
                 break;
+                */
 
             case R.id.nav_profile :
                 i = new Intent(Sidebar_HomePage.this, SidebarProfile.class);
@@ -382,7 +387,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_share :
-                i = new Intent(Sidebar_HomePage.this, SidebarShare.class);
+                i = new Intent(Sidebar_HomePage.this, SidebarHotline.class);
                 startActivity(i);
                 break;
 
