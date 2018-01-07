@@ -364,10 +364,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         //fragmentManager.beginTransaction().replace(R.id.content_frame, new Tab1_Home()).commit();
 
         switch (id){
+            /*
             case R.id.nav_home :
                 i = new Intent(Sidebar_HomePage.this, Sidebar_HomePage.class);
                 startActivity(i);
                 break;
+                */
 
             case R.id.nav_profile :
                 i = new Intent(Sidebar_HomePage.this, SidebarProfile.class);

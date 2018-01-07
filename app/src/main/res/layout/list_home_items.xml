@@ -4,11 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
-    android:layout_marginRight="4dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginBottom="2dp"
-    android:layout_marginTop="2dp"
+    android:layout_height="475dp"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="1dp"
     app:cardCornerRadius="4dp"
     >
 
@@ -17,7 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/selector"
-        android:padding="10dp">
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgViewProfilePic"
@@ -33,7 +33,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/imgViewProfilePic"
             android:padding="7dp">
@@ -55,7 +55,7 @@
                 android:layout_toEndOf="@+id/reportHomeType"
                 android:paddingLeft="5dp"
                 android:text="datetime"
-                android:textSize="12dp" />
+                android:textSize="12sp" />
 
             <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
@@ -82,27 +82,52 @@
 
         </RelativeLayout>
 
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportBottomLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <!--<TextView-->
+            <!--android:id="@+id/textViewDesc"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Description"-->
+            <!--android:layout_marginTop="98dp"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:paddingBottom="2dp"/>-->
+
         <ImageView
             android:id="@+id/imageViewReport"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="350dp"
             android:src="@drawable/img_fire"
-            android:layout_marginTop="13dp"
-            android:layout_below="@+id/textViewDesc"
+            android:layout_marginTop="103dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/textViewDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:layout_marginTop="12dp"
-            android:layout_below="@+id/imgViewProfilePic"
+            android:layout_alignBottom="@+id/imageViewReport"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp" />
-
+            android:background="#80161616"
+            android:padding="12dp"
+            android:text="Description"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            />
 
     </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>
 
