@@ -22,107 +22,136 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="70dp"
-        app:cardCornerRadius="4dp"
-        android:id="@+id/cardView">
-
-        <RelativeLayout
-            android:id="@+id/viewReportLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector"
-            android:padding="10dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgViewProfilePic"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center_horizontal"
-                android:elevation="8dp"
-                android:src="@drawable/img_user"
-                app:border_color="#FFF"
-                app:border_width="2dp"
-                app:layout_anchorGravity="top|center_horizontal"
-                app:layout_scrollFlags="scroll" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="7dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/imgViewProfilePic">
-
-                <ImageView
-                    android:id="@+id/viewReportType"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/btn_fire"
-                    android:layout_below="@+id/viewReportHead"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/viewReportHead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:maxLines="2"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="2dp"
-                    android:text="Hello World"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000"  />
-
-                <TextView
-                    android:id="@+id/viewReportDateTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="datetime"
-                    android:textSize="12dp"
-                    android:layout_alignBottom="@+id/viewReportType"
-                    android:layout_toEndOf="@+id/viewReportType" />
-
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/viewReportImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/img_fire"
-                android:layout_below="@+id/viewReportDesc"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="12dp" />
-
-            <TextView
-                android:id="@+id/viewReportDesc"
-                android:text="Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/imgViewProfilePic"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="18dp" />
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <include
-        layout="@layout/list_comments"
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:layout_below="@+id/cardView"
-        android:layout_alignStart="@+id/cardView" />
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="475dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="60dp"
+                app:cardCornerRadius="1dp"
+                android:id="@+id/cardView">
 
+                <RelativeLayout
+                    android:id="@+id/viewReportLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgViewProfilePic"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:elevation="8dp"
+                        android:src="@drawable/img_user"
+                        app:border_color="#FFF"
+                        app:border_width="2dp"
+                        app:layout_anchorGravity="top|center_horizontal"
+                        app:layout_scrollFlags="scroll" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="7dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imgViewProfilePic">
+
+                        <ImageView
+                            android:id="@+id/viewReportType"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/btn_fire"
+                            android:layout_below="@+id/viewReportHead"
+                            android:layout_alignParentStart="true" />
+
+                        <TextView
+                            android:id="@+id/viewReportHead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:maxLines="2"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="2dp"
+                            android:text="Hello World"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000"  />
+
+                        <TextView
+                            android:id="@+id/viewReportDateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:text="datetime"
+                            android:textSize="12dp"
+                            android:layout_alignBottom="@+id/viewReportType"
+                            android:layout_toEndOf="@+id/viewReportType" />
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/reportBottomLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <TextView
+                        android:id="@+id/viewReportDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:layout_marginTop="98dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="2dp"/>
+
+                    <ImageView
+                        android:id="@+id/viewReportImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:src="@drawable/img_fire"
+                        android:layout_below="@+id/viewReportDesc"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="15dp" />
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/viewReportDesc"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="#80161616"-->
+                        <!--android:padding="12dp"-->
+                        <!--android:text="Description"-->
+                        <!--android:textColor="@color/colorAccent"-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:layout_alignParentBottom="true"-->
+                        <!--android:layout_alignParentStart="true" />-->
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <include
+                layout="@layout/list_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/cardView"
+                android:layout_alignStart="@+id/cardView" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
