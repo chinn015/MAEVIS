@@ -7,69 +7,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.user.maevis.models.FirebaseDatabaseManager;
 
 import java.util.List;
 
-public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHolder> {
+/**
+ * Created by User on 1/8/2018.
+ */
 
+public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTimelineAdapter.ViewHolder> {
 
     private List<ListItem> listItems;
-    private List<ListItemVerified> listItemsVerified;
     private Context context;
-    //private static ListItem clickedItem = null;
-    private static ListItemVerified clickedItemVerified = null;
+    private static ListItem clickedItem = null;
 
-    /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
+    public TabProfileTimelineAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
-    }*/
-
-    public TabHomeAdapter(List<ListItemVerified> listItemsVerified, Context context) {
-        this.listItemsVerified = listItemsVerified;
-        this.context = context;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TabProfileTimelineAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_home_items, parent, false);
-        return new ViewHolder(v);
+        return new TabProfileTimelineAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final ListItemVerified listItemVerified = listItemsVerified.get(position);
-
-        holder.textViewHead.setText(listItemVerified.getHead());
-        holder.textViewDesc.setText(listItemVerified.getDescription());
-        holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
-        Picasso.with(context)
-                .load(listItemVerified.getImageThumbnailURL())
-                .fit()
-                .into(holder.imageViewReport);
-
-        Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
-
-        holder.reportLayout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItemVerified(listItemVerified);
-                Intent i;
-                i = new Intent(context, ReportPage.class);
-                context.startActivity(i);
-            }
-        });
-    }
-
-    /*@Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(TabProfileTimelineAdapter.ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
         holder.textViewHead.setText(listItem.getHead());
@@ -92,31 +60,19 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 context.startActivity(i);
             }
         });
-    }*/
+    }
 
-    /*public static ListItem getClickedItem() {
+    public static ListItem getClickedItem() {
         return clickedItem;
     }
 
     public static void setClickedItem(ListItem clickedItem) {
-        TabHomeAdapter.clickedItem = clickedItem;
-    }*/
-
-    public static ListItemVerified getClickedItemVerified() {
-        return clickedItemVerified;
-    }
-
-    public static void setClickedItemVerified(ListItemVerified clickedItemVerified) {
-        TabHomeAdapter.clickedItemVerified = clickedItemVerified;
+        TabProfileTimelineAdapter.clickedItem = clickedItem;
     }
 
     @Override
     public int getItemCount() {
-        return listItemsVerified.size();
-    }
-
-    public int getItemVerifiedCount() {
-        return listItemsVerified.size();
+        return listItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

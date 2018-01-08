@@ -3,40 +3,37 @@ package com.user.maevis.models;
 import java.util.List;
 
 /**
- * Created by User on 11/23/2017.
+ * Created by User on 1/8/2018.
  */
 
-public class ReportModel {
-
+public class ReportVerifiedModel {
     private String dateTime;
     private String description;
-    private String imageURL;
+    private String imageThumbnailURL;
+    private List<String> imageList;
     private String location;
     private double locationLatitude;
     private double locationLongitude;
-    private String mergedTo;
     private String reportStatus;
     private String reportType;
     private String reportedBy;
+    private List<String> mergedReportsID;
 
-    public ReportModel() {
-
-    }
 
     //CONSTRUCTOR
-    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy) {
+    public ReportVerifiedModel(String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy) {
         this.dateTime = dateTime;
         this.description = description;
-        this.imageURL = imageURL;
+        this.imageList = imageList;
+        this.imageThumbnailURL = imageThumbnailURL;
         this.location = location;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
+        this.mergedReportsID = mergedReportsID;
         this.reportStatus = reportStatus;
-        this.mergedTo = mergedTo;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
     }
-
 
     //GETTER SETTERS
     public String getDateTime() {
@@ -55,12 +52,20 @@ public class ReportModel {
         this.description = description;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageThumbnailURL() {
+        return imageThumbnailURL;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageThumbnailURL(String imageThumbnailURL) {
+        this.imageThumbnailURL = imageThumbnailURL;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
     }
 
     public String getLocation() {
@@ -87,14 +92,6 @@ public class ReportModel {
         this.locationLongitude = locationLongitude;
     }
 
-    public String getMergedTo() {
-        return mergedTo;
-    }
-
-    public void setMergedTo(String mergedTo) {
-        this.mergedTo = mergedTo;
-    }
-
     public String getReportStatus() {
         return reportStatus;
     }
@@ -117,5 +114,13 @@ public class ReportModel {
 
     public void setReportedBy(String reportedBy) {
         this.reportedBy = reportedBy;
+    }
+
+    public List<String> getMergedReportsID() {
+        return mergedReportsID;
+    }
+
+    public void setMergedReportsID(List<String> mergedReportsID) {
+        this.mergedReportsID = mergedReportsID;
     }
 }

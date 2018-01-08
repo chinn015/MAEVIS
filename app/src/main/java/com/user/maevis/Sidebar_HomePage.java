@@ -193,8 +193,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 locationLatitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLatitude").getValue());
                 locationLongitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLongitude").getValue());
 
+                //retrieve full name
+                String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
+                        fullName+" reported a " +
                                 dataSnapshot.child("reportType").getValue().toString() + " at " +
                                 dataSnapshot.child("location").getValue().toString(),
                         dataSnapshot.child("dateTime").getValue().toString(),
@@ -203,6 +206,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         dataSnapshot.child("location").getValue().toString(),
                         locationLatitude,
                         locationLongitude,
+                        dataSnapshot.child("mergedTo").getValue().toString(),
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
@@ -210,8 +214,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
                 FirebaseDatabaseManager.getListItems().add(item);
 
-                if(item.getReportStatus().equals("Verified")) {
-                    FirebaseDatabaseManager.getVerifiedReports().add(item);
+                switch(item.getReportStatus()) {
+                    case "Verified": FirebaseDatabaseManager.getVerifiedReports().add(item); break;
+                    case "Pending": FirebaseDatabaseManager.getPendingReports().add(item); break;
                 }
             }
 

@@ -95,6 +95,7 @@ public class SidebarProfileMedia extends Fragment {
 						dataSnapshot.child("location").getValue().toString(),
 						locationLatitude,
 						locationLongitude,
+						dataSnapshot.child("mergedTo").getValue().toString(),
 						dataSnapshot.child("reportStatus").getValue().toString(),
 						dataSnapshot.child("reportType").getValue().toString(),
 						dataSnapshot.child("reportedBy").getValue().toString(),
