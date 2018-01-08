@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.user.maevis.ListItem;
+import com.user.maevis.ListItemVerified;
 import com.user.maevis.NotificationView;
 import com.user.maevis.R;
 import com.user.maevis.ReportPage;
@@ -61,50 +62,7 @@ public class cNotification {
     }
 
     //notification for view report with data
-    public static void showViewReportNotification(Context context, ListItem nearbyReport){
-
-//        String fullName = FirebaseDatabaseManager.getFullName(nearbyReport.getReportedBy());
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-//        builder.setSmallIcon(R.drawable.ic_notif_maevis_logo)
-//                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-//                .setContentTitle(nearbyReport.getReportType() + " Report")
-//                .setLights(0xff00ff00, 500, 500)
-//                .setAutoCancel(true)
-//                .setContentText(fullName + " reported a " +  nearbyReport.getReportType()
-//                        + " near your location.");
-//
-//        Intent i = new Intent(context, ReportPage.class);
-//
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//        stackBuilder.addParentStack(ReportPage.class);
-//        stackBuilder.addNextIntent(i);
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, ReportPage.class), PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.SECOND, 1);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5000, pendingIntent);
-//
-//        //PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//        builder.setContentIntent(pendingIntent);
-//
-//        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-//        //nm.notify(0, builder.build());
-//
-//        SharedPreferences prefs = context.getSharedPreferences(Activity.class.getSimpleName(), Context.MODE_PRIVATE);
-//        int notificationNumber = prefs.getInt("notificationNumber", 0);
-//
-//        nm.notify(notificationNumber ,  builder.build());
-//        SharedPreferences.Editor editor = prefs.edit();
-//        notificationNumber++;
-//        editor.putInt("notificationNumber", notificationNumber);
-//        editor.commit();
-
-
-
-        // Bitmap pic = getBitmapfromUrl(nearbyReport.getImageURL());
-        Log.e("image-url", nearbyReport.getImageURL());
+    public static void showActiveNotification(Context context, ListItemVerified nearbyReport){
 
         String fullName = FirebaseDatabaseManager.getFullName(nearbyReport.getReportedBy());
 
@@ -145,6 +103,50 @@ public class cNotification {
         editor.commit();
 
     }
+
+    //notification for view report with data
+    public static void showPendingNotification(Context context, ListItem nearbyReport){
+
+        String fullName = FirebaseDatabaseManager.getFullName(nearbyReport.getReportedBy());
+
+        int NOTIFICATION_ID = 1;
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_notif_maevis_logo)
+                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                        .setContentTitle(nearbyReport.getReportType() + " Report")
+                        .setContentText(fullName + " reported a " +  nearbyReport.getReportType()
+                                + " near your location.")
+                        .setAutoCancel(true)
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+        //.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(pic));
+
+        Intent intent = new Intent(context, ReportPage.class);
+        PendingIntent launchIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        Intent buttonIntent = new Intent(context, ReportPage.class);
+        buttonIntent.putExtra("notificationId", NOTIFICATION_ID);
+        PendingIntent dismissIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, 0);
+
+        builder.addAction(android.R.drawable.ic_menu_view, "VIEW", launchIntent);
+        builder.addAction(android.R.drawable.ic_delete, "DISMISS", dismissIntent);
+        builder.setContentIntent(launchIntent);
+
+        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        //nm.notify(NOTIFICATION_ID, builder.build());
+
+        SharedPreferences prefs = context.getSharedPreferences(Activity.class.getSimpleName(), Context.MODE_PRIVATE);
+        int notificationNumber = prefs.getInt("notificationNumber", 0);
+
+        nm.notify(notificationNumber ,  builder.build());
+        SharedPreferences.Editor editor = prefs.edit();
+        notificationNumber++;
+        editor.putInt("notificationNumber", notificationNumber);
+        editor.commit();
+
+    }
+
 
 
     /* To get a Bitmap image from the URL received*/

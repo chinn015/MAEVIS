@@ -61,16 +61,16 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
 
         //display details of clicked item
-        viewNotifHead.setText(TabNotifAdapter.getClickedItem().getHead());
-        viewNotifDesc.setText(TabNotifAdapter.getClickedItem().getDescription());
-        viewNotifDateTime.setText(TabNotifAdapter.getClickedItem().getDisplayDateTime());
+        viewNotifHead.setText(Tab2_Location.pendingReport.getHead());
+        viewNotifDesc.setText(Tab2_Location.pendingReport.getDescription());
+        viewNotifDateTime.setText(Tab2_Location.pendingReport.getDisplayDateTime());
         Picasso.with(getApplicationContext())
-                .load(TabNotifAdapter.getClickedItem().getImageURL())
+                .load(Tab2_Location.pendingReport.getImageURL())
                 .fit()
                 .into(viewNotifImage);
 
         Picasso.with(getApplicationContext())
-                .load(ListItem.getReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
+                .load(ListItem.getReportTypeImage((Tab2_Location.pendingReport.getReportType())))
                 .into(viewNotifReportType);
 
 
@@ -194,34 +194,34 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v==btnVerifyReport) {
-            Toast.makeText(VerifyReport.this, "Report verified.", Toast.LENGTH_SHORT).show();
-            ListItem clickedReportBasis = TabNotifAdapter.getClickedItem();
-            //FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
+            clickedReportBasis = Tab2_Location.pendingReport;
 
-            for(int x = 0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
-                ListItem verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
-                double vLatitude = verifiedReport.getLocationLatitude();
-                double vLongitude = verifiedReport.getLocationLongitude();
+            for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
+                ListItem pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+                double vLatitude = pendingReport.getLocationLatitude();
+                double vLongitude = pendingReport.getLocationLongitude();
                 float distance, limit_distance;
 
                 limit_distance = 300;
                 Location report_locations = new Location("1");
                 Location verify_location = new Location("2");
-                String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
+                String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
 
                 report_locations.setLatitude(vLatitude);
                 report_locations.setLongitude(vLongitude);
 
-                verify_location.setLatitude(verifiedReport.getLocationLatitude());
-                verify_location.setLongitude(verifiedReport.getLocationLongitude());
+                verify_location.setLatitude(pendingReport.getLocationLatitude());
+                verify_location.setLongitude(pendingReport.getLocationLongitude());
 
                 //Returns the approximate distance in meters between the current location and the given report location.
                 distance = verify_location.distanceTo(report_locations);
 
                 if(distance <= limit_distance){
-                    if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), verifiedReport.getDateTime())) {
-                        if (verifiedReport.getReportType().equals(clickedReportBasis.getReportType())) {
-                            FirebaseReports.child(verifiedReport.getReportID()).child("reportStatus").setValue("Verified-Official");
+                    if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), pendingReport.getDateTime())) {
+                        if (pendingReport.getReportType().equals(clickedReportBasis.getReportType())) {
+                            getImageList().add(pendingReport.getImageURL());
+                            getMergedReportsID().add(pendingReport.getReportID());
+                            FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("reportStatus").setValue("Verified");
                         }
                     }
                 }
@@ -236,10 +236,49 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         if(v==btnDeclineReport) {
             Toast.makeText(VerifyReport.this, "Report declined.", Toast.LENGTH_SHORT).show();
-            FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Declined");
+            FirebaseReports.child(Tab2_Location.pendingReport.getReportID()).child("reportStatus").setValue("Declined");
             finish();
             startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
             return;
         }
+    }
+  
+    public void verifyReport() {
+        String dateTime = clickedReportBasis.getDateTime();
+        String description = clickedReportBasis.getDescription();
+        String imageThumbnailURL = clickedReportBasis.getImageURL();
+        List<String> imageList = getImageList();
+        String location = clickedReportBasis.getLocation();
+        double locationLatitude = clickedReportBasis.getLocationLatitude();
+        double locationLongitude = clickedReportBasis.getLocationLongitude();
+        String reportStatus = "Active";
+        String reportType = clickedReportBasis.getReportType();
+        String reportedBy = SessionManager.getUserID();
+        List<String> mergedReportsID = getMergedReportsID();
+
+        reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy);
+
+        newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
+        newReportVerified.setValue(reportVerifiedModel);
+
+        Toast.makeText(VerifyReport.this, "Report verified!.", Toast.LENGTH_LONG).show();
+        finish();
+        startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
+    }
+
+    public List<String> getMergedReportsID() {
+        return mergedReportsID;
+    }
+
+    public void setMergedReportsID(List<String> mergedReportsID) {
+        this.mergedReportsID = mergedReportsID;
     }
 }

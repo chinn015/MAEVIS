@@ -32,6 +32,7 @@ import com.user.maevis.session.SessionManager;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,7 +44,14 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     private Location mUserLocation;
     static double userLatitude, userLongitude;
     static ListItem verifiedReport;
+    static ListItem pendingReport;
+    static ListItemVerified activeVerifiedReport;
     static String userLocAddress;
+
+    static List<String> markerReportIDs;
+    static List<String> markerPendingReportIDs;
+    static List<String> markerActiveVerifiedReportIDs;
+
     View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +73,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         }
 
         userLocAddress = getUserLocAddress(userLatitude, userLongitude);
+        markerReportIDs = new ArrayList<>();
+        markerPendingReportIDs = new ArrayList<>();
+        markerActiveVerifiedReportIDs = new ArrayList<>();
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -117,44 +128,56 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         }
 
          /*set marker for home location*/
-        home_location = getHomeAddress(SessionManager.getAddress());
+        home_location = new LatLng(10.316590, 123.897093);
+       // home_location = getHomeAddress(SessionManager.getAddress());
         mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(0.8f).title("Home Location").icon(BitmapDescriptorFactory.fromBitmap(homeMarker)));
 
         mMap.setOnMarkerClickListener(this);
 
-        for(int x=0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
-            verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
-            double vLatitude = verifiedReport.getLocationLatitude();
-            double vLongitude = verifiedReport.getLocationLongitude();
+        //Display location markers for activeVerifiedReports (officially validated) for Regular Users and Admins
+        for (int x = 0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+            //verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
+            activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReports().get(x);
+            double vLatitude = activeVerifiedReport.getLocationLatitude();
+            double vLongitude = activeVerifiedReport.getLocationLongitude();
             float distance, limit_distance;
 
             limit_distance = 1000;
             Location report_locations = new Location("1");
             Location current_location = new Location("2");
-            String vTitle = verifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy());
+            String vTitle = activeVerifiedReport.getReportType() + " " + FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy());
 
-            switch (verifiedReport.getReportType()) {
+            switch (activeVerifiedReport.getReportType()) {
                 case "Fire":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                             .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
                     break;
 
                 case "Flood":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                             .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
                     break;
 
                 case "Vehicular Accident":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle+": "+vLatitude+" - "+vLongitude)
+                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                             .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
                     break;
             }
+
+            markerReportIDs.add(activeVerifiedReport.getReportID());
+
+            if(!FirebaseDatabaseManager.getActiveVerifiedReports().isEmpty()) {
+                Log.d("REPORTS", FirebaseDatabaseManager.getActiveVerifiedReports().get(0).getDescription());
+            } else {
+                Log.d("REPORTS", "WAY SUD!!!");
+            }
+
 
             report_locations.setLatitude(vLatitude);
             report_locations.setLongitude(vLongitude);
@@ -165,15 +188,81 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             //Returns the approximate distance in meters between the current location and the given report location.
             distance = current_location.distanceTo(report_locations);
 
-            if(distance <= limit_distance){
-                Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                Log.d("Inside: ", FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()));
-                cNotification.showViewReportNotification(getContext(), verifiedReport);
+            if (distance <= limit_distance) {
+                //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                Log.d("Inside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
+                cNotification.showActiveNotification(getContext(), activeVerifiedReport);
                 cNotification.vibrateNotif(getContext());
-            }else{
-                Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
-                Log.d("Outside: ", FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()));
+            } else {
+               // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
+                Log.d("Outside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
             }
+        }
+
+        Log.d("username", SessionManager.getUsername());
+        Log.d("address", SessionManager.getAddress());
+        Toast.makeText(getContext(), "size1" + FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
+
+
+
+        //Display location markers for pendingReports to be validated by the admin
+        if(SessionManager.getUserType().equals("Admin")) {
+            for (int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
+                pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+                double vLatitude = pendingReport.getLocationLatitude();
+                double vLongitude = pendingReport.getLocationLongitude();
+                float distance, limit_distance;
+
+                limit_distance = 1000;
+                Location report_locations = new Location("1");
+                Location current_location = new Location("2");
+                String vTitle = pendingReport.getReportType() + " " + FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+
+                switch (pendingReport.getReportType()) {
+                    case "Fire":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
+                        break;
+
+                    case "Flood":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
+                        break;
+
+                    case "Vehicular Accident":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
+                        break;
+                }
+
+                markerReportIDs.add(pendingReport.getReportID());
+
+                report_locations.setLatitude(vLatitude);
+                report_locations.setLongitude(vLongitude);
+
+                current_location.setLatitude(userLatitude);
+                current_location.setLongitude(userLongitude);
+
+                //Returns the approximate distance in meters between the current location and the given report location.
+                distance = current_location.distanceTo(report_locations);
+
+                if (distance <= limit_distance) {
+                   // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
+                    Log.d("Inside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
+                    cNotification.showPendingNotification(getContext(), pendingReport);
+                    cNotification.vibrateNotif(getContext());
+                } else {
+                   // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
+                    Log.d("Outside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
+                }
+            }
+
 
         }
 
@@ -206,21 +295,42 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         String markerId;
         Intent i;
         int id;
+        boolean status=false;
 
         markerId = marker.getId().replaceAll("[^\\d.]", "");
         id = Integer.parseInt(markerId) - 2;
-        //Toast.makeText(getContext(), markerId, Toast.LENGTH_LONG).show();
-       // Toast.makeText(getContext(), "("+markerId+") "+FirebaseDatabaseManager.getFullName(verifiedReport.getReportedBy()), Toast.LENGTH_LONG).show();
+
 
         if( id != -1 && id != -2){
-            Toast.makeText(getContext(), "("+id+") "+FirebaseDatabaseManager.getVerifiedReports().get(id).getReportType(), Toast.LENGTH_LONG).show();
-            verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(id);
-            i = new Intent(getContext(), ReportPage.class);
-            startActivity(i);
-        }else if( id == 0 ){
-            marker.setTitle("My Location");
-        }else{
-            marker.setTitle("Home Location");
+            switch(SessionManager.getUserType()) {
+                case "Regular User":
+                    Toast.makeText(getContext(), "Reg User MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
+
+                    activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+
+                    i = new Intent(getContext(), ReportPage.class);
+                    startActivity(i);
+                    break;
+                case "Admin":
+                    if(FirebaseDatabaseManager.isInActiveVerifiedReports(markerReportIDs.get(id))) {
+                        //Toast.makeText(getContext(), "Admin AVR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getActiveVerifiedReports().size(), Toast.LENGTH_LONG).show();
+                        activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+                        i = new Intent(getContext(), ReportPage.class);
+                        startActivity(i);
+                    } else {
+                        //Toast.makeText(getContext(), "Admin PR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
+                        pendingReport = FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id));
+                        i = new Intent(getContext(), VerifyReport.class);
+                        startActivity(i);
+                    }
+                    break;
+            }
+        }else if( id == 0 ) {
+            if (marker.isInfoWindowShown()) {
+                marker.hideInfoWindow();
+            } else {
+                marker.showInfoWindow();
+            }
         }
 
         return true;

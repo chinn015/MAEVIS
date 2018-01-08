@@ -48,15 +48,15 @@ public class ReportPage extends AppCompatActivity {
                     .into(viewReportType);
 
         }else{
-            viewReportHead.setText(Tab2_Location.verifiedReport.getHead());
-            viewReportDesc.setText(Tab2_Location.verifiedReport.getDescription());
-            viewReportDateTime.setText(Tab2_Location.verifiedReport.getDisplayDateTime());
+            viewReportHead.setText(Tab2_Location.activeVerifiedReport.getHead());
+            viewReportDesc.setText(Tab2_Location.activeVerifiedReport.getDescription());
+            viewReportDateTime.setText(Tab2_Location.activeVerifiedReport.getDisplayDateTime());
             Picasso.with(getApplicationContext())
-                    .load(Tab2_Location.verifiedReport.getImageURL())
+                    .load(Tab2_Location.activeVerifiedReport.getImageThumbnailURL())
                     .fit()
                     .into(viewReportImage);
             Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage(Tab2_Location.verifiedReport.getReportType()))
+                    .load(ListItem.getReportTypeImage(Tab2_Location.activeVerifiedReport.getReportType()))
                     .into(viewReportType);
         }
     }

@@ -177,7 +177,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress());
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserType());
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));

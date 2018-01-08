@@ -170,9 +170,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sLastName = user.child("lastName").getValue().toString();
                         String sBirthdate = user.child("birthdate").getValue().toString();
                         String sAddress = user.child("address").getValue().toString();
+                        String sUserType = user.child("userType").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress);
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserType);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
