@@ -21,18 +21,11 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
 
 
     private List<ListItem> listItems;
-    private List<ListItemVerified> listItemsVerified;
     private Context context;
-    //private static ListItem clickedItem = null;
-    private static ListItemVerified clickedItemVerified = null;
+    private static ListItem clickedItem = null;
 
-    /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
+    public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
-        this.context = context;
-    }*/
-
-    public TabHomeAdapter(List<ListItemVerified> listItemsVerified, Context context) {
-        this.listItemsVerified = listItemsVerified;
         this.context = context;
     }
 
@@ -43,32 +36,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final ListItemVerified listItemVerified = listItemsVerified.get(position);
-
-        holder.textViewHead.setText(listItemVerified.getHead());
-        holder.textViewDesc.setText(listItemVerified.getDescription());
-        holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
-        Picasso.with(context)
-                .load(listItemVerified.getImageThumbnailURL())
-                .fit()
-                .into(holder.imageViewReport);
-
-        Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
-
-        holder.reportLayout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItemVerified(listItemVerified);
-                Intent i;
-                i = new Intent(context, ReportPage.class);
-                context.startActivity(i);
-            }
-        });
-    }
-
-    /*@Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
@@ -92,31 +59,19 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 context.startActivity(i);
             }
         });
-    }*/
+    }
 
-    /*public static ListItem getClickedItem() {
+    public static ListItem getClickedItem() {
         return clickedItem;
     }
 
     public static void setClickedItem(ListItem clickedItem) {
         TabHomeAdapter.clickedItem = clickedItem;
-    }*/
-
-    public static ListItemVerified getClickedItemVerified() {
-        return clickedItemVerified;
-    }
-
-    public static void setClickedItemVerified(ListItemVerified clickedItemVerified) {
-        TabHomeAdapter.clickedItemVerified = clickedItemVerified;
     }
 
     @Override
     public int getItemCount() {
-        return listItemsVerified.size();
-    }
-
-    public int getItemVerifiedCount() {
-        return listItemsVerified.size();
+        return listItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
