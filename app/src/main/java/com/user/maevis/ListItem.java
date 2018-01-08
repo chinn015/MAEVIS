@@ -12,7 +12,6 @@ public class ListItem implements Comparable<ListItem> {
     private String location;
     private double locationLatitude;
     private double locationLongitude;
-    private String mergedTo;
     private String reportStatus;
     private String reportType;
     private String reportedBy;
@@ -20,7 +19,9 @@ public class ListItem implements Comparable<ListItem> {
 
 
     //CONSTRUCTORS
-    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
+
+
+    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
         this.reportID = reportID;
         this.head = head;
         this.dateTime = dateTime;
@@ -29,13 +30,11 @@ public class ListItem implements Comparable<ListItem> {
         this.location = location;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
-        this.mergedTo = mergedTo;
         this.reportStatus = reportStatus;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
         this.displayDateTime = displayDateTime;
     }
-
 
     //GETTER SETTER
     public String getReportID() {
@@ -92,14 +91,6 @@ public class ListItem implements Comparable<ListItem> {
 
     public void setLocationLongitude(double locationLongitude) {
         this.locationLongitude = locationLongitude;
-    }
-
-    public String getMergedTo() {
-        return mergedTo;
-    }
-
-    public void setMergedTo(String mergedTo) {
-        this.mergedTo = mergedTo;
     }
 
     public String getReportStatus() {

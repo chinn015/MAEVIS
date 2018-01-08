@@ -45,12 +45,14 @@ import me.grantland.widget.AutofitTextView;
 
 public class UploadReport extends AppCompatActivity {
 
+    DatabaseReference FirebaseReports, FirebaseUsers;
     private AutofitTextView txtFldLocation;
     private EditText txtFldDescription;
     private ProgressDialog progressDialog;
     private StorageReference firebaseStorage;
     private Uri reportPhoto;
     private static String imageURL = "";
+
 
     public static ReportModel reportModel;
     public static DatabaseReference newReport;
@@ -66,6 +68,9 @@ public class UploadReport extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+        FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
 
         firebaseStorage = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
@@ -220,8 +225,6 @@ public class UploadReport extends AppCompatActivity {
         String location = txtFldLocation.getText().toString();
         double locationLatitude = Tab2_Location.getUserLatitude();
         double locationLongitude = Tab2_Location.getUserLongitude();
-        String mergedTo = "NULL";
-        String reportStatus = "Pending";
         String reportType = SelectionPage.getReportType();
         String reportedBy = SessionManager.getUserID();
 
@@ -235,9 +238,9 @@ public class UploadReport extends AppCompatActivity {
             return;
         }
 
-        reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, mergedTo, reportStatus, reportType, reportedBy);
+        reportModel = new ReportModel(dateTime, description, getImageURL(), location, locationLatitude, locationLongitude, "Pending", reportType, reportedBy);
 
-        newReport = FirebaseDatabaseManager.FirebaseReports.push();
+        newReport = FirebaseReports.push();
         newReport.setValue(reportModel);
 
         Toast.makeText(UploadReport.this, "Report sent!.", Toast.LENGTH_LONG).show();
