@@ -92,15 +92,16 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         final LatLng user_location;
         final LatLng home_location;
         BitmapDrawable bitmapUser, bitmapHome;
-        BitmapDrawable[] bitmapReports = new BitmapDrawable[3];
-        Bitmap[] reports = new Bitmap[3];
-        Bitmap[] reportMarker = new Bitmap[3];
+        BitmapDrawable[] bitmapReports = new BitmapDrawable[6];
+        Bitmap[] reports = new Bitmap[6];
+        Bitmap[] reportMarker = new Bitmap[6];
         int[] reportIcons = {
                 R.drawable.ic_marker_fire,
                 R.drawable.ic_marker_flood,
                 R.drawable.ic_marker_accident,
-                R.drawable.ic_marker_user,
-                R.drawable.ic_marker_home
+                R.drawable.ic_marker__verified_fire,
+                R.drawable.ic_marker_verified_flood,
+                R.drawable.ic_marker_verified_accident
         };
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_user);
@@ -112,7 +113,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         Bitmap homeMarker = Bitmap.createScaledBitmap(home, 160, 160, false);
 
 
-        for (int x = 0; x < 3; x++){
+        for (int x = 0; x < 6; x++){
             bitmapReports[x] = (BitmapDrawable)getResources().getDrawable(reportIcons[x]);
             reports[x] = bitmapReports[x].getBitmap();
             reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
@@ -121,10 +122,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         /*set marker for user's location*/
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
+            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
         }else{
             user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(0.8f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
+            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
         }
 
          /*set marker for home location*/
@@ -151,22 +152,22 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
                 case "Fire":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
+                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[3])));
                     break;
 
                 case "Flood":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
+                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[4])));
                     break;
 
                 case "Vehicular Accident":
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
+                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[5])));
                     break;
             }
 
@@ -201,9 +202,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
         Log.d("username", SessionManager.getUsername());
         Log.d("address", SessionManager.getAddress());
-        Toast.makeText(getContext(), "size1" + FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
-
-
 
         //Display location markers for pendingReports to be validated by the admin
         if(SessionManager.getUserType().equals("Admin")) {
@@ -222,21 +220,21 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
                     case "Fire":
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(vLatitude, vLongitude))
-                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                                 .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[0])));
                         break;
 
                     case "Flood":
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(vLatitude, vLongitude))
-                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                                 .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[1])));
                         break;
 
                     case "Vehicular Accident":
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(vLatitude, vLongitude))
-                                .visible(true).alpha(0.8f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
                                 .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[2])));
                         break;
                 }
