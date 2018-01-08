@@ -81,6 +81,7 @@ public class SidebarProfileTimeline extends Fragment {
                         dataSnapshot.child("location").getValue().toString(),
                         locationLatitude,
                         locationLongitude,
+                        dataSnapshot.child("mergedTo").getValue().toString(),
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
@@ -100,7 +101,7 @@ public class SidebarProfileTimeline extends Fragment {
                     }
                 });
 
-                adapter = new TabHomeAdapter(listItems, getContext());
+                adapter = new TabProfileTimelineAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);
             }
 
