@@ -22,125 +22,171 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="70dp"
-        app:cardCornerRadius="4dp">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/verifyReportLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgViewProfilePic"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center_horizontal"
-                android:elevation="8dp"
-                android:src="@drawable/img_user"
-                app:border_color="#FFF"
-                app:border_width="2dp"
-                app:layout_anchorGravity="top|center_horizontal"
-                app:layout_scrollFlags="scroll" />
+            <android.support.v7.widget.CardView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="475dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="60dp"
+                app:cardCornerRadius="1dp"
+                android:id="@+id/cardViewNotif">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="7dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/imgViewProfilePic">
-
-                <ImageView
-                    android:id="@+id/viewReportType"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@mipmap/btn_fire"
-                    android:layout_below="@+id/viewNotifHead"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/viewNotifHead"
+                <RelativeLayout
+                    android:id="@+id/verifyReportLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:maxLines="2"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="2dp"
-                    android:text="Hello World"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:textColor="#000"  />
+                    android:background="@drawable/selector"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
-                <TextView
-                    android:id="@+id/viewNotifDateTime"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgViewProfilePic"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:elevation="8dp"
+                        android:src="@drawable/img_user"
+                        app:border_color="#FFF"
+                        app:border_width="2dp"
+                        app:layout_anchorGravity="top|center_horizontal"
+                        app:layout_scrollFlags="scroll" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="7dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/imgViewProfilePic">
+
+                        <ImageView
+                            android:id="@+id/viewReportType"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@mipmap/btn_fire"
+                            android:layout_below="@+id/viewNotifHead"
+                            android:layout_alignParentStart="true" />
+
+                        <TextView
+                            android:id="@+id/viewNotifHead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:maxLines="2"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="2dp"
+                            android:text="Hello World"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="#000"  />
+
+                        <TextView
+                            android:id="@+id/viewNotifDateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="5dp"
+                            android:text="datetime"
+                            android:textSize="12dp"
+                            android:layout_alignBottom="@+id/viewReportType"
+                            android:layout_toEndOf="@+id/viewReportType" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/reportBottomLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="datetime"
-                    android:textSize="12dp"
-                    android:layout_alignBottom="@+id/viewReportType"
-                    android:layout_toEndOf="@+id/viewReportType" />
-            </RelativeLayout>
+                    >
 
-            <ImageView
-                android:id="@+id/viewNotifImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/img_fire"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
+                    <TextView
+                        android:id="@+id/viewNotifDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:layout_marginTop="98dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="2dp"/>
 
-            <TextView
-                android:id="@+id/viewNotifDesc"
-                android:text="Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    <ImageView
+                        android:id="@+id/viewNotifImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:src="@drawable/img_fire"
+                        android:layout_below="@+id/viewNotifDesc"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="16dp" />
+
+                    <!--<ImageView-->
+                        <!--android:id="@+id/viewNotifImage"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="200dp"-->
+                        <!--android:src="@drawable/img_fire"-->
+                        <!--android:layout_alignParentBottom="true"-->
+                        <!--android:layout_alignParentStart="true" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/viewNotifDesc"-->
+                        <!--android:text="Description"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="20dp"-->
+                        <!--android:layout_below="@+id/imgViewProfilePic"-->
+                        <!--android:layout_alignParentStart="true"-->
+                        <!--android:layout_marginStart="18dp" />-->
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:id="@+id/btnVerifyReport"
+                android:text="Verify"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:layout_marginEnd="200dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/imgViewProfilePic"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="18dp" />
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/cardViewNotif"
+                android:textSize="20dp"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:id="@+id/btnDeclineReport"
+                android:text="Decline"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentEnd="true"
+                android:textSize="20dp"
+                android:textAllCaps="false"
+                android:backgroundTint="#464646"
+                android:textColor="@color/colorAccent"
+                android:layout_below="@id/cardViewNotif"
+                />
+
 
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </ScrollView>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:id="@+id/btnVerifyReport"
-        android:text="Verify"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
-        android:layout_marginEnd="200dp"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="20dp"
-        android:textAllCaps="false"/>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:id="@+id/btnDeclineReport"
-        android:text="Decline"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="20dp"
-        android:textAllCaps="false"
-        android:backgroundTint="#464646"
-        android:textColor="@color/colorAccent" />
 
 
 

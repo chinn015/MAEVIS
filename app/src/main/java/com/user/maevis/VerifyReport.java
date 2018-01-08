@@ -22,9 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
-import com.user.maevis.models.ReportModel;
-import com.user.maevis.models.ReportVerifiedModel;
-import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,12 +43,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference FirebaseReports;
     private Iterator<DataSnapshot> items;
     private List<ListItem> listItems;
-    private List<String> imageList;
-    private List<String> mergedReportsID;
-    ListItem clickedReportBasis;
-
-    public static ReportVerifiedModel reportVerifiedModel;
-    public static DatabaseReference newReportVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,25 +83,61 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
         listItems = new ArrayList<>();
-        imageList = new ArrayList<>();
-        mergedReportsID = new ArrayList<>();
 
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
 
-                //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
-                String formatDateTime = FirebaseDatabaseManager.formatDate(reportDateTime);
+                String year  = reportDateTime.substring(0,4);
+                String monthNum = reportDateTime.substring(5,7);
+                String day = reportDateTime.substring(8,10);
+
+                String month="";
+                switch (monthNum) {
+                    case "01": month = "JAN"; break;
+                    case "02": month = "FEB"; break;
+                    case "03": month = "MAR"; break;
+                    case "04": month = "APR"; break;
+                    case "05": month = "MAY"; break;
+                    case "06": month = "JUN"; break;
+                    case "07": month = "JUL"; break;
+                    case "08": month = "AUG"; break;
+                    case "09": month = "SEP"; break;
+                    case "10": month = "OCT"; break;
+                    case "11": month = "NOV"; break;
+                    case "12": month = "DEC"; break;
+                }
+
+                String time = reportDateTime.substring(11, reportDateTime.length());
+                String hour = time.substring(0, 2);
+                int hr = Integer.parseInt(hour);
+                if(hr > 9) {
+                    hour = time.substring(0, 2);
+                } else {
+                    hour = time.substring(1, 2);
+                }
+                String min = time.substring(3,5);
+                String period = time.substring(9, time.length());
+
+                String formatDateTime = hour+":"+min+" "+period+" - "+month+" "+day+" "+year;
 
                 //parse Long to Double for Latitude and Longitude values
-                double locationLatitude = 0.000;
-                double locationLongitude = 0.0000;
-                locationLatitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLatitude").getValue());
-                locationLongitude = FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("locationLongitude").getValue());
+                double locationLatitude = 0.0000;
+                Object locLat = dataSnapshot.child("locationLatitude").getValue();
+                if (locLat instanceof Long) {
+                    locationLatitude = ((Long) locLat).doubleValue();
+                } else {
+                    locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
+                }
 
-                //retrieve full name
-                String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                double locationLongitude = 0.0000;
+                Object locLong = dataSnapshot.child("locationLongitude").getValue();
+                if (locLong instanceof Long) {
+                    locationLongitude = ((Long) locLong).doubleValue();
+                } else {
+                    locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
+                }
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
@@ -122,7 +149,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
                         dataSnapshot.child("location").getValue().toString(),
                         locationLatitude,
                         locationLongitude,
-                        dataSnapshot.child("mergedTo").getValue().toString(),
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
@@ -201,8 +227,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-            verifyReport();
-            //FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
+            FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
 
             finish();
             startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
@@ -217,7 +242,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             return;
         }
     }
-
+  
     public void verifyReport() {
         String dateTime = clickedReportBasis.getDateTime();
         String description = clickedReportBasis.getDescription();

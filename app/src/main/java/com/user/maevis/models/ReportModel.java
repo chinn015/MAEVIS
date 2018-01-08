@@ -1,7 +1,5 @@
 package com.user.maevis.models;
 
-import java.util.List;
-
 /**
  * Created by User on 11/23/2017.
  */
@@ -14,7 +12,6 @@ public class ReportModel {
     private String location;
     private double locationLatitude;
     private double locationLongitude;
-    private String mergedTo;
     private String reportStatus;
     private String reportType;
     private String reportedBy;
@@ -24,7 +21,7 @@ public class ReportModel {
     }
 
     //CONSTRUCTOR
-    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy) {
+    public ReportModel(String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String reportStatus, String reportType, String reportedBy) {
         this.dateTime = dateTime;
         this.description = description;
         this.imageURL = imageURL;
@@ -32,7 +29,6 @@ public class ReportModel {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.reportStatus = reportStatus;
-        this.mergedTo = mergedTo;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
     }
@@ -85,14 +81,6 @@ public class ReportModel {
 
     public void setLocationLongitude(double locationLongitude) {
         this.locationLongitude = locationLongitude;
-    }
-
-    public String getMergedTo() {
-        return mergedTo;
-    }
-
-    public void setMergedTo(String mergedTo) {
-        this.mergedTo = mergedTo;
     }
 
     public String getReportStatus() {
