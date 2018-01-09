@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -35,6 +36,7 @@ public class Tab1_Home extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
+    private List<ListItemVerified> listItemsVerified;
     private LinearLayoutManager layoutManager;
 
     private DatabaseReference FirebaseReports;
@@ -52,6 +54,7 @@ public class Tab1_Home extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         listItems = new ArrayList<>();
+        listItemsVerified = new ArrayList<>();
 
         FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
@@ -154,6 +157,8 @@ public class Tab1_Home extends Fragment {
             }
         });
 
+
+
         FirebaseDatabaseManager.FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -181,6 +186,7 @@ public class Tab1_Home extends Fragment {
                         dataSnapshot.child("location").getValue().toString(),
                         locationLatitude,
                         locationLongitude,
+                        dataSnapshot.child("mergedTo").getValue().toString(),
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
@@ -201,8 +207,8 @@ public class Tab1_Home extends Fragment {
                     }
                 });
 
-                adapter = new TabHomeAdapter(listItems, getContext());
-                recyclerView.setAdapter(adapter);
+                /*adapter = new TabHomeAdapter(listItems, getContext());
+                recyclerView.setAdapter(adapter);*/
             }
 
             @Override

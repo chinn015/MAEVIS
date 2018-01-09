@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.user.maevis.ListItem;
+import com.user.maevis.ListItemVerified;
 import com.user.maevis.UserItem;
 
 import java.util.ArrayList;
@@ -17,9 +18,13 @@ import java.util.List;
 public class FirebaseDatabaseManager {
     public static final DatabaseReference FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
     public static final DatabaseReference FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+    public static final DatabaseReference FirebaseReportsVerified = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/ReportsVerified");
 
     private static List<ListItem> listItems;
     private static List<ListItem> verifiedReports;
+    private static List<ListItem> pendingReports;
+    private static List<ListItemVerified> activeVerifiedReports;
+    private static List<ListItemVerified> doneVerifiedReports;
     private static List<UserItem> userItems;
 
     public FirebaseDatabaseManager() {
@@ -29,6 +34,9 @@ public class FirebaseDatabaseManager {
     public static void initializeFirebaseDatabaseManager() {
         listItems = new ArrayList<>(); //List of all Reports
         verifiedReports = new ArrayList<>(); //List of all verified Reports
+        pendingReports = new ArrayList<>(); //List of all pending Reports
+        activeVerifiedReports = new ArrayList<>(); //List of all active officially verified Reports
+        doneVerifiedReports = new ArrayList<>(); //List of all done officially verified Reports
         userItems = new ArrayList<>(); //List of all Users
     }
 
@@ -82,9 +90,10 @@ public class FirebaseDatabaseManager {
     }
 
     public static void getReportsForAdmin() {
+
     }
 
-//FUNCTIONS THAT CAN BE USED GLOBALLY
+    //FUNCTIONS THAT CAN BE USED GLOBALLY
 
     //format date from (yyyy-mm-dd hh:mm:ss A) to (hh:mm A - MMM-dd-yyyy)
     public static String formatDate(String dateToFormat) {

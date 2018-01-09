@@ -1,41 +1,47 @@
 package com.user.maevis;
 
+import android.support.annotation.NonNull;
 
-import java.util.Date;
+import java.util.List;
 
-public class ListItem implements Comparable<ListItem> {
+/**
+ * Created by User on 1/8/2018.
+ */
+
+public class ListItemVerified implements Comparable<ListItem> {
     private String reportID;
     private String head;
     private String dateTime;
     private String description;
-    private String imageURL;
+    private List<String> imageList; //URLs of all images from all users who sent similar reports
+    private String imageThumbnailURL;
     private String location;
     private double locationLatitude;
     private double locationLongitude;
-    private String mergedTo;
-    private String reportStatus;
+    private List<String> mergedReportsID;
+    private String reportStatus; //Active or Done
     private String reportType;
-    private String reportedBy;
+    private String reportedBy; //admin ID
     private String displayDateTime; //date sorting shit
 
 
     //CONSTRUCTORS
-    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
+    public ListItemVerified(String reportID, String head, String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
         this.reportID = reportID;
         this.head = head;
         this.dateTime = dateTime;
         this.description = description;
-        this.imageURL = imageURL;
+        this.imageList = imageList;
+        this.imageThumbnailURL = imageThumbnailURL;
         this.location = location;
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
-        this.mergedTo = mergedTo;
         this.reportStatus = reportStatus;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
+        this.mergedReportsID = mergedReportsID;
         this.displayDateTime = displayDateTime;
     }
-
 
     //GETTER SETTER
     public String getReportID() {
@@ -62,12 +68,20 @@ public class ListItem implements Comparable<ListItem> {
         this.description = description;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageThumbnailURL() {
+        return imageThumbnailURL;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageThumbnailURL(String imageThumbnailURL) {
+        this.imageThumbnailURL = imageThumbnailURL;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
     }
 
     public String getLocation() {
@@ -94,14 +108,6 @@ public class ListItem implements Comparable<ListItem> {
         this.locationLongitude = locationLongitude;
     }
 
-    public String getMergedTo() {
-        return mergedTo;
-    }
-
-    public void setMergedTo(String mergedTo) {
-        this.mergedTo = mergedTo;
-    }
-
     public String getReportStatus() {
         return reportStatus;
     }
@@ -126,6 +132,14 @@ public class ListItem implements Comparable<ListItem> {
         this.reportedBy = reportedBy;
     }
 
+    public List<String> getMergedReportsID() {
+        return mergedReportsID;
+    }
+
+    public void setMergedReportsID(List<String> mergedReportsID) {
+        this.mergedReportsID = mergedReportsID;
+    }
+
     public String getDisplayDateTime() {
         return displayDateTime;
     }
@@ -138,10 +152,7 @@ public class ListItem implements Comparable<ListItem> {
         return head;
     }
 
-    public void setHead(String head) {
-        this.head = head;
-    }
-
+    @Override
     public int compareTo(ListItem li) {
         if (getDateTime() == null || li.getDateTime() == null) {
             return 0;
