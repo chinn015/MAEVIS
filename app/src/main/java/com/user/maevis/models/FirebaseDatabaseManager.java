@@ -1,5 +1,7 @@
 package com.user.maevis.models;
 
+import android.util.Log;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.user.maevis.ListItem;
@@ -87,7 +89,9 @@ public class FirebaseDatabaseManager {
         FirebaseDatabaseManager.doneVerifiedReports = doneVerifiedReports;
     }
 
+    public static void getReportsForAdmin() {
 
+    }
 
     //FUNCTIONS THAT CAN BE USED GLOBALLY
 
@@ -209,5 +213,54 @@ public class FirebaseDatabaseManager {
         }
 
         return status;
+    }
+
+    public static boolean isInActiveVerifiedReports(String reportID) {
+        boolean status = false;
+
+        for(int x=0; x < getActiveVerifiedReports().size(); x++) {
+            if(reportID.equals(getActiveVerifiedReports().get(x).getReportID())) {
+                Log.d("match", reportID+" - "+getActiveVerifiedReports().get(x).getReportID());
+                status = true;
+            }
+        }
+
+        return status;
+    }
+
+    public static ListItemVerified getActiveVerifiedReport(String reportID) {
+        ListItemVerified activeVerifiedReport =  null;
+
+        for(int x=0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+            if(reportID.equals(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID())) {
+                activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReports().get(x);
+            }
+        }
+
+        return activeVerifiedReport;
+    }
+
+    public static ListItem getPendingReport(String reportID) {
+        ListItem pendingReport =  null;
+
+        for(int x=0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
+            if(reportID.equals(FirebaseDatabaseManager.getPendingReports().get(x).getReportID())) {
+                pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+            }
+        }
+
+        return pendingReport;
+    }
+
+    public static ListItem getVerifiedReport(String reportID) {
+        ListItem verifiedReport =  null;
+
+        for(int x=0; x < FirebaseDatabaseManager.getVerifiedReports().size(); x++) {
+            if(reportID.equals(FirebaseDatabaseManager.getVerifiedReports().get(x).getReportID())) {
+                verifiedReport = FirebaseDatabaseManager.getVerifiedReports().get(x);
+            }
+        }
+
+        return verifiedReport;
     }
 }

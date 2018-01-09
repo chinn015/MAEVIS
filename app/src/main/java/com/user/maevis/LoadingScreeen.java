@@ -28,7 +28,7 @@ import java.util.Comparator;
 
 public class LoadingScreeen extends AppCompatActivity {
     private static final String TAG = LoadingScreeen.class.getSimpleName();
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
+    private final int SPLASH_DISPLAY_LENGTH = 1000;
     private BroadcastReceiver broadcastReceiver;
 
     @Override

@@ -82,22 +82,6 @@ public class Tab1_Home extends Fragment {
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
-                /*ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-                        fullName+" reported a " +
-                                dataSnapshot.child("reportType").getValue().toString() + " at " +
-                                dataSnapshot.child("location").getValue().toString(),
-                        dataSnapshot.child("dateTime").getValue().toString(),
-                        dataSnapshot.child("description").getValue().toString(),
-                        dataSnapshot.child("imageURL").getValue().toString(),
-                        dataSnapshot.child("location").getValue().toString(),
-                        locationLatitude,
-                        locationLongitude,
-                        dataSnapshot.child("mergedTo").getValue().toString(),
-                        dataSnapshot.child("reportStatus").getValue().toString(),
-                        dataSnapshot.child("reportType").getValue().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);*/
-
                 List<String> imageList = new ArrayList<>();
                 Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
                 while(images.hasNext()) {
@@ -135,6 +119,7 @@ public class Tab1_Home extends Fragment {
                                    listItemsVerified.add(itemVerified);
                                    break;
                     case "Done": FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified); break;
+
                 }
 
                 Collections.sort(listItemsVerified, new Comparator<ListItemVerified>() {
