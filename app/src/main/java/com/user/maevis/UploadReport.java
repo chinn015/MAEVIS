@@ -131,23 +131,39 @@ public class UploadReport extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
 
-            /*if(requestCode==REQUEST_CAMERA){
-
+            if(requestCode == REQUEST_CAMERA) {
+                Uri selectedImageUri = data.getData();
                 Bundle bundle = data.getExtras();
                 final Bitmap bmp = (Bitmap) bundle.get("data");
                 ivImage.setImageBitmap(bmp);
 
-            }else if(requestCode==SELECT_FILE){
+                //upload photo
+                /*progressDialog.setMessage("Uploading photo from camera.");
+                progressDialog.show();
 
+                StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
+
+                filePath.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        //imageURL.concat(downloadUrl.toString());
+                        setImageURL(downloadUrl.toString());
+
+                        //Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadReport.this, "Sent! " + getImageURL(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                });*/
+            } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
-
-            }*/
-
-            if (requestCode == REQUEST_CAMERA || requestCode == SELECT_FILE) {
-                Uri selectedImageUri = data.getData();
-                ivImage.setImageURI(selectedImageUri);
-
 
                 //upload photo
                 progressDialog.setMessage("Uploading photo from camera.");

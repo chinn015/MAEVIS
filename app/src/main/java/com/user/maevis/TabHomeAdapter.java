@@ -26,6 +26,8 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     //private static ListItem clickedItem = null;
     private static ListItemVerified clickedItemVerified = null;
 
+    static boolean clickedStatus = false;
+
     /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
@@ -61,6 +63,10 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
                 setClickedItemVerified(listItemVerified);
+
+                clickedStatus = true;
+                TabNotifAdapterRegUser.clickedStatus = false;
+
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);
