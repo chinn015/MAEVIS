@@ -96,19 +96,19 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         Bitmap[] reports = new Bitmap[6];
         Bitmap[] reportMarker = new Bitmap[6];
         int[] reportIcons = {
-                R.drawable.ic_marker_fire,
-                R.drawable.ic_marker_flood,
-                R.drawable.ic_marker_accident,
-                R.drawable.ic_marker__verified_fire,
-                R.drawable.ic_marker_verified_flood,
-                R.drawable.ic_marker_verified_accident
+                R.mipmap.ic_marker_fire,
+                R.mipmap.ic_marker_flood,
+                R.mipmap.ic_marker_accident,
+                R.mipmap.ic_marker__verified_fire,
+                R.mipmap.ic_marker_verified_flood,
+                R.mipmap.ic_marker_verified_accident
         };
 
-        bitmapUser = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_user);
+        bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
-        bitmapHome = (BitmapDrawable)getResources().getDrawable(R.drawable.ic_marker_home);
+        bitmapHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap home = bitmapHome.getBitmap();
         Bitmap homeMarker = Bitmap.createScaledBitmap(home, 160, 160, false);
 

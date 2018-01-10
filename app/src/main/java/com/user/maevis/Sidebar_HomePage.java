@@ -403,6 +403,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
                 i = new Intent(Sidebar_HomePage.this, LoadingScreeen.class);
                 startActivity(i);
+                Sidebar_HomePage.this.finish();
                 break;
 
         }
