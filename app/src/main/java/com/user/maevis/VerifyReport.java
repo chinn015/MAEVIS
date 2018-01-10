@@ -70,18 +70,31 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
 
         //display details of clicked item
-        viewNotifHead.setText(Tab2_Location.pendingReport.getHead());
-        viewNotifDesc.setText(Tab2_Location.pendingReport.getDescription());
-        viewNotifDateTime.setText(Tab2_Location.pendingReport.getDisplayDateTime());
-        Picasso.with(getApplicationContext())
-                .load(Tab2_Location.pendingReport.getImageURL())
-                .fit()
-                .into(viewNotifImage);
+        if(Tab2_Location.clickedStatus) {
+            viewNotifHead.setText(Tab2_Location.pendingReport.getHead());
+            viewNotifDesc.setText(Tab2_Location.pendingReport.getDescription());
+            viewNotifDateTime.setText(Tab2_Location.pendingReport.getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(Tab2_Location.pendingReport.getImageURL())
+                    .fit()
+                    .into(viewNotifImage);
 
-        Picasso.with(getApplicationContext())
-                .load(ListItem.getReportTypeImage((Tab2_Location.pendingReport.getReportType())))
-                .into(viewNotifReportType);
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportTypeImage((Tab2_Location.pendingReport.getReportType())))
+                    .into(viewNotifReportType);
+        } else if (TabNotifAdapter.clickedStatus) {
+            viewNotifHead.setText(TabNotifAdapter.getClickedItem().getHead());
+            viewNotifDesc.setText(TabNotifAdapter.getClickedItem().getDescription());
+            viewNotifDateTime.setText(TabNotifAdapter.getClickedItem().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(TabNotifAdapter.getClickedItem().getImageURL())
+                    .fit()
+                    .into(viewNotifImage);
 
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
+                    .into(viewNotifReportType);
+        }
 
         btnVerifyReport = (Button) findViewById(R.id.btnVerifyReport);
         btnDeclineReport = (Button) findViewById(R.id.btnDeclineReport);

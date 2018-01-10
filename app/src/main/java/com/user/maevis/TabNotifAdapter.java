@@ -22,6 +22,9 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     private List<ListItem> listItems;
     private static ListItem clickedItem = null;
     private Context context;
+
+    static boolean clickedStatus = false;
+
     int[] reportIcons = {
             R.mipmap.btn_fire,
             R.mipmap.btn_flood,
@@ -68,6 +71,9 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                clickedStatus = true;
+                Tab2_Location.clickedStatus = false;
+
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
                 setClickedItem(listItem);
                 Intent i;

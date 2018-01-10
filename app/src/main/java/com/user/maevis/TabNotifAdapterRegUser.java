@@ -21,6 +21,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
     private List<ListItemVerified> listItemsVerified;
     private static ListItemVerified clickedItem = null;
     private Context context;
+
     int[] reportIcons = {
             R.mipmap.btn_fire,
             R.mipmap.btn_flood,
