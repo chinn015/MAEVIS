@@ -178,9 +178,9 @@ public class ListItem implements Comparable<ListItem> {
     public static int getReportMarkerImage(String reportType){
         int retIcon = 0;
         int[] reportIcons = {
-                R.drawable.ic_marker_fire,
-                R.drawable.ic_marker_flood,
-                R.drawable.ic_marker_accident,
+                R.mipmap.ic_marker_fire,
+                R.mipmap.ic_marker_flood,
+                R.mipmap.ic_marker_accident,
         };
 
         switch (reportType){

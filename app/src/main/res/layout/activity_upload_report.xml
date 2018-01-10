@@ -25,7 +25,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_marker_fire"
+        android:src="@mipmap/ic_marker_fire"
         android:layout_above="@+id/txtFldLocation"
         android:layout_toEndOf="@+id/txtFldLocationLabel" />
 
