@@ -21,6 +21,9 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
     private List<ListItemVerified> listItemsVerified;
     private static ListItemVerified clickedItem = null;
     private Context context;
+
+    static boolean clickedStatus = false;
+
     int[] reportIcons = {
             R.mipmap.btn_fire,
             R.mipmap.btn_flood,
@@ -61,14 +64,15 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
                     break;
         }
 
-        /*holder.textViewDesc.setText(listItem.getDesc());
-        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/
-
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
                 setClickedItem(listItemVerified);
+
+                clickedStatus = true;
+                TabHomeAdapter.clickedStatus = false;
+
                 Intent i;
                 i = new Intent(context, VerifyReport.class);
                 context.startActivity(i);

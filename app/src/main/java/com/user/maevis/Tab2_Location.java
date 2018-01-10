@@ -51,6 +51,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     static List<String> markerReportIDs;
     static List<String> markerPendingReportIDs;
     static List<String> markerActiveVerifiedReportIDs;
+    static boolean clickedStatus = false;
 
     View view;
 
@@ -298,6 +299,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         markerId = marker.getId().replaceAll("[^\\d.]", "");
         id = Integer.parseInt(markerId) - 2;
 
+        clickedStatus = true;
+        TabNotifAdapter.clickedStatus = false;
 
         if( id != -1 && id != -2){
             switch(SessionManager.getUserType()) {

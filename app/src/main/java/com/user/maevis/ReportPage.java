@@ -35,18 +35,6 @@ public class ReportPage extends AppCompatActivity {
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
 
-        /*if(TabHomeAdapter.getClickedItem() != null) {
-            viewReportHead.setText(TabHomeAdapter.getClickedItem().getHead());
-            viewReportDesc.setText(TabHomeAdapter.getClickedItem().getDescription());
-            viewReportDateTime.setText(TabHomeAdapter.getClickedItem().getDisplayDateTime());
-            Picasso.with(getApplicationContext())
-                    .load(TabHomeAdapter.getClickedItem().getImageURL())
-                    .fit()
-                    .into(viewReportImage);
-            Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage(TabHomeAdapter.getClickedItem().getReportType()))
-                    .into(viewReportType);*/
-
         if(TabHomeAdapter.getClickedItemVerified() != null) {
             viewReportHead.setText(TabHomeAdapter.getClickedItemVerified().getHead());
             viewReportDesc.setText(TabHomeAdapter.getClickedItemVerified().getDescription());
