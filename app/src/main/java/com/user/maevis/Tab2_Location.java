@@ -1,11 +1,18 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -15,8 +22,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -26,8 +36,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
-import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
+import android.Manifest;
 
 import android.widget.Toast;
 
@@ -37,7 +47,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class Tab2_Location extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class Tab2_Location extends Fragment implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener{
 
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
@@ -47,6 +58,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
     static ListItem pendingReport;
     static ListItemVerified activeVerifiedReport;
     static String userLocAddress;
+    Location mLastLocation;
+    Marker mCurrLocationMarker;
 
     static List<String> markerReportIDs;
     static List<String> markerPendingReportIDs;
@@ -77,6 +90,13 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         markerReportIDs = new ArrayList<>();
         markerPendingReportIDs = new ArrayList<>();
         markerActiveVerifiedReportIDs = new ArrayList<>();
+
+        LocationManager mlocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if(!enabled) {
+            showDialogGPS();
+        }
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -193,8 +213,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
             if (distance <= limit_distance) {
                 //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
                 Log.d("Inside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
-                //cNotification.showActiveNotification(getContext(), activeVerifiedReport);
-                //cNotification.vibrateNotif(getContext());
+                cNotification.showActiveNotification(getContext(), activeVerifiedReport);
+                cNotification.vibrateNotif(getContext());
             } else {
                // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
                 Log.d("Outside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
@@ -254,8 +274,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
                 if (distance <= limit_distance) {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
                     Log.d("Inside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
-                    //cNotification.showPendingNotification(getContext(), pendingReport);
-                    //cNotification.vibrateNotif(getContext());
+                    cNotification.showPendingNotification(getContext(), pendingReport);
+                    cNotification.vibrateNotif(getContext());
                 } else {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
                     Log.d("Outside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
@@ -269,7 +289,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
 
         Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "My Location",
+                Toast.makeText(getActivity(), "My Location: " + userLocAddress,
                         Toast.LENGTH_LONG).show();
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -389,5 +409,50 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback, Googl
         }
         return fullAddress;
     }
+
+    /**
+     * Show a dialog to the user requesting that GPS be enabled
+     */
+    private void showDialogGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false);
+        builder.setTitle("Enable Location");
+        builder.setMessage("Your Location Settings is set to OFF. Please enable Location to use this app.");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(
+                        new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("Ignore", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    /*
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
+    public  void init() {
+        gpsTracker = new GPSTracker(getActivity().getApplicationContext());
+        if (gpsTracker.getLocation() != null) {
+            //  gpsTracker.(getActivity(), view);
+            userLatitude = gpsTracker.getLocation().getLatitude();
+            userLongitude = gpsTracker.getLocation().getLongitude();
+        } else {
+
+        }
+    }
+    */
 
 }
