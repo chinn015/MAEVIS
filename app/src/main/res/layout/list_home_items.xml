@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="475dp"
     android:layout_marginBottom="1dp"
     android:layout_marginTop="1dp"
-    app:cardCornerRadius="4dp"
-    >
+    app:cardCornerRadius="4dp">
 
     <RelativeLayout
         android:id="@+id/reportLayout"
@@ -112,7 +111,11 @@
                 android:src="@drawable/img_fire"
                 android:layout_marginTop="103dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/textViewDesc"
