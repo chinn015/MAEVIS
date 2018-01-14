@@ -213,8 +213,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             if (distance <= limit_distance) {
                 //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
                 Log.d("Inside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
-                cNotification.showActiveNotification(getContext(), activeVerifiedReport);
-                cNotification.vibrateNotif(getContext());
+                //cNotification.showActiveNotification(getContext(), activeVerifiedReport);
+                //cNotification.vibrateNotif(getContext());
             } else {
                // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
                 Log.d("Outside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
@@ -274,8 +274,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 if (distance <= limit_distance) {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
                     Log.d("Inside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
-                    cNotification.showPendingNotification(getContext(), pendingReport);
-                    cNotification.vibrateNotif(getContext());
+                    //cNotification.showPendingNotification(getContext(), pendingReport);
+                    //cNotification.vibrateNotif(getContext());
                 } else {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
                     Log.d("Outside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));

@@ -91,7 +91,11 @@ public class UploadReport extends AppCompatActivity {
         txtFldLocation = (AutofitTextView) findViewById(R.id.txtFldLocation);
         txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
         txtFldDescription.setHint("Write something about this report. [" + SelectionPage.getReportType() + "]");
-        txtFldLocation.setText(Tab2_Location.userLocAddress);
+        if(Tab2_Location.userLocAddress != null){
+            txtFldLocation.setText(Tab2_Location.userLocAddress);
+        }else{
+            txtFldLocation.setText(Sidebar_HomePage.userAddress);
+        }
         ivReportType = (ImageView) findViewById(R.id.reportIconType);
         Picasso.with(getApplicationContext())
                 .load(ListItem.getReportMarkerImage(SelectionPage.getReportType()))

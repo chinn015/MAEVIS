@@ -1,8 +1,15 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -31,8 +38,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Sidebar_HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,12 +54,16 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     TextView profileName;
     static TabNotifBadge badge;
     static int noOfReports;
+    private GPSTracker gpsTracker;
+    private Location mUserLocation;
+    static String userAddress;
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
-            R.drawable.ic_my_location_black_24dp,
+            R.drawable.ic_search_black_24dp,
             R.drawable.ic_notifications_none_black_24dp,
-            R.drawable.ic_search_black_24dp
+            R.drawable.ic_my_location_black_24dp
+
     };
 
 
@@ -65,7 +78,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewPager = (ViewPager) findViewById(R.id.simpleViewPager);
-        //viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(1);
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -93,6 +106,18 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         profileName = (TextView) headerView.findViewById(R.id.txtViewProfileName);
         profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
 
+        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if(!enabled) {
+            showDialogGPS();
+        }else{
+            gpsTracker = new GPSTracker(getApplicationContext());
+            mUserLocation = gpsTracker.getLocation();
+            userAddress = getUserLocAddress(mUserLocation.getLatitude(), mUserLocation.getLongitude());
+            Toast.makeText(this, "hey " + userAddress, Toast.LENGTH_LONG).show();
+        }
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -100,15 +125,15 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
                         break;
-                    case 1: toolbar.setTitle("Location");
+                    case 1: toolbar.setTitle("Search");
                         break;
                     case 2: toolbar.setTitle("Notification");
                         break;
-                    case 3: toolbar.setTitle("Search");
+                    case 3: toolbar.setTitle("Location");
                         break;
                 }
 
-                if (position == 1) {
+                if (position == 3) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else {
@@ -119,7 +144,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 1) {
+                if (position == 3) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else if (position == 2) {
@@ -244,12 +269,29 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
     }
 
+    public String getUserLocAddress (double userLatitude, double userLongitude){
+        String fullAddress = "No Location Found.";
+        Geocoder geocoder;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(userLatitude, userLongitude, 1);
+            fullAddress = addresses.get(0).getAddressLine(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullAddress;
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Tab1_Home(), "ONE");
-        adapter.addFragment(new Tab2_Location(), "TWO");
+        adapter.addFragment(new Tab4_Search(), "TWO");
         adapter.addFragment(new Tab3_Notification(), "THREE");
-        adapter.addFragment(new Tab4_Search(), "FOUR");
+        adapter.addFragment(new Tab2_Location(), "FOUR");
 
         viewPager.setAdapter(adapter);
     }
@@ -438,4 +480,29 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
     }
 
+    /**
+     * Show a dialog to the user requesting that GPS be enabled
+     */
+    private void showDialogGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Enable Location");
+        builder.setMessage("Your Location Settings is set to OFF. Please enable Location to use this app.");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(
+                        new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("Ignore", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
 }
