@@ -65,7 +65,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         viewPager = (ViewPager) findViewById(R.id.simpleViewPager);
-        viewPager.setOffscreenPageLimit(4);
+        //viewPager.setOffscreenPageLimit(4);
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);

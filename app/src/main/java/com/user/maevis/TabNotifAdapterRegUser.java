@@ -70,12 +70,12 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
                 setClickedItem(listItemVerified);
 
-                clickedStatus = true;
+                /*clickedStatus = true;
                 TabHomeAdapter.clickedStatus = false;
 
                 Intent i;
                 i = new Intent(context, VerifyReport.class);
-                context.startActivity(i);
+                context.startActivity(i);*/
             }
         });
     }
