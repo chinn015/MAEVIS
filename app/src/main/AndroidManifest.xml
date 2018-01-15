@@ -121,6 +121,9 @@
                 android:value=".Sidebar_HomePage" />
         </activity>
 
+        <activity android:name=".UserManagement"
+            android:label="User Management"/>
+
         <service
             android:name="com.user.maevis.controllers.FirebaseInstanceIdNotif">
             <intent-filter>

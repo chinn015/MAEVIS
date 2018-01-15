@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.user.maevis.VerifyReport">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp">
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="400dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgViewProfilePic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:elevation="8dp"
+                android:src="@drawable/img_user"
+                app:border_color="#FFF"
+                app:border_width="2dp"
+                app:layout_anchorGravity="top|center_horizontal"
+                app:layout_scrollFlags="scroll"
+                android:layout_marginStart="38dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="73dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FirstName LastName"
+                android:id="@+id/textView"
+                android:textSize="20dp"
+                android:layout_alignTop="@+id/imgViewProfilePic"
+                android:layout_toEndOf="@+id/imgViewProfilePic"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="26dp" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:id="@+id/btnVerifyReport"
+                android:text="Verify"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="65dp"
+                android:textSize="20dp"
+                android:textAllCaps="false"
+                android:layout_below="@+id/imgViewProfilePic"
+                android:layout_toStartOf="@+id/btnDeclineReport" />
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:id="@+id/btnDeclineReport"
+                android:text="Decline"
+                android:textSize="20dp"
+                android:textAllCaps="false"
+                android:backgroundTint="#464646"
+                android:textColor="@color/colorAccent"
+                android:layout_alignBaseline="@+id/btnVerifyReport"
+                android:layout_alignBottom="@+id/btnVerifyReport"
+                android:layout_alignStart="@+id/textView" />
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
