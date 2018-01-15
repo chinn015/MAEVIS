@@ -5,11 +5,14 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +40,8 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +63,8 @@ public class UploadReport extends AppCompatActivity {
     ImageView ivImage, ivReportType;
     VideoView videoView;
     Integer REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
+    String mCurrentPhotoPath;
+    Uri photoURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +110,15 @@ public class UploadReport extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (items[i].equals("Camera")) {
-
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    String pictureName = getPictureName();
+                    File imageFile = new File(pictureDirectory, pictureName);
+                    Uri pictureUri = Uri.fromFile(imageFile);
+                    photoURI = pictureUri;
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+
                     startActivityForResult(intent, REQUEST_CAMERA);
 
 //                    Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -125,32 +139,34 @@ public class UploadReport extends AppCompatActivity {
 
     }
 
+    public String getPictureName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd_HHmmss");
+        String timestamp = sdf.format(new Date());
+
+        return "IMGMAEVIS"+timestamp+".jpg";
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
 
-            if(requestCode == REQUEST_CAMERA) {
-                Uri selectedImageUri = data.getData();
-                Bundle bundle = data.getExtras();
-                final Bitmap bmp = (Bitmap) bundle.get("data");
-                ivImage.setImageBitmap(bmp);
+            if(requestCode == REQUEST_CAMERA) {;
+                ivImage.setImageURI(photoURI);
 
                 //upload photo
-                /*progressDialog.setMessage("Uploading photo from camera.");
+                progressDialog.setMessage("Uploading photo from camera.");
                 progressDialog.show();
 
-                StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
+                StorageReference filePath = firebaseStorage.child("Photos").child(photoURI.getLastPathSegment());
 
-                filePath.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                filePath.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        //imageURL.concat(downloadUrl.toString());
                         setImageURL(downloadUrl.toString());
 
-                        //Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
                         Toast.makeText(UploadReport.this, "Sent! " + getImageURL(), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
@@ -160,7 +176,7 @@ public class UploadReport extends AppCompatActivity {
                         Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
-                });*/
+                });
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
@@ -191,6 +207,22 @@ public class UploadReport extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     public void setImageURL(String imgURL) {
