@@ -11,18 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
-import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
-import com.user.maevis.models.ReportModel;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.models.ReportVerifiedModel;
 import com.user.maevis.session.SessionManager;
 
@@ -39,6 +35,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private TextView viewNotifDateTime;
     private ImageView viewNotifImage;
     private ImageView viewNotifReportType;
+    private ImageView imgViewProfilePic;
 
     private Button btnVerifyReport;
     private Button btnDeclineReport;
@@ -52,6 +49,9 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     public static ReportVerifiedModel reportVerifiedModel;
     public static DatabaseReference newReportVerified;
+
+    /*private static UserItem clickedUserItem = null;
+    static boolean clickedUserItemStatus = false;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,37 +67,39 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         viewNotifDateTime = (TextView) findViewById(R.id.viewNotifDateTime);
         viewNotifImage = (ImageView) findViewById(R.id.viewNotifImage);
         viewNotifReportType = (ImageView) findViewById(R.id.viewReportType);
+        imgViewProfilePic = (ImageView) findViewById(R.id.imgViewProfilePic);
 
+        imgViewProfilePic.setOnClickListener(this);
 
         //display details of clicked item
-        if(Tab2_Location.clickedStatus) {
-            viewNotifHead.setText(Tab2_Location.pendingReport.getHead());
-            viewNotifDesc.setText(Tab2_Location.pendingReport.getDescription());
-            viewNotifDateTime.setText(Tab2_Location.pendingReport.getDisplayDateTime());
+        if(PageNavigationManager.getClickedTabLocListItemPending() != null) {
+            viewNotifHead.setText(PageNavigationManager.getClickedTabLocListItemPending().getHead());
+            viewNotifDesc.setText(PageNavigationManager.getClickedTabLocListItemPending().getDescription());
+            viewNotifDateTime.setText(PageNavigationManager.getClickedTabLocListItemPending().getDisplayDateTime());
             Picasso.with(getApplicationContext())
-                    .load(Tab2_Location.pendingReport.getImageURL())
+                    .load(PageNavigationManager.getClickedTabLocListItemPending().getImageURL())
                     .fit()
                     .into(viewNotifImage);
 
             Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage((Tab2_Location.pendingReport.getReportType())))
+                    .load(ListItem.getReportTypeImage((PageNavigationManager.getClickedTabLocListItemPending().getReportType())))
                     .into(viewNotifReportType);
-        } else if (TabNotifAdapter.clickedStatus) {
-            viewNotifHead.setText(TabNotifAdapter.getClickedItem().getHead());
-            viewNotifDesc.setText(TabNotifAdapter.getClickedItem().getDescription());
-            viewNotifDateTime.setText(TabNotifAdapter.getClickedItem().getDisplayDateTime());
+        } else if (PageNavigationManager.getClickedTabNotifListItem() != null) {
+            viewNotifHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
+            viewNotifDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
+            viewNotifDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
             Picasso.with(getApplicationContext())
-                    .load(TabNotifAdapter.getClickedItem().getImageURL())
+                    .load(PageNavigationManager.getClickedTabNotifListItem().getImageURL())
                     .fit()
                     .into(viewNotifImage);
 
             Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage((TabNotifAdapter.getClickedItem().getReportType())))
+                    .load(ListItem.getReportTypeImage((PageNavigationManager.getClickedTabNotifListItem().getReportType())))
                     .into(viewNotifReportType);
         }
 
-        btnVerifyReport = (Button) findViewById(R.id.btnVerifyReport);
-        btnDeclineReport = (Button) findViewById(R.id.btnDeclineReport);
+        btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
+        btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
 
         btnVerifyReport.setOnClickListener(this);
         btnDeclineReport.setOnClickListener(this);
@@ -229,6 +231,36 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
             return;
         }
+
+        if(v==imgViewProfilePic) {
+            if(SessionManager.getUserType().equals("Admin")) {
+                Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show();
+                String userID = "";
+
+                if (PageNavigationManager.getClickedTabLocListItemPending() != null /*Tab2_Location.clickedStatus*/) {
+                    userID = PageNavigationManager.getClickedTabLocListItemPending().getReportedBy();
+                } else if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
+                    userID = PageNavigationManager.getClickedTabNotifListItem().getReportedBy();
+                } else if (PageNavigationManager.getClickedTabNotifRegListItem() != null /*TabNotifAdapterRegUser.clickedStatus*/) {
+                    userID = PageNavigationManager.getClickedTabNotifRegListItem().getReportedBy();
+                }
+
+                /*for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
+                    if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
+                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
+                        clickedUserItemStatus = true;
+                        ReportPage.clickedUserItemStatus = false;
+                        TabHomeAdapter.clickedUserItemStatus = false;
+                    }
+                }*/
+
+                PageNavigationManager.clickVerifyReportUserItem(FirebaseDatabaseManager.getUserItem(userID));
+                if(PageNavigationManager.getClickedVerifyReportUserItem() != null) {
+                    Intent i = new Intent(this, UserManagement.class);
+                    startActivity(i);
+                }
+            }
+        }
     }
 
     public void verifyReport() {
@@ -269,4 +301,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     public void setMergedReportsID(List<String> mergedReportsID) {
         this.mergedReportsID = mergedReportsID;
     }
+
+    /*public static UserItem getClickedUserItem() {
+        return clickedUserItem;
+    }
+
+    public static void setClickedUserItem(UserItem clickedUserItem) {
+        VerifyReport.clickedUserItem = clickedUserItem;
+    }*/
 }

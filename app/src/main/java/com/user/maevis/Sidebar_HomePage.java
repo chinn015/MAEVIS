@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
 
 import java.io.IOException;
@@ -166,6 +167,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         //store data to Lists
         //initialize Firebase Database Manager
         FirebaseDatabaseManager.initializeFirebaseDatabaseManager();
+        PageNavigationManager.initializePageNavigationManager();
 
         //listener to store all users from the Firebase Database to a List
         FirebaseDatabaseManager.FirebaseUsers.addChildEventListener(new ChildEventListener() {

@@ -56,8 +56,8 @@ public class NotificationView extends AppCompatActivity implements View.OnClickL
         viewNotifDateTime.setText(UploadReport.reportModel.getDateTime());
         Picasso.with(getApplicationContext()).load(UploadReport.reportModel.getImageURL()).into(viewNotifImage);
 
-        btnVerifyReport = (Button) findViewById(R.id.btnVerifyReport);
-        btnDeclineReport = (Button) findViewById(R.id.btnDeclineReport);
+        btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
+        btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
 
         btnVerifyReport.setOnClickListener(this);
         btnDeclineReport.setOnClickListener(this);

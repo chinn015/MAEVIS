@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
 import android.Manifest;
 
@@ -82,6 +83,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         }else{
             userLatitude = 10.316590;
             userLongitude = 123.897093;
+            showDialogGPS();
             Toast.makeText(getActivity(), "Location not found.",
                     Toast.LENGTH_LONG).show();
         }
@@ -91,12 +93,14 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         markerPendingReportIDs = new ArrayList<>();
         markerActiveVerifiedReportIDs = new ArrayList<>();
 
+        /*
         LocationManager mlocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if(!enabled) {
             showDialogGPS();
         }
+        */
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -227,17 +231,18 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         //Display location markers for pendingReports to be validated by the admin
         if(SessionManager.getUserType().equals("Admin")) {
             for (int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
-                pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
-                double vLatitude = pendingReport.getLocationLatitude();
-                double vLongitude = pendingReport.getLocationLongitude();
+                //pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+                PageNavigationManager.clickTabLocListItemPending(FirebaseDatabaseManager.getPendingReports().get(x));
+                double vLatitude = PageNavigationManager.getClickedTabLocListItemPending().getLocationLatitude();
+                double vLongitude = PageNavigationManager.getClickedTabLocListItemPending().getLocationLongitude();
                 float distance, limit_distance;
 
                 limit_distance = 1000;
                 Location report_locations = new Location("1");
                 Location current_location = new Location("2");
-                String vTitle = pendingReport.getReportType() + " " + FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+                String vTitle = PageNavigationManager.getClickedTabLocListItemPending().getReportType() + " " + FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy());
 
-                switch (pendingReport.getReportType()) {
+                switch (PageNavigationManager.getClickedTabLocListItemPending().getReportType()) {
                     case "Fire":
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(vLatitude, vLongitude))
@@ -260,7 +265,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                         break;
                 }
 
-                markerReportIDs.add(pendingReport.getReportID());
+                markerReportIDs.add(PageNavigationManager.getClickedTabLocListItemPending().getReportID());
 
                 report_locations.setLatitude(vLatitude);
                 report_locations.setLongitude(vLongitude);
@@ -273,12 +278,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
                 if (distance <= limit_distance) {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Inside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
+                    Log.d("Inside: ", FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy()));
                     //cNotification.showPendingNotification(getContext(), pendingReport);
                     //cNotification.vibrateNotif(getContext());
                 } else {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Outside: ", FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()));
+                    Log.d("Outside: ", FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy()));
                 }
             }
 
@@ -327,7 +332,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 case "Regular User":
                     Toast.makeText(getContext(), "Reg User MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
 
-                    activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+                    //activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+
+                    PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
 
                     i = new Intent(getContext(), ReportPage.class);
                     startActivity(i);
@@ -335,12 +342,14 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 case "Admin":
                     if(FirebaseDatabaseManager.isInActiveVerifiedReports(markerReportIDs.get(id))) {
                         //Toast.makeText(getContext(), "Admin AVR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getActiveVerifiedReports().size(), Toast.LENGTH_LONG).show();
-                        activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+                        //activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
+                        PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
                         i = new Intent(getContext(), ReportPage.class);
                         startActivity(i);
                     } else {
                         //Toast.makeText(getContext(), "Admin PR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
-                        pendingReport = FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id));
+                        //pendingReport = FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id));
+                        PageNavigationManager.clickTabLocListItemPending(FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id)));
                         i = new Intent(getContext(), VerifyReport.class);
                         startActivity(i);
                     }
@@ -454,5 +463,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         }
     }
     */
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        this.onCreate(null);
+    }
 
 }

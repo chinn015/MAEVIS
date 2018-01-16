@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
+import com.user.maevis.session.SessionManager;
 
 import org.w3c.dom.Text;
 
@@ -25,6 +27,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private ImageView viewReportImage;
     private ImageView viewReportType;
     private CircleImageView viewUserImage;
+
+    /*private static UserItem clickedUserItem = null;
+    static boolean clickedUserItemStatus = false;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
         viewUserImage = (CircleImageView) findViewById(R.id.imgViewProfilePic);
 
-        if(TabHomeAdapter.getClickedItemVerified() != null) {
+        /*if(TabHomeAdapter.getClickedItemVerified() != null) {
             viewReportHead.setText(TabHomeAdapter.getClickedItemVerified().getHead());
             viewReportDesc.setText(TabHomeAdapter.getClickedItemVerified().getDescription());
             viewReportDateTime.setText(TabHomeAdapter.getClickedItemVerified().getDisplayDateTime());
@@ -64,6 +69,30 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(Tab2_Location.activeVerifiedReport.getReportType()))
                     .into(viewReportType);
+        }*/
+
+        if(PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
+            viewReportHead.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getHead());
+            viewReportDesc.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDescription());
+            viewReportDateTime.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getImageThumbnailURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabHomeListItemVerified().getReportType()))
+                    .into(viewReportType);
+        }else if (PageNavigationManager.getClickedTabLocListItemVerified() != null){
+            viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
+            viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
+            viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getImageThumbnailURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
+                    .into(viewReportType);
         }
 
         viewUserImage.setOnClickListener(this);
@@ -72,9 +101,44 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if(v==viewUserImage) {
-            Toast.makeText(this, "User", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, UserManagement.class);
-            startActivity(i);
+            if(SessionManager.getUserType().equals("Admin")) {
+                Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show();
+                String userID = "";
+
+                if (PageNavigationManager.getClickedTabHomeListItemVerified() != null /*TabHomeAdapter.clickedStatus*/) {
+                    userID = PageNavigationManager.getClickedTabHomeListItemVerified().getReportedBy();
+                } else if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
+                    userID = PageNavigationManager.getClickedTabNotifListItem().getReportedBy();
+                } else if (PageNavigationManager.getClickedTabLocListItemVerified() != null) {
+                    userID = PageNavigationManager.getClickedTabLocListItemVerified().getReportedBy();
+                }
+
+                PageNavigationManager.clickReportPageUserItem(FirebaseDatabaseManager.getUserItem(userID));
+                if(PageNavigationManager.getClickedReportPageUserItem() != null) {
+                    Intent i = new Intent(this, UserManagement.class);
+                    startActivity(i);
+                }
+
+                /*for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
+                    if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
+                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
+                        clickedUserItemStatus = true;
+
+                        PageNavigationManager.clickReportPageUserItem(FirebaseDatabaseManager.getUserItems().get(x));
+
+                        /*VerifyReport.clickedUserItemStatus = false;
+                        TabHomeAdapter.clickedUserItemStatus = false;
+                    }
+                }*/
+            }
         }
     }
+
+    /*public static UserItem getClickedUserItem() {
+        return clickedUserItem;
+    }
+
+    public static void setClickedUserItem(UserItem clickedUserItem) {
+        ReportPage.clickedUserItem = clickedUserItem;
+    }*/
 }

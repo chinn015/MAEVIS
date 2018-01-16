@@ -78,7 +78,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="55dp"
-        android:id="@+id/btnVerifyReport"
+        android:id="@+id/btnBlockUser"
         android:text="Verify"
         android:backgroundTint="@color/colorPrimary"
         android:textColor="@color/colorAccent"
@@ -92,7 +92,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="55dp"
-        android:id="@+id/btnDeclineReport"
+        android:id="@+id/btnProfileUM"
         android:text="Decline"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="65dp"
