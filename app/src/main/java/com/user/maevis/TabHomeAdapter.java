@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
 
 import java.util.List;
 
@@ -25,8 +26,10 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     private Context context;
     //private static ListItem clickedItem = null;
     private static ListItemVerified clickedItemVerified = null;
+    private static UserItem clickedUserItem = null;
 
     static boolean clickedStatus = false;
+    static boolean clickedUserItemStatus = false;
 
     /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -62,10 +65,22 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItemVerified(listItemVerified);
+                //setClickedItemVerified(listItemVerified);
 
-                clickedStatus = true;
-                TabNotifAdapterRegUser.clickedStatus = false;
+                /*for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+                    if (listItemVerified.getReportedBy().equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
+                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
+                        clickedUserItemStatus = true;
+                        VerifyReport.clickedUserItemStatus = false;
+                    }
+                }*/
+
+                PageNavigationManager.clickTabHomeListItemVerified(listItemVerified);
+
+                /*clickedStatus = true;
+                clickedUserItemStatus = true;
+                TabNotifAdapter.clickedStatus = false;
+                TabNotifAdapterRegUser.clickedStatus = false;*/
 
                 Intent i;
                 i = new Intent(context, ReportPage.class);
@@ -114,6 +129,14 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
 
     public static void setClickedItemVerified(ListItemVerified clickedItemVerified) {
         TabHomeAdapter.clickedItemVerified = clickedItemVerified;
+    }
+
+    public static UserItem getClickedUserItem() {
+        return clickedUserItem;
+    }
+
+    public static void setClickedUserItem(UserItem clickedUserItem) {
+        TabHomeAdapter.clickedUserItem = clickedUserItem;
     }
 
     @Override

@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FirstName LastName"
-                android:id="@+id/textView"
+                android:id="@+id/viewUMName"
                 android:textSize="20dp"
                 android:layout_alignTop="@+id/imgViewProfilePic"
                 android:layout_toEndOf="@+id/imgViewProfilePic"
@@ -59,30 +59,30 @@
                 android:layout_marginTop="26dp" />
 
             <Button
+                android:id="@+id/btnBlockUser"
                 android:layout_width="150dp"
                 android:layout_height="55dp"
-                android:id="@+id/btnVerifyReport"
-                android:text="Verify"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/colorAccent"
-                android:layout_marginTop="65dp"
-                android:textSize="20dp"
-                android:textAllCaps="false"
                 android:layout_below="@+id/imgViewProfilePic"
-                android:layout_toStartOf="@+id/btnDeclineReport" />
+                android:layout_marginTop="65dp"
+                android:layout_toStartOf="@+id/btnProfileUM"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Block User"
+                android:textAllCaps="false"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp" />
 
             <Button
+                android:id="@+id/btnProfileUM"
                 android:layout_width="150dp"
                 android:layout_height="55dp"
-                android:id="@+id/btnDeclineReport"
-                android:text="Decline"
-                android:textSize="20dp"
-                android:textAllCaps="false"
+                android:layout_alignBaseline="@+id/btnBlockUser"
+                android:layout_alignBottom="@+id/btnBlockUser"
+                android:layout_alignStart="@+id/viewUMName"
                 android:backgroundTint="#464646"
+                android:text="Profile"
+                android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
-                android:layout_alignBaseline="@+id/btnVerifyReport"
-                android:layout_alignBottom="@+id/btnVerifyReport"
-                android:layout_alignStart="@+id/textView" />
+                android:textSize="20dp" />
 
         </RelativeLayout>
     </ScrollView>

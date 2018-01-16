@@ -263,4 +263,18 @@ public class FirebaseDatabaseManager {
 
         return verifiedReport;
     }
+
+    public static UserItem getUserItem(String userID) {
+        UserItem userItem = null;
+
+        for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
+            if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
+                        /*clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
+                        clickedUserItemStatus = true;*/
+                userItem = FirebaseDatabaseManager.getUserItems().get(x);
+            }
+        }
+
+        return userItem;
+    }
 }

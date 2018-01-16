@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
 
 import java.util.List;
@@ -75,8 +76,10 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                 clickedStatus = true;
                 Tab2_Location.clickedStatus = false;
 
+                PageNavigationManager.clickTabNotifListItem(listItem);
+
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItem);
+                //setClickedItem(listItem);
 
                 if(SessionManager.getUserType().equals("Admin")) {
                     Intent i;
