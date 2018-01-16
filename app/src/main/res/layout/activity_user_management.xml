@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.user.maevis.VerifyReport">
+    tools:context="com.user.maevis.UserManagement">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -85,5 +85,139 @@
                 android:textSize="20dp" />
 
         </RelativeLayout>
+  
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/appBarLayout">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgViewProfilePic"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="57dp"
+            android:elevation="8dp"
+            android:src="@drawable/img_user"
+            app:border_color="#FFF"
+            app:border_width="2dp"
+            app:layout_anchorGravity="top|center_horizontal"
+            app:layout_scrollFlags="scroll"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txtViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imgViewProfilePic"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="26dp"
+            android:layout_toEndOf="@+id/imgViewProfilePic"
+            android:text="FirstName LastName"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/imgUserStatus"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_remove_red_eye_black_24dp"
+            android:tint="@color/colorPrimary"
+            android:layout_above="@+id/textView"
+            android:layout_alignStart="@+id/txtViewName"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/userStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="active"
+            android:textSize="15dp"
+            android:layout_alignBottom="@+id/imgUserStatus"
+            android:layout_toEndOf="@+id/imgUserStatus"
+            android:layout_marginStart="14dp" />
+
+        <TextView
+            android:id="@+id/txtViewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_above="@+id/imgUserStatus"
+            android:layout_alignStart="@+id/imgUserStatus" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Summary of Reports"
+            android:textSize="18dp"
+            android:layout_marginTop="48dp"
+            android:id="@+id/textView"
+            android:textColor="@color/colorPrimary"
+            android:layout_below="@+id/imgViewProfilePic"
+            android:layout_alignEnd="@+id/textView4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unverified Reports"
+            android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/textView"
+            android:layout_alignStart="@+id/textView"
+            android:id="@+id/lblUnverified" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21"
+            android:textSize="15dp"
+            android:id="@+id/txtViewUnverified"
+            android:layout_alignBaseline="@+id/lblUnverified"
+            android:layout_alignBottom="@+id/lblUnverified"
+            android:layout_toEndOf="@+id/btnBlockUser" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verified Reports"
+            android:textSize="15dp"
+            android:layout_marginTop="18dp"
+            android:layout_below="@+id/lblUnverified"
+            android:layout_alignStart="@+id/lblUnverified"
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/textView3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textSize="15dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_alignBaseline="@+id/textView3"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_alignStart="@+id/txtViewUnverified"
+            android:id="@+id/txtViewVerified"/>
+
+        <Button
+            android:id="@+id/btnBlockUser"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Block User"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:layout_marginBottom="28dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
 </RelativeLayout>

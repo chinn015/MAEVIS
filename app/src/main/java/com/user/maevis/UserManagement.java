@@ -3,6 +3,7 @@ package com.user.maevis;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,9 +12,6 @@ import com.user.maevis.models.PageNavigationManager;
 
 import org.w3c.dom.Text;
 
-/**
- * Created by Chen on 1/15/2018.
- */
 
 public class UserManagement extends AppCompatActivity implements View.OnClickListener {
     private Button btnBlockUser;
@@ -36,6 +34,11 @@ public class UserManagement extends AppCompatActivity implements View.OnClickLis
             //viewUMName.setText(VerifyReport.getClickedUserItem().getFirstName()+" "+VerifyReport.getClickedUserItem().getLastName());
             viewUMName.setText(PageNavigationManager.getClickedVerifyReportUserItem().getFirstName()+" "+PageNavigationManager.getClickedVerifyReportUserItem().getLastName());
         }
+      
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
