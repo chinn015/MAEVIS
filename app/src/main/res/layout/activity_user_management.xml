@@ -21,73 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp">
-
-        <RelativeLayout
-            android:layout_width="300dp"
-            android:layout_height="400dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgViewProfilePic"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:elevation="8dp"
-                android:src="@drawable/img_user"
-                app:border_color="#FFF"
-                app:border_width="2dp"
-                app:layout_anchorGravity="top|center_horizontal"
-                app:layout_scrollFlags="scroll"
-                android:layout_marginStart="38dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="73dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FirstName LastName"
-                android:id="@+id/viewUMName"
-                android:textSize="20dp"
-                android:layout_alignTop="@+id/imgViewProfilePic"
-                android:layout_toEndOf="@+id/imgViewProfilePic"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="26dp" />
-
-            <Button
-                android:id="@+id/btnBlockUser"
-                android:layout_width="150dp"
-                android:layout_height="55dp"
-                android:layout_below="@+id/imgViewProfilePic"
-                android:layout_marginTop="65dp"
-                android:layout_toStartOf="@+id/btnProfileUM"
-                android:backgroundTint="@color/colorPrimary"
-                android:text="Block User"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="20dp" />
-
-            <Button
-                android:id="@+id/btnProfileUM"
-                android:layout_width="150dp"
-                android:layout_height="55dp"
-                android:layout_alignBaseline="@+id/btnBlockUser"
-                android:layout_alignBottom="@+id/btnBlockUser"
-                android:layout_alignStart="@+id/viewUMName"
-                android:backgroundTint="#464646"
-                android:text="Profile"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="20dp" />
-
-        </RelativeLayout>
-  
-    </ScrollView>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -111,7 +44,7 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:id="@+id/txtViewName"
+            android:id="@+id/viewUMName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imgViewProfilePic"
@@ -129,7 +62,7 @@
             android:src="@drawable/ic_remove_red_eye_black_24dp"
             android:tint="@color/colorPrimary"
             android:layout_above="@+id/textView"
-            android:layout_alignStart="@+id/txtViewName"
+            android:layout_alignStart="@+id/viewUMName"
             android:layout_marginBottom="20dp" />
 
         <TextView
@@ -161,7 +94,7 @@
             android:id="@+id/textView"
             android:textColor="@color/colorPrimary"
             android:layout_below="@+id/imgViewProfilePic"
-            android:layout_alignEnd="@+id/textView4" />
+            android:layout_toStartOf="@+id/userStatus" />
 
         <TextView
             android:layout_width="wrap_content"
