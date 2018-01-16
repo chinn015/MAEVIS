@@ -121,6 +121,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String birthdate = txtFldBirthdate.getText().toString();
         String address = txtFldAddress.getText().toString();
         String userType = "Regular User";
+        String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
 
@@ -161,7 +162,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         //final UserModel userModel = new UserModel(email, username, password);
         //final UserModel userModel = new UserModel(username, password, email, firstName, lastName, birthdate, address);
-        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, userType, username);
+        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, userStatus, userType, username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -177,7 +178,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserType());
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType());
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));
