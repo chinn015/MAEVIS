@@ -1,6 +1,9 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,6 +32,8 @@ public class UserManagement extends AppCompatActivity implements View.OnClickLis
         btnBlockUser = (Button) findViewById(R.id.btnBlockUser);
         btnProfileUM = (Button) findViewById(R.id.btnProfileUM);
 
+        btnBlockUser.setOnClickListener(this);
+
         viewUMName = (TextView) findViewById(R.id.viewUMName);
 
         if(PageNavigationManager.getClickedReportPageUserItem() != null /*ReportPage.clickedUserItemStatus*/) {
@@ -49,11 +54,11 @@ public class UserManagement extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if(v==btnBlockUser) {
-            Toast.makeText(UserManagement.this, "Report declined.", Toast.LENGTH_SHORT).show();
-            FirebaseDatabaseManager.FirebaseUsers.child(PageNavigationManager.getClickedUMBlockUserItem().getUserID()).child("userStatus").setValue("Blocked");
+            showDialogBlock();
+            //FirebaseDatabaseManager.FirebaseUsers.child(PageNavigationManager.getClickedUMBlockUserItem().getUserID()).child("userStatus").setValue("Blocked");
 
-            finish();
-            startActivity(new Intent(UserManagement.this, Sidebar_HomePage.class));
+            /*finish();
+            startActivity(new Intent(UserManagement.this, Sidebar_HomePage.class));*/
             return;
         }
 
@@ -61,5 +66,39 @@ public class UserManagement extends AppCompatActivity implements View.OnClickLis
 
             return;
         }
+    }
+
+    private void showDialogBlock() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        String name = "";
+
+        if(PageNavigationManager.getClickedUMBlockUserItem() != null) {
+            name = PageNavigationManager.getClickedUMBlockUserItem().getFirstName()+" "+PageNavigationManager.getClickedUMBlockUserItem().getLastName();
+        }
+
+        builder.setTitle("Block User");
+        builder.setMessage("Are you sure you want to block "+name+"?");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Block", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(UserManagement.this, "User blocked.", Toast.LENGTH_SHORT).show();
+
+                FirebaseDatabaseManager.FirebaseUsers.child(PageNavigationManager.getClickedUMBlockUserItem().getUserID()).child("userStatus").setValue("Blocked");
+
+                finish();
+                startActivity(new Intent(UserManagement.this, Sidebar_HomePage.class));
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 }

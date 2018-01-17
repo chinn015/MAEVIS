@@ -186,9 +186,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                     Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() +" "+SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
-                                    //Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
-                                    progressDialog.dismiss();
                                 }
+                                progressDialog.dismiss();
                             }
                         });
 

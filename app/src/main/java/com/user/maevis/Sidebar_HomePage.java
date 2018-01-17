@@ -314,9 +314,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Tab1_Home(), "ONE");
-        adapter.addFragment(new Tab4_Search(), "TWO");
+        adapter.addFragment(new Tab2_Location(), "TWO");
         adapter.addFragment(new Tab3_Notification(), "THREE");
-        adapter.addFragment(new Tab2_Location(), "FOUR");
+        adapter.addFragment(new Tab4_Search(), "FOUR");
 
         viewPager.setAdapter(adapter);
     }
