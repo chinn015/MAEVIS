@@ -96,8 +96,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplication(), SelectionPage.class);
-                startActivity(i);
+                if(SessionManager.getUserStatus().equals("Active")) {
+                    Intent i = new Intent(getApplication(), SelectionPage.class);
+                    startActivity(i);
+                } else if(SessionManager.getUserStatus().equals("Blocked")) {
+                    showDialogBlocked();
+                }
             }
         });
 
@@ -269,6 +273,25 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             }
         });
 
+    }
+
+    private void showDialogBlocked() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Sidebar_HomePage.this);
+        builder.setCancelable(false);
+        builder.setTitle("Account Blocked");
+        builder.setMessage("Your account has been blocked. \nYou cannot send any reports for now.");
+        builder.setInverseBackgroundForced(true);
+
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 
     public String getUserLocAddress (double userLatitude, double userLongitude){

@@ -30,7 +30,8 @@ public class SessionManager {
     public static final String KEY_LASTNAME = "SESSION_LASTNAME";
     public static final String KEY_BIRTHDATE = "SESSION_BIRTHDATE";
     public static final String KEY_ADDRESS = "SESSION_ADDRESS";
-    public static final String KEY_STATUS = "SESSION_STATUS";
+    public static final String KEY_USERSTATUS = "SESSION_USERSTATUS";
+    public static final String KEY_SESSIONSTATUS = "SESSION_SESSIONSTATUS";
     public static final String KEY_USERTYPE = "SESSION_USERTYPE";
     public static final String KEY_DEVICE_TOKEN = "SESSION_DEVICE_TOKEN";
 
@@ -42,7 +43,7 @@ public class SessionManager {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userType) {
+    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType) {
         sessionEditor.putString(KEY_USERID, userID);
         sessionEditor.putString(KEY_USERNAME, username);
         sessionEditor.putString(KEY_EMAIL, email);
@@ -50,7 +51,8 @@ public class SessionManager {
         sessionEditor.putString(KEY_LASTNAME, lastName);
         sessionEditor.putString(KEY_BIRTHDATE, birthdate);
         sessionEditor.putString(KEY_ADDRESS, address);
-        sessionEditor.putBoolean(KEY_STATUS, true);
+        sessionEditor.putString(KEY_USERSTATUS, userStatus);
+        sessionEditor.putBoolean(KEY_SESSIONSTATUS, true);
         sessionEditor.putString(KEY_USERTYPE, userType);
         //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
 
@@ -74,7 +76,7 @@ public class SessionManager {
 
     public static boolean isLoggedIn() {
 
-        return sessionPreferences.getBoolean(KEY_STATUS, false);
+        return sessionPreferences.getBoolean(KEY_SESSIONSTATUS, false);
     }
 
     public static void clearSession() {
@@ -108,6 +110,10 @@ public class SessionManager {
 
     public static String getAddress() {
         return sessionPreferences.getString(KEY_ADDRESS, null);
+    }
+
+    public static String getUserStatus() {
+        return sessionPreferences.getString(KEY_USERSTATUS, null);
     }
 
     public static String getUserType() {

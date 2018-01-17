@@ -1,6 +1,9 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,13 +52,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     public static ReportVerifiedModel reportVerifiedModel;
     public static DatabaseReference newReportVerified;
-
-    /*private static UserItem clickedUserItem = null;
-    static boolean clickedUserItemStatus = false;*/
-
-    /*private String clickedUserID = "";
-    private ListItem listItemTemp = null;
-    private String tab = "";*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,69 +183,26 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if(v==btnVerifyReport) {
-            clickedReportBasis = Tab2_Location.pendingReport;
-
-            for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
-                ListItem pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
-                double vLatitude = pendingReport.getLocationLatitude();
-                double vLongitude = pendingReport.getLocationLongitude();
-                float distance, limit_distance;
-
-                limit_distance = 300;
-                Location report_locations = new Location("1");
-                Location verify_location = new Location("2");
-                String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
-
-                report_locations.setLatitude(vLatitude);
-                report_locations.setLongitude(vLongitude);
-
-                verify_location.setLatitude(pendingReport.getLocationLatitude());
-                verify_location.setLongitude(pendingReport.getLocationLongitude());
-
-                //Returns the approximate distance in meters between the current location and the given report location.
-                distance = verify_location.distanceTo(report_locations);
-
-                if(distance <= limit_distance){
-                    if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), pendingReport.getDateTime())) {
-                        if (pendingReport.getReportType().equals(clickedReportBasis.getReportType())) {
-                            getImageList().add(pendingReport.getImageURL());
-                            getMergedReportsID().add(pendingReport.getReportID());
-                            FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("reportStatus").setValue("Verified");
-                        }
-                    }
-                }
-            }
-
-            verifyReport();
-            //FirebaseReports.child(TabNotifAdapter.getClickedItem().getReportID()).child("reportStatus").setValue("Verified");
-
-            finish();
-            startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+            showDialogVerify();
             return;
         }
 
         if(v==btnDeclineReport) {
-            Toast.makeText(VerifyReport.this, "Report declined.", Toast.LENGTH_SHORT).show();
-            FirebaseReports.child(Tab2_Location.pendingReport.getReportID()).child("reportStatus").setValue("Declined");
-            finish();
-            startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+            showDialogDecline();
             return;
         }
 
         if(v==imgViewProfilePic) {
             if(SessionManager.getUserType().equals("Admin")) {
-                //Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show()
-
-                if (PageNavigationManager.getClickedTabLocListItemPending() != null /*Tab2_Location.clickedStatus*/) {
+                if (PageNavigationManager.getClickedTabLocListItemPending() != null) {
                     PageNavigationManager.markTab(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy(),
                             PageNavigationManager.KEY_TABLOCPENDING,
                             PageNavigationManager.getClickedTabLocListItemPending());
 
-                    //PageNavigationManager.markTab(PageNavigationManager.getClickedUserID(), PageNavigationManager.getFromTab(), PageNavigationManager.getListItemTemp(), null, null);
                     Toast.makeText(this, "[TabLoc] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
                 }
 
-                if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
+                if (PageNavigationManager.getClickedTabNotifListItem() != null) {
                     PageNavigationManager.markTab(PageNavigationManager.getClickedTabNotifListItem().getReportedBy(),
                             PageNavigationManager.KEY_TABNOTIF,
                             PageNavigationManager.getClickedTabNotifListItem());
@@ -257,33 +210,51 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "[TabNotif] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
                 }
 
-                /*if (PageNavigationManager.getClickedTabNotifRegListItem() != null) {
-                    clickedUserID = PageNavigationManager.getClickedTabNotifRegListItem().getReportedBy();
-                    Toast.makeText(this, "[TabNotifReg] User ID: "+clickedUserID, Toast.LENGTH_LONG).show();
-                }*/
-
-                //Toast.makeText(this, "User ID: "+userID, Toast.LENGTH_LONG).show();
-
                 PageNavigationManager.clickVerifyReportUserItem(FirebaseDatabaseManager.getUserItem(PageNavigationManager.getClickedUserID()));
                 if(PageNavigationManager.getClickedVerifyReportUserItem() != null) {
                     Intent i = new Intent(this, UserManagement.class);
                     startActivity(i);
                 }
-
-                /*switch(tab) {
-                    case "TabLoc": PageNavigationManager.setClickedTabLocListItemPending(listItemTemp);
-                                   break;
-                    case "TabNotif": PageNavigationManager.setClickedTabNotifListItem(listItemTemp);
-                        break;
-                }*/
-
-
-                //PageNavigationManager.resetClickedPages();
             }
         }
     }
 
     public void verifyReport() {
+        clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+        newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
+
+        for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
+            ListItem pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+            double vLatitude = pendingReport.getLocationLatitude();
+            double vLongitude = pendingReport.getLocationLongitude();
+            float distance, limit_distance;
+
+            limit_distance = 300;
+            Location report_locations = new Location("1");
+            Location verify_location = new Location("2");
+            String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+
+            report_locations.setLatitude(vLatitude);
+            report_locations.setLongitude(vLongitude);
+
+            verify_location.setLatitude(pendingReport.getLocationLatitude());
+            verify_location.setLongitude(pendingReport.getLocationLongitude());
+
+            //Returns the approximate distance in meters between the current location and the given report location.
+            distance = verify_location.distanceTo(report_locations);
+
+            if(distance <= limit_distance){
+                if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), pendingReport.getDateTime())) {
+                    if (pendingReport.getReportType().equals(clickedReportBasis.getReportType())) {
+                        getImageList().add(pendingReport.getImageURL());
+                        getMergedReportsID().add(pendingReport.getReportID());
+                        FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("reportStatus").setValue("Verified");
+                        FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("mergedTo").setValue(newReportVerified.getKey());
+                    }
+                }
+            }
+        }
+
         String dateTime = clickedReportBasis.getDateTime();
         String description = clickedReportBasis.getDescription();
         String imageThumbnailURL = clickedReportBasis.getImageURL();
@@ -297,11 +268,17 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         List<String> mergedReportsID = getMergedReportsID();
 
         reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy);
-
-        newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
         newReportVerified.setValue(reportVerifiedModel);
 
         Toast.makeText(VerifyReport.this, "Report verified!.", Toast.LENGTH_LONG).show();
+        finish();
+        startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+    }
+
+    public void declineReport() {
+        Toast.makeText(VerifyReport.this, "Report declined.", Toast.LENGTH_SHORT).show();
+        FirebaseDatabaseManager.FirebaseReports.child(PageNavigationManager.getClickedTabLocListItemPending().getReportID()).child("reportStatus").setValue("Declined");
+
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
     }
@@ -322,11 +299,47 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         this.mergedReportsID = mergedReportsID;
     }
 
-    /*public static UserItem getClickedUserItem() {
-        return clickedUserItem;
+    private void showDialogVerify() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("VERIFY REPORT");
+        builder.setMessage("Confirm verification of report.");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("VERIFY", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                verifyReport();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 
-    public static void setClickedUserItem(UserItem clickedUserItem) {
-        VerifyReport.clickedUserItem = clickedUserItem;
-    }*/
+    private void showDialogDecline() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("DECLINE REPORT");
+        builder.setMessage("Decline this report?");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("DECLINE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                declineReport();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
 }

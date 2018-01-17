@@ -65,7 +65,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
     static List<String> markerReportIDs;
     static List<String> markerPendingReportIDs;
     static List<String> markerActiveVerifiedReportIDs;
-    static boolean clickedStatus = false;
 
     View view;
 
@@ -324,31 +323,21 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         markerId = marker.getId().replaceAll("[^\\d.]", "");
         id = Integer.parseInt(markerId) - 2;
 
-        clickedStatus = true;
-        TabNotifAdapter.clickedStatus = false;
-
         if( id != -1 && id != -2){
             switch(SessionManager.getUserType()) {
                 case "Regular User":
                     Toast.makeText(getContext(), "Reg User MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
 
-                    //activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
-
                     PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
-
                     i = new Intent(getContext(), ReportPage.class);
                     startActivity(i);
                     break;
                 case "Admin":
                     if(FirebaseDatabaseManager.isInActiveVerifiedReports(markerReportIDs.get(id))) {
-                        //Toast.makeText(getContext(), "Admin AVR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getActiveVerifiedReports().size(), Toast.LENGTH_LONG).show();
-                        //activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id));
                         PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
                         i = new Intent(getContext(), ReportPage.class);
                         startActivity(i);
                     } else {
-                        //Toast.makeText(getContext(), "Admin PR MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
-                        //pendingReport = FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id));
                         PageNavigationManager.clickTabLocListItemPending(FirebaseDatabaseManager.getPendingReport(markerReportIDs.get(id)));
                         i = new Intent(getContext(), VerifyReport.class);
                         startActivity(i);

@@ -170,10 +170,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sLastName = user.child("lastName").getValue().toString();
                         String sBirthdate = user.child("birthdate").getValue().toString();
                         String sAddress = user.child("address").getValue().toString();
+                        String sUserStatus = user.child("userStatus").getValue().toString();
                         String sUserType = user.child("userType").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserType);
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserStatus, sUserType);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
@@ -184,7 +185,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() +" "+SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
                                     //Toast.makeText(Login.this, "User authentication success!", Toast.LENGTH_LONG).show();
                                     progressDialog.dismiss();
                                 }

@@ -13,18 +13,20 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String password;
+    private String userStatus;
     private String userType;
     private String username;
 
     //Constructor
 
-    public UserModel(String address, String birthdate, String email, String firstName, String lastName, String password, String userType, String username) {
+    public UserModel(String address, String birthdate, String email, String firstName, String lastName, String password, String userStatus, String userType, String username) {
         this.address = address;
         this.birthdate = birthdate;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.userStatus = userStatus;
         this.userType = userType;
         this.username = username;
     }
@@ -91,6 +93,14 @@ public class UserModel {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
     }
 
     public void setAddress(String address) {
