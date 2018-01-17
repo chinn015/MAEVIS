@@ -31,6 +31,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     /*private static UserItem clickedUserItem = null;
     static boolean clickedUserItemStatus = false;*/
 
+    /*private String clickedUserID = "";
+    private ListItem listItemTemp = null;
+    private String tab = "";*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,17 +107,45 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         if(v==viewUserImage) {
             if(SessionManager.getUserType().equals("Admin")) {
                 Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show();
-                String userID = "";
 
                 if (PageNavigationManager.getClickedTabHomeListItemVerified() != null /*TabHomeAdapter.clickedStatus*/) {
-                    userID = PageNavigationManager.getClickedTabHomeListItemVerified().getReportedBy();
-                } else if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
-                    userID = PageNavigationManager.getClickedTabNotifListItem().getReportedBy();
-                } else if (PageNavigationManager.getClickedTabLocListItemVerified() != null) {
-                    userID = PageNavigationManager.getClickedTabLocListItemVerified().getReportedBy();
+                    /*clickedUserID = PageNavigationManager.getClickedTabHomeListItemVerified().getReportedBy();
+                    tab = "TabLoc";
+                    listItemTemp = PageNavigationManager.getClickedTabLocListItemPending();
+                    Toast.makeText(this, "[TabLoc] User ID: "+clickedUserID, Toast.LENGTH_LONG).show();*/
+
+                    PageNavigationManager.markTab(PageNavigationManager.getClickedTabHomeListItemVerified().getReportedBy(),
+                            PageNavigationManager.KEY_TABHOME,
+                            PageNavigationManager.getClickedTabHomeListItemVerified());
+
+                    Toast.makeText(this, "[TabLoc] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
                 }
 
-                PageNavigationManager.clickReportPageUserItem(FirebaseDatabaseManager.getUserItem(userID));
+                if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
+                    /*clickedUserID = PageNavigationManager.getClickedTabLocListItemPending().getReportedBy();
+                    tab = "TabLoc";
+                    listItemTemp = PageNavigationManager.getClickedTabLocListItemPending();*/
+
+                    PageNavigationManager.markTab(PageNavigationManager.getClickedTabNotifListItem().getReportedBy(),
+                            PageNavigationManager.KEY_TABNOTIF,
+                            PageNavigationManager.getClickedTabNotifListItem());
+
+                    Toast.makeText(this, "[TabLoc] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
+                }
+
+                if (PageNavigationManager.getClickedTabLocListItemVerified() != null) {
+                    /*clickedUserID = PageNavigationManager.getClickedTabLocListItemPending().getReportedBy();
+                    tab = "TabLoc";
+                    listItemTemp = PageNavigationManager.getClickedTabLocListItemPending();*/
+
+                    PageNavigationManager.markTab(PageNavigationManager.getClickedTabLocListItemVerified().getReportedBy(),
+                            PageNavigationManager.KEY_TABLOCVERIFIED,
+                            PageNavigationManager.getClickedTabLocListItemVerified());
+
+                    Toast.makeText(this, "[TabLoc] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
+                }
+
+                PageNavigationManager.clickReportPageUserItem(FirebaseDatabaseManager.getUserItem(PageNavigationManager.getClickedUserID()));
                 if(PageNavigationManager.getClickedReportPageUserItem() != null) {
                     Intent i = new Intent(this, UserManagement.class);
                     startActivity(i);

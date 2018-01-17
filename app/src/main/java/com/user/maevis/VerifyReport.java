@@ -53,6 +53,10 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     /*private static UserItem clickedUserItem = null;
     static boolean clickedUserItemStatus = false;*/
 
+    /*private String clickedUserID = "";
+    private ListItem listItemTemp = null;
+    private String tab = "";*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,31 +238,47 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         if(v==imgViewProfilePic) {
             if(SessionManager.getUserType().equals("Admin")) {
-                Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show();
-                String userID = "";
+                //Toast.makeText(this, "User Management", Toast.LENGTH_LONG).show()
 
                 if (PageNavigationManager.getClickedTabLocListItemPending() != null /*Tab2_Location.clickedStatus*/) {
-                    userID = PageNavigationManager.getClickedTabLocListItemPending().getReportedBy();
-                } else if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
-                    userID = PageNavigationManager.getClickedTabNotifListItem().getReportedBy();
-                } else if (PageNavigationManager.getClickedTabNotifRegListItem() != null /*TabNotifAdapterRegUser.clickedStatus*/) {
-                    userID = PageNavigationManager.getClickedTabNotifRegListItem().getReportedBy();
+                    PageNavigationManager.markTab(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy(),
+                            PageNavigationManager.KEY_TABLOCPENDING,
+                            PageNavigationManager.getClickedTabLocListItemPending());
+
+                    //PageNavigationManager.markTab(PageNavigationManager.getClickedUserID(), PageNavigationManager.getFromTab(), PageNavigationManager.getListItemTemp(), null, null);
+                    Toast.makeText(this, "[TabLoc] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
                 }
 
-                /*for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
-                    if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
-                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
-                        clickedUserItemStatus = true;
-                        ReportPage.clickedUserItemStatus = false;
-                        TabHomeAdapter.clickedUserItemStatus = false;
-                    }
+                if (PageNavigationManager.getClickedTabNotifListItem() != null /*TabNotifAdapter.clickedStatus*/) {
+                    PageNavigationManager.markTab(PageNavigationManager.getClickedTabNotifListItem().getReportedBy(),
+                            PageNavigationManager.KEY_TABNOTIF,
+                            PageNavigationManager.getClickedTabNotifListItem());
+
+                    Toast.makeText(this, "[TabNotif] User ID: "+PageNavigationManager.getClickedUserID(), Toast.LENGTH_LONG).show();
+                }
+
+                /*if (PageNavigationManager.getClickedTabNotifRegListItem() != null) {
+                    clickedUserID = PageNavigationManager.getClickedTabNotifRegListItem().getReportedBy();
+                    Toast.makeText(this, "[TabNotifReg] User ID: "+clickedUserID, Toast.LENGTH_LONG).show();
                 }*/
 
-                PageNavigationManager.clickVerifyReportUserItem(FirebaseDatabaseManager.getUserItem(userID));
+                //Toast.makeText(this, "User ID: "+userID, Toast.LENGTH_LONG).show();
+
+                PageNavigationManager.clickVerifyReportUserItem(FirebaseDatabaseManager.getUserItem(PageNavigationManager.getClickedUserID()));
                 if(PageNavigationManager.getClickedVerifyReportUserItem() != null) {
                     Intent i = new Intent(this, UserManagement.class);
                     startActivity(i);
                 }
+
+                /*switch(tab) {
+                    case "TabLoc": PageNavigationManager.setClickedTabLocListItemPending(listItemTemp);
+                                   break;
+                    case "TabNotif": PageNavigationManager.setClickedTabNotifListItem(listItemTemp);
+                        break;
+                }*/
+
+
+                //PageNavigationManager.resetClickedPages();
             }
         }
     }

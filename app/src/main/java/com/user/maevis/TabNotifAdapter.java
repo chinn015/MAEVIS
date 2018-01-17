@@ -73,8 +73,8 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                clickedStatus = true;
-                Tab2_Location.clickedStatus = false;
+                /*clickedStatus = true;
+                Tab2_Location.clickedStatus = false;*/
 
                 PageNavigationManager.clickTabNotifListItem(listItem);
 
