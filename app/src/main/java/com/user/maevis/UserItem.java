@@ -8,19 +8,23 @@ public class UserItem {
     private String userID;
     private String address;
     private String birthdate;
+    private String deviceToken;
     private String email;
     private String firstName;
     private String lastName;
+    private String userStatus;
     private String userType;
     private String username;
 
-    public UserItem(String userID, String address, String birthdate, String email, String firstName, String lastName, String userType, String username) {
+    public UserItem(String userID, String address, String birthdate, String deviceToken, String email, String firstName, String lastName, String userStatus, String userType, String username) {
         this.userID = userID;
         this.address = address;
         this.birthdate = birthdate;
+        this.deviceToken = deviceToken;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userStatus = userStatus;
         this.userType = userType;
         this.username = username;
     }

@@ -86,6 +86,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null) {
+                    FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
                     finish();
                     startActivity(new Intent(Login.this, Sidebar_HomePage.class));
                 }
@@ -174,7 +175,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sUserType = user.child("userType").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserStatus, sUserType);
+                        if(sDeviceToken.equals("")) {
+                            sDeviceToken = "NULL";
+                        }
+
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserStatus, sUserType, sDeviceToken);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
@@ -185,6 +190,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
                                 } else {
+                                    FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
                                     Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() +" "+SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
                                 }
                                 progressDialog.dismiss();

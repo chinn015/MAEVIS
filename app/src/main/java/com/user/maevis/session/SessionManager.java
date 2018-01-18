@@ -43,7 +43,7 @@ public class SessionManager {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType) {
+    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType, String deviceToken) {
         sessionEditor.putString(KEY_USERID, userID);
         sessionEditor.putString(KEY_USERNAME, username);
         sessionEditor.putString(KEY_EMAIL, email);
@@ -54,6 +54,7 @@ public class SessionManager {
         sessionEditor.putString(KEY_USERSTATUS, userStatus);
         sessionEditor.putBoolean(KEY_SESSIONSTATUS, true);
         sessionEditor.putString(KEY_USERTYPE, userType);
+        sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
         //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
 
         sessionEditor.commit();
@@ -128,7 +129,7 @@ public class SessionManager {
         SessionManager.firebaseAuth = firebaseAuth;
     }
 
-    public static String getKeyDeviceToken() {
+    public static String getDeviceToken() {
         return sessionPreferences.getString(KEY_DEVICE_TOKEN, null);
     }
 }
