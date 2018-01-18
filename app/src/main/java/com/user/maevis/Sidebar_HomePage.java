@@ -61,9 +61,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
-            R.drawable.ic_search_black_24dp,
+            R.drawable.ic_my_location_black_24dp,
             R.drawable.ic_notifications_none_black_24dp,
-            R.drawable.ic_my_location_black_24dp
+            R.drawable.ic_search_black_24dp
 
     };
 
@@ -138,7 +138,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         break;
                 }
 
-                if (position == 3) {
+                if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else {

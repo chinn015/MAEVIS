@@ -82,7 +82,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         }else{
             userLatitude = 10.316590;
             userLongitude = 123.897093;
-            showDialogGPS();
+            //showDialogGPS();
             Toast.makeText(getActivity(), "Location not found.",
                     Toast.LENGTH_LONG).show();
         }
