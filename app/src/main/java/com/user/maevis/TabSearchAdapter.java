@@ -1,6 +1,5 @@
 package com.user.maevis;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -8,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,10 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
     private Context context;
     //private static ListItem clickedItem = null;
     private static ListItemVerified clickedItemVerified = null;
+    private static UserItem clickedUserItem = null;
 
     static boolean clickedStatus = false;
+    static boolean clickedUserItemStatus = false;
 
     /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -42,7 +42,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_home_items, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_search_location, parent, false);
         return new ViewHolder(v);
     }
 
@@ -64,10 +64,22 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItemVerified(listItemVerified);
+                //setClickedItemVerified(listItemVerified);
 
-                clickedStatus = true;
-                TabNotifAdapterRegUser.clickedStatus = false;
+                /*for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+                    if (listItemVerified.getReportedBy().equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
+                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
+                        clickedUserItemStatus = true;
+                        VerifyReport.clickedUserItemStatus = false;
+                    }
+                }*/
+
+                PageNavigationManager.clickTabHomeListItemVerified(listItemVerified);
+
+                /*clickedStatus = true;
+                clickedUserItemStatus = true;
+                TabNotifAdapter.clickedStatus = false;
+                TabNotifAdapterRegUser.clickedStatus = false;*/
 
                 Intent i;
                 i = new Intent(context, ReportPage.class);
@@ -118,6 +130,14 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
         TabSearchAdapter.clickedItemVerified = clickedItemVerified;
     }
 
+    public static UserItem getClickedUserItem() {
+        return clickedUserItem;
+    }
+
+    public static void setClickedUserItem(UserItem clickedUserItem) {
+        TabSearchAdapter.clickedUserItem = clickedUserItem;
+    }
+
     @Override
     public int getItemCount() {
         return listItemsVerified.size();
@@ -137,7 +157,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
         public ImageView imageReportType;
 
 
-        public ViewHolder (View itemView){
+        public ViewHolder(View itemView) {
             super(itemView);
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);

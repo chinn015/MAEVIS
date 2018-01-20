@@ -153,7 +153,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else if (position == 2) {
-                    Sidebar_HomePage.badge.updateTabBadge(0);
+                    //Sidebar_HomePage.badge.updateTabBadge(0);
                     btnHomeLoc.hide();
                     btnUserLoc.hide();
                 }else{
