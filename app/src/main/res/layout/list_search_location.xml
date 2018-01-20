@@ -60,16 +60,6 @@
                     android:text="datetime"
                     android:textSize="12sp" />
 
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="datetime"-->
-                <!--android:id="@+id/textViewDateTimeNotif"-->
-                <!--android:layout_alignBottom="@+id/reportType"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:textSize="12dp"/>-->
-
                 <TextView
                     android:id="@+id/textViewHead"
                     android:layout_width="wrap_content"
