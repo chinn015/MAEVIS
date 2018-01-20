@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.ViewHolder> {
@@ -147,5 +148,11 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
             imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
 
         }
+    }
+
+    public void setFilter(List<ListItemVerified> listItemVerified){
+        listItemsVerified = new ArrayList<>();
+        listItemsVerified.addAll(listItemVerified);
+        notifyDataSetChanged();
     }
 }

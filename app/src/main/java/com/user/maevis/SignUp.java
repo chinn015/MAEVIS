@@ -124,6 +124,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
+        if(deviceToken.equals("")) {
+            deviceToken = "NULL";
+        }
 
         if(TextUtils.isEmpty(username)) {
             Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
@@ -160,9 +163,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        //final UserModel userModel = new UserModel(email, username, password);
-        //final UserModel userModel = new UserModel(username, password, email, firstName, lastName, birthdate, address);
-        final UserModel userModel = new UserModel(address, birthdate, email, firstName, lastName, password, userStatus, userType, username);
+        final UserModel userModel = new UserModel(address, birthdate, deviceToken, email, firstName, lastName, password, userStatus, userType, username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -178,7 +179,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType());
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken());
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));

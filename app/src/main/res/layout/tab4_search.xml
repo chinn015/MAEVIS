@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recyclerView"
-    android:scrollbars="vertical"
+    android:id="@+id/layoutSearch"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recyclerViewSearch"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/list_profile_media"
+    android:fadeScrollbars="true"
     />
+
+</RelativeLayout>
+

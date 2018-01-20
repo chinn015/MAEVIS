@@ -61,9 +61,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
-            R.drawable.ic_search_black_24dp,
+            R.drawable.ic_my_location_black_24dp,
             R.drawable.ic_notifications_none_black_24dp,
-            R.drawable.ic_my_location_black_24dp
+            R.drawable.ic_search_black_24dp
 
     };
 
@@ -138,7 +138,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         break;
                 }
 
-                if (position == 3) {
+                if (position == 1) {
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else {
@@ -180,9 +180,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 UserItem user = new UserItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("address").getValue().toString(),
                         dataSnapshot.child("birthdate").getValue().toString(),
+                        dataSnapshot.child("deviceToken").getValue().toString(),
                         dataSnapshot.child("email").getValue().toString(),
                         dataSnapshot.child("firstName").getValue().toString(),
                         dataSnapshot.child("lastName").getValue().toString(),
+                        dataSnapshot.child("userStatus").getValue().toString(),
                         dataSnapshot.child("userType").getValue().toString(),
                         dataSnapshot.child("username").getValue().toString());
 
@@ -314,9 +316,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Tab1_Home(), "ONE");
-        adapter.addFragment(new Tab4_Search(), "TWO");
+        adapter.addFragment(new Tab2_Location(), "TWO");
         adapter.addFragment(new Tab3_Notification(), "THREE");
-        adapter.addFragment(new Tab2_Location(), "FOUR");
+        adapter.addFragment(new Tab4_Search(), "FOUR");
 
         viewPager.setAdapter(adapter);
     }
@@ -331,11 +333,14 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(2).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
-        tabLayout.getTabAt(2).setCustomView(R.layout.tab_badge);
-        badge = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
-        //badge.updateTabBadge(7);
-        //badge.updateTabBadge(Tab3_Notification.noOfReports);
-        countReports();
+        //tabLayout.getTabAt(2).setCustomView(R.layout.tab_badge);
+        //badge = new TabNotifBadge(this, tabLayout.getTabAt(2).getCustomView().findViewById(R.id.tab_badge));
+        //countReports();
+
+        /*
+        badge.updateTabBadge(7);
+        badge.updateTabBadge(Tab3_Notification.noOfReports);
+        */
 
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(3).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);

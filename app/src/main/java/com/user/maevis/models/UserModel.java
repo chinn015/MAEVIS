@@ -9,6 +9,7 @@ public class UserModel {
     //private String userID;
     private String address;
     private String birthdate;
+    private String deviceToken;
     private String email;
     private String firstName;
     private String lastName;
@@ -19,9 +20,10 @@ public class UserModel {
 
     //Constructor
 
-    public UserModel(String address, String birthdate, String email, String firstName, String lastName, String password, String userStatus, String userType, String username) {
+    public UserModel(String address, String birthdate, String deviceToken, String email, String firstName, String lastName, String password, String userStatus, String userType, String username) {
         this.address = address;
         this.birthdate = birthdate;
+        this.deviceToken = deviceToken;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,6 +59,14 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     public String getEmail() {
