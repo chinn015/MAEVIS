@@ -41,7 +41,7 @@ public class Tab4_Search extends Fragment {
     //private RecyclerView.Adapter adapter;
     private List<ListItemVerified> listItemsVerified;
     private LinearLayoutManager layoutManager;
-
+    static String stringContain;
     private DatabaseReference FirebaseReports;
     private DatabaseReference FirebaseUsers;
 
@@ -57,11 +57,11 @@ public class Tab4_Search extends Fragment {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this.getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
         adapter = new TabSearchAdapter(listItemsVerified, getContext());
         recyclerView.setAdapter(adapter);
 
-
-       loadRecyclerViewData();
+        loadRecyclerViewData();
 
 
 
@@ -184,7 +184,7 @@ public class Tab4_Search extends Fragment {
                     searchManager.getSearchableInfo(getActivity().getComponentName())
             );
 
-            searchView.setQueryHint("Search Location");
+            searchView.setQueryHint("Search Location, Report, User");
             searchView.setIconified(false);
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -201,7 +201,6 @@ public class Tab4_Search extends Fragment {
                     // do your search on change or save the last string or...
                     final List<ListItemVerified> filterModeList = filter(listItemsVerified,newText);
                     adapter.setFilter(filterModeList);
-
                     return true;
                 }
             });
@@ -222,11 +221,18 @@ public class Tab4_Search extends Fragment {
 
             final String reportName = FirebaseDatabaseManager.getUserItem(model.getReportedBy()).getFirstName().toLowerCase()+" "+FirebaseDatabaseManager.getUserItem(model.getReportedBy()).getLastName().toLowerCase();
 
-
-            if(reportType.contains(query) || reportAddress.contains(query) || reportName.contains(query)){
+            if(reportType.contains(query)) {
+                stringContain = "reportType";
+                filteredModeList.add(model);
+            } else if (reportAddress.contains(query)){
+                stringContain = "reportAddress";
+                filteredModeList.add(model);
+            } else if(reportName.contains(query)){
+                stringContain = "reportName";
                 filteredModeList.add(model);
             }
         }
+
         return filteredModeList;
     }
 
