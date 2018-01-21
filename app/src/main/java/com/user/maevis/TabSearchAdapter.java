@@ -2,6 +2,7 @@ package com.user.maevis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,23 +43,50 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_search_location, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_search_reports, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ListItemVerified listItemVerified = listItemsVerified.get(position);
-
         holder.textViewHead.setText(listItemVerified.getHead());
-        holder.textViewDesc.setText(listItemVerified.getDescription());
         holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
-        Picasso.with(context)
-                .load(listItemVerified.getImageThumbnailURL())
-                .fit()
-                .into(holder.imageViewReport);
+        Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
 
-        Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
+        if(Tab4_Search.stringContain != null){
+            switch (Tab4_Search.stringContain){
+                case "reportType" :
+                    Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
+
+                    Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageThumbnail);
+                    holder.reportType.setVisibility(View.GONE);
+                    break;
+
+                case "reportAddress" :
+                    holder.reportType.setVisibility(View.VISIBLE);
+                    Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
+                    Picasso.with(context)
+                            .load(listItemVerified.getImageThumbnailURL())
+                            .fit()
+                            .into(holder.imageThumbnail);
+                    break;
+                case "reportName" :
+                    holder.reportType.setVisibility(View.VISIBLE);
+                    Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
+                    Picasso.with(context)
+                            .load(R.drawable.img_user)
+                            .fit()
+                            .into(holder.imageThumbnail);
+                    break;
+            }
+
+        }else{
+            Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
+            Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageThumbnail);
+            holder.reportType.setVisibility(View.GONE);
+        }
+
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -87,40 +115,6 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
             }
         });
     }
-
-    /*@Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final ListItem listItem = listItems.get(position);
-
-        holder.textViewHead.setText(listItem.getHead());
-        holder.textViewDesc.setText(listItem.getDescription());
-        holder.textViewDateTime.setText(listItem.getDisplayDateTime());
-        Picasso.with(context)
-                .load(listItem.getImageURL())
-                .fit()
-                .into(holder.imageViewReport);
-
-        Picasso.with(context).load(listItem.getReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
-
-        holder.reportLayout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItem);
-                Intent i;
-                i = new Intent(context, ReportPage.class);
-                context.startActivity(i);
-            }
-        });
-    }*/
-
-    /*public static ListItem getClickedItem() {
-        return clickedItem;
-    }
-
-    public static void setClickedItem(ListItem clickedItem) {
-        TabHomeAdapter.clickedItem = clickedItem;
-    }*/
 
     public static ListItemVerified getClickedItemVerified() {
         return clickedItemVerified;
@@ -154,18 +148,20 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
         public TextView textViewDateTime;
         public ImageView imageViewReport;
         public RelativeLayout reportLayout;
-        public ImageView imageReportType;
+        public ImageView imageThumbnail;
+        public ImageView reportType;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             textViewHead = (TextView) itemView.findViewById(R.id.textViewHead);
-            textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
+            //textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTime);
-            imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
+            //imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
             reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
-            imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
+            imageThumbnail = (ImageView) itemView.findViewById(R.id.imageThumbnail);
+            reportType = (ImageView) itemView.findViewById(R.id.reportType);
 
         }
     }

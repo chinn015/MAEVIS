@@ -130,11 +130,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
                         break;
-                    case 1: toolbar.setTitle("Search");
+                    case 1: toolbar.setTitle("Location");
                         break;
                     case 2: toolbar.setTitle("Notification");
                         break;
-                    case 3: toolbar.setTitle("Location");
+                    case 3: toolbar.setTitle("Search");
                         break;
                 }
 
