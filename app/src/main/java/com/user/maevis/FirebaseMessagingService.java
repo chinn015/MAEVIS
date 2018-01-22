@@ -10,9 +10,6 @@ import android.support.v4.content.ContextCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-/**
- * Created by Chen on 1/22/2018.
- */
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -20,12 +17,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
 
+        String notif_title = remoteMessage.getNotification().getTitle();
+        String notif_message = remoteMessage.getNotification().getBody();
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notif_maevis_logo)
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .setContentTitle("MAEVIS")
-                .setContentText("fire report")
+                .setContentTitle(notif_title)
+                .setContentText(notif_message)
                 .setAutoCancel(true);
 
         int mNotificationId = (int) System.currentTimeMillis();
