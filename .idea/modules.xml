@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MAEVIS.iml" filepath="$PROJECT_DIR$/MAEVIS.iml" />
-      <module fileurl="file://C:\Users\User2016\Documents\MAEVIS\MAEVIS.iml" filepath="C:\Users\User2016\Documents\MAEVIS\MAEVIS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../User2016/Documents/MAEVIS/MAEVIS.iml" filepath="$PROJECT_DIR$/../../../User2016/Documents/MAEVIS/MAEVIS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\User2016\Documents\MAEVIS\app\app.iml" filepath="C:\Users\User2016\Documents\MAEVIS\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../User2016/Documents/MAEVIS/app/app.iml" filepath="$PROJECT_DIR$/../../../User2016/Documents/MAEVIS/app/app.iml" />
     </modules>
   </component>
 </project>
