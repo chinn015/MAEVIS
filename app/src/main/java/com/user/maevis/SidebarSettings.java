@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +27,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.user.maevis.session.SessionManager;
@@ -36,6 +49,16 @@ import me.grantland.widget.AutofitTextView;
 
 
 public class SidebarSettings extends AppCompatActivity {
+
+    private EditText username, password, fName, lName, email;
+
+    private DatabaseReference dbUsername, dbPassword, dbFName, dbLName, dbEmail, dbAddress;
+
+    private static final String REQUIRED = "Required";
+
+    private static final String TAG = "SidebarSettings";
+
+    private String oldPass;
 
     ImageView ivImage;
     VideoView videoView;
@@ -51,7 +74,22 @@ public class SidebarSettings extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //User logged in
+        username = (EditText) findViewById(R.id.txtFldEditUsername);
+        password = (EditText) findViewById(R.id.txtFldEditPassword);
+        fName = (EditText) findViewById(R.id.txtFldEditFirstname);
+        lName = (EditText) findViewById(R.id.txtFldEditLastname);
+        email = (EditText) findViewById(R.id.txtFldEditEmail);
         txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
+
+        dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
+        dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
+        dbFName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("firstName");
+        dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
+        dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
+        dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
+
+
         txtFldAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +98,80 @@ public class SidebarSettings extends AppCompatActivity {
         });
 
         txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+
+        dbUsername.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                username.setText(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbPassword.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                password.setText(dataSnapshot.getValue(String.class));
+                oldPass = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbFName.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                fName.setText(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbLName.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                lName.setText(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbEmail.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                email.setText(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        dbAddress.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                txtFldAddress.setText(dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         btnChangePhoto = (CircleImageView) findViewById(R.id.imgChangePhoto);
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +181,112 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void saveData(){
+        //Toast.makeText(this, "Updated Profile", Toast.LENGTH_SHORT).show();
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String userName = username.getText().toString();
+        final String pass = password.getText().toString();
+        final String first = fName.getText().toString();
+        final String last = lName.getText().toString();
+        final String emailAdd = email.getText().toString();
+        final String add = txtFldAddress.getText().toString();
+
+        // Username is required
+        if (TextUtils.isEmpty(userName)) {
+            username.setError(REQUIRED);
+            return;
+        }
+
+        // Password is required
+        if (TextUtils.isEmpty(pass)) {
+            password.setError(REQUIRED);
+            return;
+        }
+
+        // First Name is required
+        if (TextUtils.isEmpty(first)) {
+            fName.setError(REQUIRED);
+            return;
+        }
+
+        // Last Name is required
+        if (TextUtils.isEmpty(last)) {
+            lName.setError(REQUIRED);
+            return;
+        }
+
+        // Email Address is required
+        if (TextUtils.isEmpty(emailAdd)) {
+            email.setError(REQUIRED);
+            return;
+        }
+
+        // Address is required
+        if (TextUtils.isEmpty(add)) {
+            txtFldAddress.setError(REQUIRED);
+            return;
+        }
+
+        dbUsername = FirebaseDatabase.getInstance().getReference();
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("firstName").setValue(first);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("lastName").setValue(last);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("email").setValue(emailAdd);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
+
+        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
+
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.d(TAG, "User re-authenticated.");
+
+                    user.updateEmail(emailAdd)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Log.d(TAG, "User email address updated.");
+                                    }else{
+                                        Log.d(TAG, "User email address not updated.");
+                                    }
+                                }
+                            });
+
+                }else{
+                    Log.d(TAG, "User not re-authenticated.");
+                }
+            }
+        });
+
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.d(TAG, "User re-authenticated.");
+
+                    user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Password updated");
+                            } else {
+                                Log.d(TAG, "Error password not updated");
+                            }
+                        }
+                    });
+                }else{
+                    Log.d(TAG, "User not re-authenticated.");
+                }
+            }
+        });
+
+        finish();
     }
 
     private void SelectImage(){
@@ -136,7 +354,9 @@ public class SidebarSettings extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save_changes) {
-            Toast.makeText(SidebarSettings.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(SidebarSettings.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
+
+            saveData();
             return true;
         }
 
