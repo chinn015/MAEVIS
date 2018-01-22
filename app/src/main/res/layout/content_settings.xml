@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:autofit="http://schemas.android.com/tools"
     android:background="@color/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -181,10 +182,10 @@
         android:layout_alignStart="@+id/txtViewEmail"
         android:layout_marginTop="13dp" />
 
-    <EditText
+    <me.grantland.widget.AutofitTextView
         android:id="@+id/txtFldEditAddress"
         android:layout_width="300dp"
-        android:layout_height="30dp"
+        android:layout_height="60dp"
         android:inputType="textPersonName"
         android:layout_marginLeft="10dp"
         android:textColor="@color/colorAccent"
@@ -196,22 +197,10 @@
         android:background="@drawable/txtfld_rounded"
         android:layout_marginTop="14dp"
         android:layout_marginStart="35dp"
-        android:layout_marginBottom="50dp"/>
-
-    <Button
-        android:id="@+id/btnSaveProfile"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="35dp"
         android:layout_marginBottom="50dp"
-        android:text="Save Profile"
-        android:background="@drawable/btn_rounded"
-        android:textColor="#FFFFFF"
-        android:textAllCaps="false"
-        android:textSize="17dp"
-        android:layout_below="@+id/txtFldEditAddress"
-        />
+        android:maxLines="3"
+        autofit:minTextSize="18sp"/>
+
 
 
 </RelativeLayout>

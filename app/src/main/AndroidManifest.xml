@@ -121,6 +121,15 @@
                 android:value=".Sidebar_HomePage" />
         </activity>
 
+        <activity android:name=".UpdateHomeAddress"
+            android:label="Update Home Address"
+            android:parentActivityName=".SidebarSettings">
+            <meta-data
+                android:name="android.support.PARENT.ACTIVITY"
+                android:value=".SidebarSettings" />
+        </activity>
+
+
         <activity android:name=".UserManagement"
             android:label="User Management"/>
 
