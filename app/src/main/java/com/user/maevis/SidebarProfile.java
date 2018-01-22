@@ -91,7 +91,7 @@ public class SidebarProfile extends AppCompatActivity
 		SidebarProfile.ViewPagerAdapter adapter = new SidebarProfile.ViewPagerAdapter(getSupportFragmentManager());
 		adapter.addFrag(new SidebarProfileTimeline(), "Timeline");
 		adapter.addFrag(new SidebarProfileMedia(), "Photos");
-		adapter.addFrag(new SidebarProfileMedia(), "Videos");
+		//adapter.addFrag(new SidebarProfileMedia(), "Videos");
 		viewPager.setAdapter(adapter);
 	}
 
