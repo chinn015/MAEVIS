@@ -8,6 +8,7 @@ import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.NotifModel;
 import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.models.ReportVerifiedModel;
 import com.user.maevis.session.SessionManager;
@@ -52,6 +54,11 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     public static ReportVerifiedModel reportVerifiedModel;
     public static DatabaseReference newReportVerified;
+
+    public static NotifModel notifModel;
+    public static DatabaseReference newNotif;
+
+    private List<String> nearbyUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +116,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         listItems = new ArrayList<>();
         imageList = new ArrayList<>();
         mergedReportsID = new ArrayList<>();
+        nearbyUsers = new ArrayList<>();
 
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
@@ -220,7 +228,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     }
 
     public void verifyReport() {
-        clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+        if(PageNavigationManager.getClickedTabLocListItemPending()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+        } else if (PageNavigationManager.getClickedTabNotifListItem()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
+        }
+
         newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
 
         for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
@@ -270,14 +283,56 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy);
         newReportVerified.setValue(reportVerifiedModel);
 
+        String fullName = FirebaseDatabaseManager.getFullName(reportVerifiedModel.getReportedBy());
+        String notifMessage = fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
+        String notifTitle = reportVerifiedModel.getReportType()+" Report";
+        String notifReportID = newReportVerified.getKey();
+
+        for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+            UserItem nearbyUser = FirebaseDatabaseManager.getUserItems().get(x);
+            double nearbyLatitude = nearbyUser.getCurrentLat();
+            double nearbyLongitude = nearbyUser.getCurrentLong();
+            float distance, nearby_distance;
+
+            nearby_distance = 1000;
+            Location nearby_users = new Location("1");
+            Location verified_report_location = new Location("2");
+            //String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+
+            nearby_users.setLatitude(nearbyLatitude);
+            nearby_users.setLongitude(nearbyLongitude);
+
+            verified_report_location.setLatitude(reportVerifiedModel.getLocationLatitude());
+            verified_report_location.setLongitude(reportVerifiedModel.getLocationLongitude());
+
+            //Returns the approximate distance in meters between the current location and the given report location.
+            distance = verified_report_location.distanceTo(nearby_users);
+
+            if(distance <= nearby_distance){
+                nearbyUsers.add(nearbyUser.getUserID());
+            }
+        }
+
+        for(int x=0; x < nearbyUsers.size(); x++) {
+            notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyUsers.get(x));
+            newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
+            newNotif.setValue(notifModel);
+        }
+
         Toast.makeText(VerifyReport.this, "Report verified!.", Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
     }
 
     public void declineReport() {
+        if(PageNavigationManager.getClickedTabLocListItemPending()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+        } else if (PageNavigationManager.getClickedTabNotifListItem()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
+        }
+
         Toast.makeText(VerifyReport.this, "Report declined.", Toast.LENGTH_SHORT).show();
-        FirebaseDatabaseManager.FirebaseReports.child(PageNavigationManager.getClickedTabLocListItemPending().getReportID()).child("reportStatus").setValue("Declined");
+        FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Declined");
 
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
@@ -300,6 +355,20 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDialogVerify() {
+        Log.d("V0 Session First Name: ", SessionManager.getFirstName());
+        Log.d("V0 Session Last Name: ", SessionManager.getLastName());
+        Log.d("V0 Session User Type: ", SessionManager.getUserType());
+
+        for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+            Log.d("User Item ["+x+"] First Name: ", FirebaseDatabaseManager.getUserItems().get(x).getFirstName());
+            Log.d("User Item ["+x+"] Last Name: ", FirebaseDatabaseManager.getUserItems().get(x).getLastName());
+        }
+
+        for(int x=0; x<FirebaseDatabaseManager.getPendingReports().size(); x++) {
+            Log.d("Pending Report Item ["+x+"] Desc: ", FirebaseDatabaseManager.getPendingReports().get(x).getDescription());
+            Log.d("Pending Report Item ["+x+"] Type: ", FirebaseDatabaseManager.getPendingReports().get(x).getReportType());
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle("VERIFY REPORT");
@@ -307,6 +376,9 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("VERIFY", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+
+
+
                 verifyReport();
             }
         });
