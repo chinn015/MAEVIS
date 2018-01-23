@@ -15,31 +15,42 @@ exports.sendNotification = functions.database.ref('/Notifications/{notifID}/').o
 
   const notifItem = admin.database().ref(`/Notifications/${notifID}`).once('value');
   return notifItem.then(fromNotifResult => {
-    const userID = fromNotifResult.val().notifiedTo;
+    const userID = fromNotifResult.val().notifiedTo;;
+    //const notifiedToSize = userID.length;
     const reportID = fromNotifResult.val().notifReportID;
     const notifTitle = fromNotifResult.val().notifTitle;
     const notifMessage = fromNotifResult.val().notifMessage;
 
+    //console.log('NotifiedTo SIZE!!!!!');
+    //console.log('NotifiedTo SIZE: ', notifiedToSize);
     console.log('Send notification to: ', userID);
 
+    /*for(var i = 0; i < notifiedToSize; i++) {
+      console.log('[loop] User ID to send to: ' + i, userID[i]);
+    }*/
     // const user_query = admin.database().ref()
-    const deviceToken = admin.database().ref(`/Users/${userID}/deviceToken`).once('value');
-    return deviceToken.then(result => {
-      const tokenID = result.val();
-      console.log('Device Token: ', tokenID);
+    //for(var i = 1; i < notifiedToSize; i++) {
+      //console.log('[outside loop] User ID to send to: ', userID[i]);
 
-      const payload = {
-        notification: {
-          title: `${notifTitle}`,
-          body: `${notifMessage}`
+      var deviceToken = admin.database().ref(`/Users/${userID}/deviceToken`).once('value');
+      return deviceToken.then(result => {
+        var tokenID = result.val();
+        console.log('User ID to send to: ', userID);
+        console.log('Device Token of user: ', tokenID);
+
+        const payload = {
+          notification: {
+            title: `${notifTitle}`,
+            body: `${notifMessage}`
+          }
         }
-      }
 
-      return admin.messaging().sendToDevice(tokenID, payload).then(response => {
-        console.log("This was a notification feature.");
+        return admin.messaging().sendToDevice(tokenID, payload).then(response => {
+          console.log("This was a notification feature.");
+        });
+
       });
-
-    });
+    //}
   });
 
 

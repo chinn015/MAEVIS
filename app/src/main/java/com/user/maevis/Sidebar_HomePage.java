@@ -23,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,6 +112,10 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         profileName = (TextView) headerView.findViewById(R.id.txtViewProfileName);
         profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
 
+        Log.d("Session First Name: ", SessionManager.getFirstName());
+        Log.d("Session Last Name: ", SessionManager.getLastName());
+        Log.d("Session User Type: ", SessionManager.getUserType());
+
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -180,10 +185,15 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 UserItem user = new UserItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("address").getValue().toString(),
                         dataSnapshot.child("birthdate").getValue().toString(),
+                        FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("currentLat").getValue()),
+                        FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("currentLong").getValue()),
                         dataSnapshot.child("deviceToken").getValue().toString(),
                         dataSnapshot.child("email").getValue().toString(),
                         dataSnapshot.child("firstName").getValue().toString(),
+                        FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("homeLat").getValue()),
+                        FirebaseDatabaseManager.parseLongToDouble(dataSnapshot.child("homeLong").getValue()),
                         dataSnapshot.child("lastName").getValue().toString(),
+                        dataSnapshot.child("userPhoto").getValue().toString(),
                         dataSnapshot.child("userStatus").getValue().toString(),
                         dataSnapshot.child("userType").getValue().toString(),
                         dataSnapshot.child("username").getValue().toString());

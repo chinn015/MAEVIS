@@ -8,22 +8,32 @@ public class UserItem {
     private String userID;
     private String address;
     private String birthdate;
+    private double currentLat;
+    private double currentLong;
     private String deviceToken;
     private String email;
     private String firstName;
+    private double homeLat;
+    private double homeLong;
     private String lastName;
+    private String userPhoto;
     private String userStatus;
     private String userType;
     private String username;
 
-    public UserItem(String userID, String address, String birthdate, String deviceToken, String email, String firstName, String lastName, String userStatus, String userType, String username) {
+    public UserItem(String userID, String address, String birthdate, double currentLat, double currentLong, String deviceToken, String email, String firstName, double homeLat, double homeLong, String lastName, String userPhoto, String userStatus, String userType, String username) {
         this.userID = userID;
         this.address = address;
         this.birthdate = birthdate;
+        this.currentLat = currentLat;
+        this.currentLong = currentLong;
         this.deviceToken = deviceToken;
         this.email = email;
         this.firstName = firstName;
+        this.homeLat = homeLat;
+        this.homeLong = homeLong;
         this.lastName = lastName;
+        this.userPhoto = userPhoto;
         this.userStatus = userStatus;
         this.userType = userType;
         this.username = username;
@@ -91,5 +101,61 @@ public class UserItem {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public double getCurrentLat() {
+        return currentLat;
+    }
+
+    public void setCurrentLat(double currentLat) {
+        this.currentLat = currentLat;
+    }
+
+    public double getCurrentLong() {
+        return currentLong;
+    }
+
+    public void setCurrentLong(double currentLong) {
+        this.currentLong = currentLong;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
+    public double getHomeLat() {
+        return homeLat;
+    }
+
+    public void setHomeLat(double homeLat) {
+        this.homeLat = homeLat;
+    }
+
+    public double getHomeLong() {
+        return homeLong;
+    }
+
+    public void setHomeLong(double homeLong) {
+        this.homeLong = homeLong;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    public String getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(String userStatus) {
+        this.userStatus = userStatus;
     }
 }

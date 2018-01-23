@@ -2,6 +2,7 @@ package com.user.maevis;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
@@ -86,7 +87,25 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null) {
-                    FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
+                    new CountDownTimer(500, 1000) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
+
+                            SessionManager.setCurrentLatLong((float) Tab2_Location.userLatitude, (float) Tab2_Location.userLongitude);
+
+                            FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(SessionManager.getCurrentLat());
+                            FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(SessionManager.getCurrentLong());
+                        }
+
+                    }.start();
+
                     finish();
                     startActivity(new Intent(Login.this, Sidebar_HomePage.class));
                 }
@@ -99,20 +118,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onStart();
         SessionManager.getFirebaseAuth().addAuthStateListener(authStateListener);
     }
-
-    /*public void onSignUp(View v){
-        if(v.getId() == R.id.btnSignUp){
-            Intent i = new Intent(this, SignUp.class);
-            startActivity(i);
-        }
-    }*/
-
-    /*public void onLogin(View v) {
-        if (v.getId() == R.id.btnLogin) {
-            Intent i = new Intent(this, HomePage.class);
-            startActivity(i);
-        }
-    }*/
 
     @Override
     public void onClick(View v) {
@@ -175,11 +180,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sUserType = user.child("userType").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
 
+                        float currentLat = (float) Tab2_Location.userLatitude;
+                        float currentLong = (float) Tab2_Location.userLongitude;
+                        float homeLat = FirebaseDatabaseManager.parseObjectToFloat(user.child("homeLat").getValue());
+                        float homeLong = FirebaseDatabaseManager.parseObjectToFloat(user.child("homeLong").getValue());
+                        String userPhoto = user.child("userPhoto").getValue().toString();
+
                         if(sDeviceToken.equals("")) {
                             sDeviceToken = "NULL";
                         }
 
-                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserStatus, sUserType, sDeviceToken);
+                        SessionManager.createLoginSession(sUserID, sUsername, sEmail, sFirstName, sLastName, sBirthdate, sAddress, sUserStatus, sUserType, sDeviceToken, currentLat, currentLong, homeLat, homeLong, userPhoto);
 
                         progressDialog.setMessage("Logging in.");
                         progressDialog.show();
@@ -188,7 +199,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "User authentication problem.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "User authentication problem. "+SessionManager.getEmail(), Toast.LENGTH_LONG).show();
                                 } else {
                                     FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
                                     Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() +" "+SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
@@ -197,22 +208,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             }
                         });
 
-
                         Log.d("token", sDeviceToken);
                         /*
                         deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
                         newDevice = firebaseDevice.push();
                         newDevice.setValue(deviceModel);
                         */
-
-
                         return;
-
                     } else if (!users.hasNext()) {
                         Toast.makeText(Login.this, "Account not found. Please double-check and try again.", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
             }
 

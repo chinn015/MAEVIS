@@ -163,7 +163,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        final UserModel userModel = new UserModel(address, birthdate, deviceToken, email, firstName, lastName, password, userStatus, userType, username);
+        double currentLat = 10.316590;
+        double currentLong = 123.897093;
+        double homeLat = 10.316590;
+        double homeLong = 123.897093;
+        final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fuser.png?alt=media&token=5adb813c-7ee9-4fd3-9389-0eb9325c10c4";
+
+        final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -179,7 +185,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken());
+                            float cLat = (float) userModel.getCurrentLat();
+                            float cLong= (float) userModel.getCurrentLong();
+                            float hLat = (float) userModel.getHomeLat();
+                            float hLong = (float) userModel.getHomeLat();
+
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));
