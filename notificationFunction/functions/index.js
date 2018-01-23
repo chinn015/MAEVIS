@@ -14,10 +14,15 @@ exports.sendNotification = functions.database.ref('/Notifications/{notifID}/').o
   }
 
   const notifItem = admin.database().ref(`/Notifications/${notifID}`).once('value');
-  return notifItem.then(fromUserResult => {
-    const userID = fromUserResult.val().notifiedTo;
+  return notifItem.then(fromNotifResult => {
+    const userID = fromNotifResult.val().notifiedTo;
+    const reportID = fromNotifResult.val().notifReportID;
+    const notifTitle = fromNotifResult.val().notifTitle;
+    const notifMessage = fromNotifResult.val().notifMessage;
+
     console.log('Send notification to: ', userID);
 
+    // const user_query = admin.database().ref()
     const deviceToken = admin.database().ref(`/Users/${userID}/deviceToken`).once('value');
     return deviceToken.then(result => {
       const tokenID = result.val();
@@ -25,8 +30,8 @@ exports.sendNotification = functions.database.ref('/Notifications/{notifID}/').o
 
       const payload = {
         notification: {
-          title: "Vehicular Accident Report",
-          body: "Someone reported a Vehicular Accident at somewhere."
+          title: `${notifTitle}`,
+          body: `${notifMessage}`
         }
       }
 

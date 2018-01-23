@@ -90,14 +90,30 @@ public class SidebarSettings extends AppCompatActivity {
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
 
 
-        /*txtFldAddress.setOnClickListener(new View.OnClickListener() {
+        txtFldAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplication(), UpdateHomeAddress.class));
+                finish();
             }
         });
 
-        txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);*/
+
+        if(UpdateHomeAddress.userHomeAddress != null){
+            txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+        }else{
+            dbAddress.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    txtFldAddress.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         dbUsername.addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,17 +176,6 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
-        dbAddress.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                txtFldAddress.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         btnChangePhoto = (CircleImageView) findViewById(R.id.imgChangePhoto);
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
