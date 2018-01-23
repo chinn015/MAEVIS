@@ -32,10 +32,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.user.maevis.session.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SidebarProfile extends AppCompatActivity
 	implements AppBarLayout.OnOffsetChangedListener {
@@ -46,6 +49,7 @@ public class SidebarProfile extends AppCompatActivity
 	private ImageView mProfileImage;
 	private int mMaxScrollSize;
 	TextView profileName;
+	CircleImageView profilePic;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,9 @@ public class SidebarProfile extends AppCompatActivity
 
 		profileName=(TextView)findViewById(R.id.txtViewProfileName);
 		profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
+		profilePic = (CircleImageView) findViewById(R.id.user_photo);
+		Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
+
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.materialup_toolbar);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {

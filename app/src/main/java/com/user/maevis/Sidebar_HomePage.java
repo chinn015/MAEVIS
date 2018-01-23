@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Sidebar_HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -59,6 +62,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private GPSTracker gpsTracker;
     private Location mUserLocation;
     static String userAddress;
+    CircleImageView profilePic;
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
@@ -111,10 +115,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         View headerView = navigationView.getHeaderView(0);
         profileName = (TextView) headerView.findViewById(R.id.txtViewProfileName);
         profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
-
-        Log.d("Session First Name: ", SessionManager.getFirstName());
-        Log.d("Session Last Name: ", SessionManager.getLastName());
-        Log.d("Session User Type: ", SessionManager.getUserType());
+        profilePic = (CircleImageView) headerView.findViewById(R.id.user_photo);
+        Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
 
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
