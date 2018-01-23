@@ -196,13 +196,22 @@ public class UpdateHomeAddress extends ActionBarActivity implements OnMapReadyCa
 
         int id = item.getItemId();
 
-        if (id == R.id.action_update_address) {
-            Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SidebarSettings.class));
-            finish();
-            return true;
-
+        if(SessionManager.isLoggedIn()) {
+            if (id == R.id.action_update_address) {
+                Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SidebarSettings.class));
+                finish();
+                return true;
+            }
+        }else{
+            if (id == R.id.action_update_address) {
+                Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SignUp.class));
+                finish();
+                return true;
+            }
         }
+
 
         return super.onOptionsItemSelected(item);
 

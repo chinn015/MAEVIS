@@ -153,8 +153,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         }
 
          /*set marker for home location*/
-        home_location = new LatLng(10.316590, 123.897093);
-       // home_location = getHomeAddress(SessionManager.getAddress());
+        //home_location = new LatLng(10.316590, 123.897093);
+        home_location = getHomeAddress(SessionManager.getAddress());
+        //home_location = new LatLng(SessionManager.getHomeLat(), SessionManager.getHomeLong());
         mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(0.8f).title("Home Location").icon(BitmapDescriptorFactory.fromBitmap(homeMarker)));
 
         mMap.setOnMarkerClickListener(this);
