@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class UpdateHomeAddress extends ActionBarActivity implements OnMapReadyCallback,
+/*public class UpdateHomeAddress extends ActionBarActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerDragListener{
 
@@ -101,9 +101,9 @@ public class UpdateHomeAddress extends ActionBarActivity implements OnMapReadyCa
         BitmapDrawable bitmapNewHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap newHome = bitmapNewHome.getBitmap();
         homeMarkerRed = Bitmap.createScaledBitmap(newHome, 160, 160, false);
-
+*/
          /*set marker for user's location*/
-        if(mUserLocation == null){
+        /*if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
         }else{
@@ -218,3 +218,4 @@ public class UpdateHomeAddress extends ActionBarActivity implements OnMapReadyCa
 
 
 }
+*/

@@ -166,4 +166,8 @@
 
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
+
+    <string name="facebook_app_id">943665299140872</string>
+    <string name="fb_login_protocol_scheme">fb943665299140872</string>
+
 </resources>

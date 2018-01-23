@@ -90,14 +90,14 @@ public class SidebarSettings extends AppCompatActivity {
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
 
 
-        txtFldAddress.setOnClickListener(new View.OnClickListener() {
+        /*txtFldAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplication(), UpdateHomeAddress.class));
             }
         });
 
-        txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+        txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);*/
 
         dbUsername.addValueEventListener(new ValueEventListener() {
             @Override
