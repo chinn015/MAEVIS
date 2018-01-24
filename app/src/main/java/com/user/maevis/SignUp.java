@@ -1,5 +1,6 @@
 package com.user.maevis;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +40,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText txtFldLastName;
     private EditText txtFldEmail;
     private EditText txtFldBirthdate;
-    private EditText txtFldAddress;
+    private TextView txtFldAddress;
     private Button btnCreateAccount;
     //private Button btnLogin;
     private Calendar currentDate;
@@ -68,7 +70,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         txtFldLastName = (EditText) findViewById(R.id.txtFldLastName);
         txtFldEmail = (EditText) findViewById(R.id.txtFldEmail);
         txtFldBirthdate = (EditText) findViewById(R.id.txtFldBirthdate);
-        txtFldAddress = (EditText) findViewById(R.id.txtFldAddress);
+        txtFldAddress = (TextView) findViewById(R.id.txtFldAddress);
 
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         //btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -84,11 +86,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         month = month+1;
 
         txtFldBirthdate.setHint("Birthdate ["+day+"/"+month+"/"+year+"]");
+        txtFldAddress.setOnClickListener(this);
+        txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+
     }
 
     @Override
     public void onClick(View v) {
-        if(v == btnCreateAccount) {
+        if (v == btnCreateAccount) {
             createAccount();
         }
 
@@ -98,15 +103,20 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             startActivity(loginPage);
         }*/
 
-        if(v == txtFldBirthdate) {
+        if (v == txtFldBirthdate) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(SignUp.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int birthYear, int birthMonth, int birthDay) {
-                    birthMonth = birthMonth+1;
-                    txtFldBirthdate.setText(birthDay+"/"+birthMonth+"/"+birthYear);
+                    birthMonth = birthMonth + 1;
+                    txtFldBirthdate.setText(birthDay + "/" + birthMonth + "/" + birthYear);
                 }
             }, year, month, day);
             datePickerDialog.show();
+        }
+
+        if (v == txtFldAddress) {
+            startActivity(new Intent(getApplication(), UpdateHomeAddress.class));
+            finish();
         }
     }
 
@@ -163,7 +173,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        final UserModel userModel = new UserModel(address, birthdate, deviceToken, email, firstName, lastName, password, userStatus, userType, username);
+        double currentLat = 10.316590;
+        double currentLong = 123.897093;
+        double homeLat = 10.316590;
+        double homeLong = 123.897093;
+        final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fuser.png?alt=media&token=5adb813c-7ee9-4fd3-9389-0eb9325c10c4";
+
+        final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -179,7 +195,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             newUser.setValue(userModel);
 
                             Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken());
+                            float cLat = (float) userModel.getCurrentLat();
+                            float cLong= (float) userModel.getCurrentLong();
+                            float hLat = (float) userModel.getHomeLat();
+                            float hLong = (float) userModel.getHomeLat();
+
+                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
 
                             finish();
                             startActivity(new Intent(getApplicationContext(), Login.class));

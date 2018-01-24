@@ -31,11 +31,6 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
     static boolean clickedStatus = false;
     static boolean clickedUserItemStatus = false;
 
-    /*public TabHomeAdapter(List<ListItem> listItems, Context context) {
-        this.listItems = listItems;
-        this.context = context;
-    }*/
-
     public TabSearchAdapter(List<ListItemVerified> listItemsVerified, Context context) {
         this.listItemsVerified = listItemsVerified;
         this.context = context;
@@ -92,22 +87,8 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                //setClickedItemVerified(listItemVerified);
-
-                /*for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
-                    if (listItemVerified.getReportedBy().equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
-                        clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
-                        clickedUserItemStatus = true;
-                        VerifyReport.clickedUserItemStatus = false;
-                    }
-                }*/
 
                 PageNavigationManager.clickTabHomeListItemVerified(listItemVerified);
-
-                /*clickedStatus = true;
-                clickedUserItemStatus = true;
-                TabNotifAdapter.clickedStatus = false;
-                TabNotifAdapterRegUser.clickedStatus = false;*/
 
                 Intent i;
                 i = new Intent(context, ReportPage.class);

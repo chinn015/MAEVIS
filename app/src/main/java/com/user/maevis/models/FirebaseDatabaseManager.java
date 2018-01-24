@@ -19,6 +19,7 @@ public class FirebaseDatabaseManager {
     public static final DatabaseReference FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
     public static final DatabaseReference FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
     public static final DatabaseReference FirebaseReportsVerified = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/ReportsVerified");
+    public static final DatabaseReference FirebaseNotifications = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Notifications");
 
     private static List<ListItem> listItems;
     private static List<ListItem> verifiedReports;
@@ -142,6 +143,16 @@ public class FirebaseDatabaseManager {
         doubleValue = Double.parseDouble(str);
 
         return doubleValue;
+    }
+
+    public static float parseObjectToFloat(Object valueToParse) {
+        float floatValue;
+
+        String str = valueToParse.toString();
+        //doubleValue = Double.valueOf(str).doubleValue();
+        floatValue = Float.parseFloat(str);
+
+        return floatValue;
     }
 
     //takes a User's ID and returns its Full Name

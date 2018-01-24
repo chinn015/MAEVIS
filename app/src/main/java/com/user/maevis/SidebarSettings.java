@@ -42,6 +42,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.user.maevis.session.SessionManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -81,6 +82,8 @@ public class SidebarSettings extends AppCompatActivity {
         lName = (EditText) findViewById(R.id.txtFldEditLastname);
         email = (EditText) findViewById(R.id.txtFldEditEmail);
         txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
+        btnChangePhoto = (CircleImageView) findViewById(R.id.imgChangePhoto);
+        Picasso.with(this).load(SessionManager.getUserPhoto()).into(btnChangePhoto);
 
         dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
         dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
@@ -89,6 +92,13 @@ public class SidebarSettings extends AppCompatActivity {
         dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
 
+        btnChangePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SelectImage();
+            }
+        });
 
         txtFldAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,16 +183,6 @@ public class SidebarSettings extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-
-        btnChangePhoto = (CircleImageView) findViewById(R.id.imgChangePhoto);
-        btnChangePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SelectImage();
             }
         });
 

@@ -156,7 +156,7 @@
         </activity>
 
         <activity android:name=".UpdateHomeAddress"
-            android:label="Update Home Address"
+            android:label="Home Address"
             android:parentActivityName=".SidebarSettings">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"

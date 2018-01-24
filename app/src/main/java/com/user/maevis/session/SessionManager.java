@@ -34,6 +34,11 @@ public class SessionManager {
     public static final String KEY_SESSIONSTATUS = "SESSION_SESSIONSTATUS";
     public static final String KEY_USERTYPE = "SESSION_USERTYPE";
     public static final String KEY_DEVICE_TOKEN = "SESSION_DEVICE_TOKEN";
+    public static final String KEY_CURRENTLAT = "SESSION_CURRENTLAT";
+    public static final String KEY_CURRENTLONG = "SESSION_CURRENTLONG";
+    public static final String KEY_HOMELAT = "SESSION_HOMELAT";
+    public static final String KEY_HOMELONG = "SESSION_HOMELONG";
+    public static final String KEY_USERPHOTO = "SESSION_USERPHOTO";
 
     //CONSTRUCTOR
     public SessionManager(Context context) {
@@ -43,7 +48,7 @@ public class SessionManager {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType, String deviceToken) {
+    public static void createLoginSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType, String deviceToken, Float currentLat, Float currentLong, Float homeLat, Float homeLong, String userPhoto) {
         sessionEditor.putString(KEY_USERID, userID);
         sessionEditor.putString(KEY_USERNAME, username);
         sessionEditor.putString(KEY_EMAIL, email);
@@ -55,7 +60,19 @@ public class SessionManager {
         sessionEditor.putBoolean(KEY_SESSIONSTATUS, true);
         sessionEditor.putString(KEY_USERTYPE, userType);
         sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
+        sessionEditor.putFloat(KEY_CURRENTLAT, currentLat);
+        sessionEditor.putFloat(KEY_CURRENTLONG, currentLong);
+        sessionEditor.putFloat(KEY_HOMELAT, homeLat);
+        sessionEditor.putFloat(KEY_HOMELONG, homeLong);
+        sessionEditor.putString(KEY_USERPHOTO, userPhoto);
         //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
+
+        sessionEditor.commit();
+    }
+
+    public static void setCurrentLatLong(float currentLat, float currentLong) {
+        sessionEditor.putFloat(KEY_CURRENTLAT, currentLat);
+        sessionEditor.putFloat(KEY_CURRENTLONG, currentLong);
 
         sessionEditor.commit();
     }
@@ -131,5 +148,25 @@ public class SessionManager {
 
     public static String getDeviceToken() {
         return sessionPreferences.getString(KEY_DEVICE_TOKEN, null);
+    }
+
+    public static Float getCurrentLat() {
+        return sessionPreferences.getFloat(KEY_CURRENTLAT, 0);
+    }
+
+    public static Float getCurrentLong() {
+        return sessionPreferences.getFloat(KEY_CURRENTLONG, 0);
+    }
+
+    public static Float getHomeLat() {
+            return sessionPreferences.getFloat(KEY_HOMELAT, 0);
+    }
+
+    public static Float getHomeLong() {
+        return sessionPreferences.getFloat(KEY_HOMELONG, 0);
+    }
+
+    public static String getUserPhoto() {
+        return sessionPreferences.getString(KEY_USERPHOTO, null);
     }
 }
