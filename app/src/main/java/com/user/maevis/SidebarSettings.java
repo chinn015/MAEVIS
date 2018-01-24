@@ -108,6 +108,7 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
+
         if(UpdateHomeAddress.userHomeAddress != null){
             txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
         }else{
