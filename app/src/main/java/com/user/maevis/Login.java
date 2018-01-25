@@ -260,6 +260,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Log.w(TAG, "Google sign in failed", e);
                 // ...
             }
+
         }else{
             // Pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);

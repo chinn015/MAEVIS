@@ -169,4 +169,26 @@ public class SessionManager {
     public static String getUserPhoto() {
         return sessionPreferences.getString(KEY_USERPHOTO, null);
     }
+
+    public static void updateSession(String userID, String username, String email, String firstName, String lastName, String birthdate, String address, String userStatus, String userType, String deviceToken, Float currentLat, Float currentLong, Float homeLat, Float homeLong, String userPhoto) {
+        sessionEditor.putString(KEY_USERID, userID);
+        sessionEditor.putString(KEY_USERNAME, username);
+        sessionEditor.putString(KEY_EMAIL, email);
+        sessionEditor.putString(KEY_FIRSTNAME, firstName);
+        sessionEditor.putString(KEY_LASTNAME, lastName);
+        sessionEditor.putString(KEY_BIRTHDATE, birthdate);
+        sessionEditor.putString(KEY_ADDRESS, address);
+        sessionEditor.putString(KEY_USERSTATUS, userStatus);
+        sessionEditor.putBoolean(KEY_SESSIONSTATUS, true);
+        sessionEditor.putString(KEY_USERTYPE, userType);
+        sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
+        sessionEditor.putFloat(KEY_CURRENTLAT, currentLat);
+        sessionEditor.putFloat(KEY_CURRENTLONG, currentLong);
+        sessionEditor.putFloat(KEY_HOMELAT, homeLat);
+        sessionEditor.putFloat(KEY_HOMELONG, homeLong);
+        sessionEditor.putString(KEY_USERPHOTO, userPhoto);
+        //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
+
+        sessionEditor.commit();
+    }
 }
