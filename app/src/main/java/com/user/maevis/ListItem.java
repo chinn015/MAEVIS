@@ -17,10 +17,11 @@ public class ListItem implements Comparable<ListItem> {
     private String reportType;
     private String reportedBy;
     private String displayDateTime; //date sorting shit
+    private String userPhoto;
 
 
     //CONSTRUCTORS
-    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
+    public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy, String displayDateTime, String userPhoto) {
         this.reportID = reportID;
         this.head = head;
         this.dateTime = dateTime;
@@ -34,6 +35,7 @@ public class ListItem implements Comparable<ListItem> {
         this.reportType = reportType;
         this.reportedBy = reportedBy;
         this.displayDateTime = displayDateTime;
+        this.userPhoto = userPhoto;
     }
 
 
@@ -200,4 +202,5 @@ public class ListItem implements Comparable<ListItem> {
 
         return retIcon;
     }
+
 }

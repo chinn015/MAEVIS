@@ -76,6 +76,7 @@ public class Tab3_Notification extends Fragment {
 
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         fullName + " reported a " +
@@ -91,7 +92,8 @@ public class Tab3_Notification extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 float distance, limit_distance;
 
@@ -155,6 +157,9 @@ public class Tab3_Notification extends Fragment {
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
+                //retrieve userPhoto
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
+
                 List<String> imageList = new ArrayList<>();
                 Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
                 while(images.hasNext()) {
@@ -184,7 +189,8 @@ public class Tab3_Notification extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 float distance, limit_distance;
 

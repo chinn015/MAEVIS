@@ -18,6 +18,8 @@ import com.user.maevis.models.PageNavigationManager;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHolder> {
 
 
@@ -60,6 +62,10 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 .into(holder.imageViewReport);
 
         Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
+
+        if(listItemVerified.getUserPhoto() != null) {
+            Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
+        }
 
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -156,6 +162,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         public ImageView imageViewReport;
         public RelativeLayout reportLayout;
         public ImageView imageReportType;
+        public CircleImageView userPhoto;
 
 
         public ViewHolder (View itemView){
@@ -167,6 +174,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
             reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
+            userPhoto = (CircleImageView) itemView.findViewById(R.id.user_photo);
 
         }
     }

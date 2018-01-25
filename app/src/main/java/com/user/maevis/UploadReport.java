@@ -79,7 +79,7 @@ public class UploadReport extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseStorage = FirebaseStorage.getInstance().getReference();
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
         ivImage = (ImageView) findViewById(R.id.ivImage);
 
