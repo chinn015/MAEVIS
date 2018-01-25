@@ -23,10 +23,11 @@ public class ListItemVerified implements Comparable<ListItem> {
     private String reportType;
     private String reportedBy; //admin ID
     private String displayDateTime; //date sorting shit
+    private String userPhoto;
 
 
     //CONSTRUCTORS
-    public ListItemVerified(String reportID, String head, String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, String displayDateTime) {
+    public ListItemVerified(String reportID, String head, String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, String displayDateTime, String userPhoto) {
         this.reportID = reportID;
         this.head = head;
         this.dateTime = dateTime;
@@ -41,6 +42,7 @@ public class ListItemVerified implements Comparable<ListItem> {
         this.reportedBy = reportedBy;
         this.mergedReportsID = mergedReportsID;
         this.displayDateTime = displayDateTime;
+        this.userPhoto = userPhoto;
     }
 
     //GETTER SETTER
@@ -150,6 +152,14 @@ public class ListItemVerified implements Comparable<ListItem> {
 
     public String getHead() {
         return head;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
     }
 
     @Override

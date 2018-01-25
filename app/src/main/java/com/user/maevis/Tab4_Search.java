@@ -86,6 +86,9 @@ public class Tab4_Search extends Fragment {
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
+                //retrieve userPhoto
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
+
                 List<String> imageList = new ArrayList<>();
                 Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
                 while (images.hasNext()) {
@@ -115,7 +118,8 @@ public class Tab4_Search extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 //add all Active reports to a List to be displayed
                 switch (itemVerified.getReportStatus()) {

@@ -121,35 +121,35 @@ public class NotificationView extends AppCompatActivity implements View.OnClickL
                     locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
                 }
 
-                ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
-                                dataSnapshot.child("reportType").getValue().toString() + " at " +
-                                dataSnapshot.child("location").getValue().toString(),
-                        dataSnapshot.child("dateTime").getValue().toString(),
-                        dataSnapshot.child("description").getValue().toString(),
-                        dataSnapshot.child("imageURL").getValue().toString(),
-                        dataSnapshot.child("location").getValue().toString(),
-                        locationLatitude,
-                        locationLongitude,
-                        dataSnapshot.child("mergedTo").getValue().toString(),
-                        dataSnapshot.child("reportStatus").getValue().toString(),
-                        dataSnapshot.child("reportType").getValue().toString(),
-                        dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
-
-                if(item.getReportStatus().equals("Pending")) {
-                    listItems.add(item);
-                }
-
-                Collections.sort(listItems, new Comparator<ListItem>() {
-                    @Override
-                    public int compare(ListItem o1, ListItem o2) {
-                        if (o1.getDateTime() == null || o2.getDateTime() == null) {
-                            return 0;
-                        }
-                        return o1.getDateTime().compareTo(o2.getDateTime());
-                    }
-                });
+//                ListItem item = new ListItem(dataSnapshot.getKey().toString(),
+//                        dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
+//                                dataSnapshot.child("reportType").getValue().toString() + " at " +
+//                                dataSnapshot.child("location").getValue().toString(),
+//                        dataSnapshot.child("dateTime").getValue().toString(),
+//                        dataSnapshot.child("description").getValue().toString(),
+//                        dataSnapshot.child("imageURL").getValue().toString(),
+//                        dataSnapshot.child("location").getValue().toString(),
+//                        locationLatitude,
+//                        locationLongitude,
+//                        dataSnapshot.child("mergedTo").getValue().toString(),
+//                        dataSnapshot.child("reportStatus").getValue().toString(),
+//                        dataSnapshot.child("reportType").getValue().toString(),
+//                        dataSnapshot.child("reportedBy").getValue().toString(),
+//                        formatDateTime);
+//
+//                if(item.getReportStatus().equals("Pending")) {
+//                    listItems.add(item);
+//                }
+//
+//                Collections.sort(listItems, new Comparator<ListItem>() {
+//                    @Override
+//                    public int compare(ListItem o1, ListItem o2) {
+//                        if (o1.getDateTime() == null || o2.getDateTime() == null) {
+//                            return 0;
+//                        }
+//                        return o1.getDateTime().compareTo(o2.getDateTime());
+//                    }
+//                });
             }
 
             @Override

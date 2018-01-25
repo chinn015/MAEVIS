@@ -85,25 +85,25 @@ public class SidebarProfileMedia extends Fragment {
 				//retrieve full name
 				String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
-				ListItem item = new ListItem(dataSnapshot.getKey().toString(),
-						fullName + " reported a " +
-								dataSnapshot.child("reportType").getValue().toString() + " at " +
-								dataSnapshot.child("location").getValue().toString(),
-						dataSnapshot.child("dateTime").getValue().toString(),
-						dataSnapshot.child("description").getValue().toString(),
-						dataSnapshot.child("imageURL").getValue().toString(),
-						dataSnapshot.child("location").getValue().toString(),
-						locationLatitude,
-						locationLongitude,
-						dataSnapshot.child("mergedTo").getValue().toString(),
-						dataSnapshot.child("reportStatus").getValue().toString(),
-						dataSnapshot.child("reportType").getValue().toString(),
-						dataSnapshot.child("reportedBy").getValue().toString(),
-						formatDateTime);
-
-				if (item.getReportedBy().equals(SessionManager.getUserID())) {
-					listItems.add(item);
-				}
+//				ListItem item = new ListItem(dataSnapshot.getKey().toString(),
+//						fullName + " reported a " +
+//								dataSnapshot.child("reportType").getValue().toString() + " at " +
+//								dataSnapshot.child("location").getValue().toString(),
+//						dataSnapshot.child("dateTime").getValue().toString(),
+//						dataSnapshot.child("description").getValue().toString(),
+//						dataSnapshot.child("imageURL").getValue().toString(),
+//						dataSnapshot.child("location").getValue().toString(),
+//						locationLatitude,
+//						locationLongitude,
+//						dataSnapshot.child("mergedTo").getValue().toString(),
+//						dataSnapshot.child("reportStatus").getValue().toString(),
+//						dataSnapshot.child("reportType").getValue().toString(),
+//						dataSnapshot.child("reportedBy").getValue().toString(),
+//						formatDateTime);
+//
+//				if (item.getReportedBy().equals(SessionManager.getUserID())) {
+//					listItems.add(item);
+//				}
 
 				Collections.sort(listItems, new Comparator<ListItem>() {
 					@Override

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -82,6 +83,9 @@ public class Tab1_Home extends Fragment {
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
 
+                //retrieve userPhoto
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
+
                 List<String> imageList = new ArrayList<>();
                 Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
                 while(images.hasNext()) {
@@ -111,7 +115,8 @@ public class Tab1_Home extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 //add all Active reports to a List to be displayed
                 switch(itemVerified.getReportStatus()) {
@@ -175,6 +180,7 @@ public class Tab1_Home extends Fragment {
 
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         fullName+" reported a " +
@@ -190,7 +196,8 @@ public class Tab1_Home extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 //add all Verified reports to a List to be displayed
                 if(item.getReportStatus().equals("Verified")) {

@@ -70,6 +70,7 @@ public class SidebarProfileTimeline extends Fragment {
 
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         fullName+" reported a " +
@@ -85,7 +86,8 @@ public class SidebarProfileTimeline extends Fragment {
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 if(item.getReportedBy().equals(SessionManager.getUserID())) {
                     listItems.add(item);

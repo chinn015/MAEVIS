@@ -244,6 +244,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         fullName+" reported a " +
@@ -259,7 +260,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 FirebaseDatabaseManager.getListItems().add(item);
 
