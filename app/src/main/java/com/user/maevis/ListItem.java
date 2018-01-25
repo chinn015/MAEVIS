@@ -144,6 +144,14 @@ public class ListItem implements Comparable<ListItem> {
         this.head = head;
     }
 
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
     public int compareTo(ListItem li) {
         if (getDateTime() == null || li.getDateTime() == null) {
             return 0;

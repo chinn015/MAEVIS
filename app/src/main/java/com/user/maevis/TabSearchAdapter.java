@@ -18,6 +18,8 @@ import com.user.maevis.models.PageNavigationManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.ViewHolder> {
 
 
@@ -69,6 +71,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
                 case "reportName" :
                     holder.reportType.setVisibility(View.VISIBLE);
                     Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
+                    Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
                     Picasso.with(context)
                             .load(R.drawable.img_user)
                             .fit()
@@ -131,6 +134,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
         public RelativeLayout reportLayout;
         public ImageView imageThumbnail;
         public ImageView reportType;
+        public ImageView userPhoto;
 
 
         public ViewHolder(View itemView) {
@@ -143,6 +147,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
             reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
             imageThumbnail = (ImageView) itemView.findViewById(R.id.imageThumbnail);
             reportType = (ImageView) itemView.findViewById(R.id.reportType);
+            userPhoto = (ImageView) itemView.findViewById(R.id.imageThumbnail);
 
         }
     }

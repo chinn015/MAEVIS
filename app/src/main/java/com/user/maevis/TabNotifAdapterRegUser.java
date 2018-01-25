@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapterRegUser.ViewHolder> {
 
 
@@ -49,6 +51,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         //details to be displayed in NotificationView Tab
         holder.textViewHead.setText(listItemVerified.getHead());
         holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
+        Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
 
         switch(listItemVerified.getReportType()){
             case "Fire":
@@ -93,6 +96,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         public ImageView imageViewReport;
         public RelativeLayout notifReportLayout;
         public ImageView imageReportType;
+        public ImageView userPhoto;
 
 
         public ViewHolder (View itemView){
@@ -104,6 +108,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
             imageViewReport = (ImageView) itemView.findViewById(R.id.viewNotifImage);
             notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportType);
+            userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
 
 
         }
