@@ -109,12 +109,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
             android:text="21"
             android:textSize="15dp"
             android:id="@+id/txtViewUnverified"
             android:layout_alignBaseline="@+id/lblUnverified"
             android:layout_alignBottom="@+id/lblUnverified"
-            android:layout_toEndOf="@+id/btnBlockUser" />
+            android:layout_toEndOf="@+id/lblUnverified"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,9 +148,9 @@
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
-            android:layout_marginBottom="28dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_marginTop="24dp"
+            android:layout_below="@+id/textView3"
+            android:layout_alignEnd="@+id/txtViewVerified" />
 
 
     </RelativeLayout>

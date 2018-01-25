@@ -1,5 +1,6 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -113,7 +114,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         }*/
 
         if (v == txtFldBirthdate) {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(SignUp.this, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(SignUp.this, AlertDialog.THEME_HOLO_LIGHT,
+                    new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int birthYear, int birthMonth, int birthDay) {
                     birthMonth = birthMonth + 1;
