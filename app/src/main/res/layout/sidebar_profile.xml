@@ -70,7 +70,13 @@
 				android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
 				android:text="user location"
 				android:textColor="@android:color/white"
-				android:paddingBottom="15dp"/>
+				android:paddingBottom="15dp"
+				android:id="@+id/txtViewUserLocation"
+				android:gravity="center_horizontal"
+				android:textSize="14dp"
+				android:layout_marginLeft="7dp"
+				android:layout_marginRight="7dp"
+				/>
 			​
 		</LinearLayout>
 		​

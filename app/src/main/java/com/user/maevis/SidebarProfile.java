@@ -50,6 +50,8 @@ public class SidebarProfile extends AppCompatActivity
 	private int mMaxScrollSize;
 	TextView profileName;
 	CircleImageView profilePic;
+	TextView user_location;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class SidebarProfile extends AppCompatActivity
 		profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
 		profilePic = (CircleImageView) findViewById(R.id.profilePic);
 		Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
-
+		user_location = (TextView) findViewById(R.id.txtViewUserLocation);
+		user_location.setText(SessionManager.getAddress());
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.materialup_toolbar);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {

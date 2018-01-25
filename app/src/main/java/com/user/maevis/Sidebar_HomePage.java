@@ -63,6 +63,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     private Location mUserLocation;
     static String userAddress;
     CircleImageView profilePic;
+    TextView user_location;
 
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
@@ -117,6 +118,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
         profilePic = (CircleImageView) headerView.findViewById(R.id.user_photo);
         Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
+        user_location = (TextView) headerView.findViewById(R.id.txtViewUserLocation);
+        user_location.setText(SessionManager.getAddress());
 
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
