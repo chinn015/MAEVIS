@@ -1,8 +1,10 @@
 package com.user.maevis;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -29,6 +31,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
 
 import java.io.IOException;
@@ -65,6 +69,8 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
         btnHomeLoc = (FloatingActionButton) findViewById(R.id.btnHomeLocation1);
         btnUserLoc = (FloatingActionButton) findViewById(R.id.btnUserLocation1);
+
+        showDialogInstructions();
 
         gpsTracker = new GPSTracker(getApplicationContext().getApplicationContext());
 
@@ -151,6 +157,11 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     public void onMarkerDragEnd(Marker arg0) {
         Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
         mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+        userHomeAddress = getUserHomeLocAddress(arg0.getPosition().latitude, arg0.getPosition().longitude);
+        userHomeLat = arg0.getPosition().latitude;
+        userHomeLong = arg0.getPosition().longitude;
+        Toast.makeText(this, userHomeAddress, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -244,6 +255,23 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
         //Toast.makeText(this, "get : " + userName, Toast.LENGTH_LONG).show();
 
+    }
+
+    private void showDialogInstructions() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        builder.setTitle("Update Home Address");
+        builder.setMessage("Locate your home address by tapping any area on the map.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
     }
 
 
