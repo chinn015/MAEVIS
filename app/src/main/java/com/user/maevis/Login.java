@@ -132,7 +132,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
         firebaseDevice = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Device");
 
-        progressDialog = new ProgressDialog(this); //instantiate a progress diaglog
+        progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle); //instantiate a progress diaglog
 
         userModel = new UserModel();
         UserSession = new SessionManager(getApplicationContext());
