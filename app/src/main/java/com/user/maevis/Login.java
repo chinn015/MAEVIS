@@ -1,5 +1,6 @@
 package com.user.maevis;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -362,14 +363,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         String sUserStatus = user.child("userStatus").getValue().toString();
                         String sUserType = user.child("userType").getValue().toString();
                         String sDeviceToken = FirebaseInstanceId.getInstance().getToken();
-
                         float currentLat = (float) Tab2_Location.userLatitude;
                         float currentLong = (float) Tab2_Location.userLongitude;
                         float homeLat = FirebaseDatabaseManager.parseObjectToFloat(user.child("homeLat").getValue());
                         float homeLong = FirebaseDatabaseManager.parseObjectToFloat(user.child("homeLong").getValue());
                         String userPhoto = user.child("userPhoto").getValue().toString();
 
-                        if(sDeviceToken.equals("")) {
+                        if (sDeviceToken.equals("")) {
                             sDeviceToken = "NULL";
                         }
 
@@ -382,10 +382,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "User authentication problem. "+SessionManager.getEmail(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "User authentication problem. " + SessionManager.getEmail(), Toast.LENGTH_LONG).show();
                                 } else {
                                     FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
-                                    Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() +" "+SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() + " " + SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
                                 }
                                 progressDialog.dismiss();
                             }
@@ -399,7 +399,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         */
                         return;
                     } else if (!users.hasNext()) {
-                        Toast.makeText(Login.this, "Account not found. Please double-check and try again.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(Login.this, "Account not found. Please double-check and try again.", Toast.LENGTH_SHORT).show();
+                        showAccountNotFoundDialog(username);
                     }
                 }
             }
@@ -409,6 +410,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+    }
 
 //        firebaseDevice.addChildEventListener(new ChildEventListener() {
 //            @Override
@@ -449,6 +451,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 //
 //            }
 //        });
+
+    private void showAccountNotFoundDialog(final String username) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Account not found");
+        builder.setMessage("It looks like " + username + " doesn't match an existing account. Please double check and try again.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
 
     }
 
