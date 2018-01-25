@@ -40,6 +40,7 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import me.grantland.widget.AutofitTextView;
+
+import static android.R.attr.bitmap;
 
 public class UploadReport extends AppCompatActivity {
 
@@ -65,6 +68,7 @@ public class UploadReport extends AppCompatActivity {
     Integer REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
     String mCurrentPhotoPath;
     Uri photoURI;
+    File imageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +122,7 @@ public class UploadReport extends AppCompatActivity {
 
                     File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     String pictureName = getPictureName();
-                    File imageFile = new File(pictureDirectory, pictureName);
+                    imageFile = new File(pictureDirectory, pictureName);
                     Uri pictureUri = Uri.fromFile(imageFile);
                     photoURI = pictureUri;
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
@@ -165,7 +169,19 @@ public class UploadReport extends AppCompatActivity {
 
                 StorageReference filePath = firebaseStorage.child("Photos").child(photoURI.getLastPathSegment());
 
-                filePath.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                Uri uri = photoURI;
+
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+                    String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, photoURI.getLastPathSegment(), null);
+                    uri = Uri.parse(path);
+                } catch (IOException ie) {
+                    Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
+                }
+
+                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
