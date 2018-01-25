@@ -91,7 +91,6 @@ public class SidebarSettings extends AppCompatActivity {
         dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
         dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
-
         btnChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,14 +102,35 @@ public class SidebarSettings extends AppCompatActivity {
         txtFldAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplication(), UpdateHomeAddress.class));
+                Intent i = new Intent(getApplicationContext(), UpdateHomeAddress.class);
+                final String userName = username.getText().toString();
+                final String userPassword = password.getText().toString();
+                final String userEmail = email.getText().toString();
+                final String userFname = fName.getText().toString();
+                final String userLname = lName.getText().toString();
+
+                i.putExtra("userName", userName);
+                i.putExtra("userPassword", userPassword);
+                i.putExtra("userEmail", userEmail);
+                i.putExtra("userFname", userFname);
+                i.putExtra("userLname", userLname);
+
+                startActivity(i);
                 finish();
             }
         });
 
 
         if(UpdateHomeAddress.userHomeAddress != null){
+            Intent i = getIntent();
+            username.setText(UpdateHomeAddress.userName);
+            password.setText(UpdateHomeAddress.userPassword);
+            fName.setText(UpdateHomeAddress.userFname);
+            lName.setText(UpdateHomeAddress.userLname);
+            email.setText(UpdateHomeAddress.userEmail);
             txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+            oldPass = UpdateHomeAddress.userPassword;
+            //Toast.makeText(this, "get1 : " + UpdateHomeAddress.userName, Toast.LENGTH_LONG).show();
         }else{
             dbAddress.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -123,68 +143,68 @@ public class SidebarSettings extends AppCompatActivity {
 
                 }
             });
+
+            dbUsername.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    username.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            dbPassword.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    password.setText(dataSnapshot.getValue(String.class));
+                    oldPass = dataSnapshot.getValue(String.class);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            dbFName.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    fName.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            dbLName.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lName.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            dbEmail.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    email.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
-
-        dbUsername.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                username.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        dbPassword.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                password.setText(dataSnapshot.getValue(String.class));
-                oldPass = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        dbFName.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                fName.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        dbLName.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                lName.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        dbEmail.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                email.setText(dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 
@@ -198,6 +218,8 @@ public class SidebarSettings extends AppCompatActivity {
         final String last = lName.getText().toString();
         final String emailAdd = email.getText().toString();
         final String add = txtFldAddress.getText().toString();
+        final Double homeLat = UpdateHomeAddress.userHomeLat;
+        final Double homeLong = UpdateHomeAddress.userHomeLong;
 
         // Username is required
         if (TextUtils.isEmpty(userName)) {
@@ -242,6 +264,8 @@ public class SidebarSettings extends AppCompatActivity {
         dbUsername.child("Users").child(SessionManager.getUserID()).child("lastName").setValue(last);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("email").setValue(emailAdd);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
 
         AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
 
