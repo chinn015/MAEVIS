@@ -61,7 +61,7 @@ public class SidebarProfile extends AppCompatActivity
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.materialup_tabs);
 		ViewPager viewPager  = (ViewPager) findViewById(R.id.tab_viewpager);
 		AppBarLayout appbarLayout = (AppBarLayout) findViewById(R.id.materialup_appbar);
-		mProfileImage = (ImageView) findViewById(R.id.imgViewProfilePic);
+		mProfileImage = (ImageView) findViewById(R.id.profilePic);
 
 		profileName=(TextView)findViewById(R.id.txtViewProfileName);
 		profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());

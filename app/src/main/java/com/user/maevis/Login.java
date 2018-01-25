@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -237,7 +238,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
         if(v == txtVwCreateAcc) {
-            //finish();
+            finish();
             Intent createAcc = new Intent(Login.this, SignUp.class);
             startActivity(createAcc);
         }

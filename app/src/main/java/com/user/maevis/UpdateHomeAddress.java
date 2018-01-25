@@ -274,5 +274,4 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
     }
 
-
 }
