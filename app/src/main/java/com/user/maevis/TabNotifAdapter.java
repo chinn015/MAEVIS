@@ -18,6 +18,8 @@ import com.user.maevis.session.SessionManager;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHolder> {
 
 
@@ -52,6 +54,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         //details to be displayed in NotificationView Tab
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
+        Picasso.with(context).load(listItem.getUserPhoto()).into(holder.userPhoto);
 
         switch(listItem.getReportType()){
             case "Fire":
@@ -103,7 +106,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         public ImageView imageViewReport;
         public RelativeLayout notifReportLayout;
         public ImageView imageReportType;
-
+        public ImageView userPhoto;
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -114,7 +117,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             imageViewReport = (ImageView) itemView.findViewById(R.id.viewNotifImage);
             notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportType);
-
+            userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
 
         }
     }
