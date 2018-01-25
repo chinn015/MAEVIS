@@ -169,7 +169,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                     }.start();
 
- 
+
                     finish();
                     startActivity(new Intent(Login.this, Sidebar_HomePage.class));
                 }
@@ -342,7 +342,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        firebaseUsers.addValueEventListener(new ValueEventListener() {
+        FirebaseDatabaseManager.FirebaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterator<DataSnapshot> users = dataSnapshot.getChildren().iterator();
