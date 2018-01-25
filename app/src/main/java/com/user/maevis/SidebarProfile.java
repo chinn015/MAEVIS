@@ -63,7 +63,7 @@ public class SidebarProfile extends AppCompatActivity
 
 		profileName=(TextView)findViewById(R.id.txtViewProfileName);
 		profileName.setText(SessionManager.getFirstName()+" "+ SessionManager.getLastName());
-		profilePic = (CircleImageView) findViewById(R.id.user_photo);
+		profilePic = (CircleImageView) findViewById(R.id.profilePic);
 		Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
 
 

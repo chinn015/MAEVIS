@@ -237,7 +237,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
         if(v == txtVwCreateAcc) {
-            finish();
+            //finish();
             Intent createAcc = new Intent(Login.this, SignUp.class);
             startActivity(createAcc);
         }

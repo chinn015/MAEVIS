@@ -87,7 +87,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         txtFldBirthdate.setHint("Birthdate ["+day+"/"+month+"/"+year+"]");
         txtFldAddress.setOnClickListener(this);
-        txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
+
+        if(AddHomeAddress.userHomeAddress != null){
+            txtFldUsername.setText(AddHomeAddress.userName);
+            txtFldEmail.setText(AddHomeAddress.userEmail);
+            txtFldFirstName.setText(AddHomeAddress.userFname);
+            txtFldLastName.setText(AddHomeAddress.userLname);
+            txtFldPassword.setText(AddHomeAddress.userPassword);
+            txtFldAddress.setText(AddHomeAddress.userHomeAddress);
+            txtFldBirthdate.setText(AddHomeAddress.userBdate);
+        }
 
     }
 
@@ -115,8 +124,23 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         }
 
         if (v == txtFldAddress) {
-            startActivity(new Intent(getApplication(), UpdateHomeAddress.class));
-            finish();
+            Intent i = new Intent(getApplicationContext(), AddHomeAddress.class);
+            final String userName = txtFldUsername.getText().toString();
+            final String userPassword = txtFldPassword.getText().toString();
+            final String userEmail = txtFldEmail.getText().toString();
+            final String userFname = txtFldFirstName.getText().toString();
+            final String userLname = txtFldLastName.getText().toString();
+            final String userBdate = txtFldBirthdate.getText().toString();
+
+            i.putExtra("userName", userName);
+            i.putExtra("userPassword", userPassword);
+            i.putExtra("userEmail", userEmail);
+            i.putExtra("userFname", userFname);
+            i.putExtra("userLname", userLname);
+            i.putExtra("userBdate", userBdate);
+
+            startActivity(i);
+            //finish();
         }
     }
 
@@ -133,6 +157,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String userType = "Regular User";
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
 
         if(deviceToken.equals("")) {
             deviceToken = "NULL";

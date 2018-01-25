@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCallback,
+public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerDragListener{
 
@@ -52,13 +52,13 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     Bitmap homeMarkerRed;
     MarkerOptions homeNewmarker = null;
     ArrayList<Marker> markers = new ArrayList<>();
-    static String userName, userPassword, userEmail, userFname, userLname;
+    static String userName, userPassword, userEmail, userFname, userLname, userBdate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_home_address);
+        setContentView(R.layout.activity_add_home_address);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,9 +97,9 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
-        BitmapDrawable bitmapOldHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_old_home);
+        /*BitmapDrawable bitmapOldHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_old_home);
         Bitmap oldHome = bitmapOldHome.getBitmap();
-        Bitmap homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 160, 160, false);
+        Bitmap homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 160, 160, false);*/
 
         BitmapDrawable bitmapNewHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap newHome = bitmapNewHome.getBitmap();
@@ -118,7 +118,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
         home_location = new LatLng(SessionManager.getHomeLat(), SessionManager.getHomeLong());
         //home_location = getHomeAddress(SessionManager.getAddress());
-        mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(1.0f).title("Old Home Address").icon(BitmapDescriptorFactory.fromBitmap(homeMarkerGray)));
+        //mMap.addMarker(new MarkerOptions().position(home_location).visible(true).alpha(1.0f).title("Old Home Address").icon(BitmapDescriptorFactory.fromBitmap(homeMarkerGray)));
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
         mMap.setOnMarkerDragListener(this);
@@ -131,14 +131,6 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
             }
         });
-
-        btnHomeLoc.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(home_location).zoom(17).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
-
     }
 
     @Override
@@ -163,7 +155,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         Marker temp;
 
         homeNewmarker = new MarkerOptions().position(
-                new LatLng(point.latitude, point.longitude)).title("New Home Address").icon(BitmapDescriptorFactory.fromBitmap(homeMarkerRed)).draggable(true);
+                new LatLng(point.latitude, point.longitude)).title("Home Location").icon(BitmapDescriptorFactory.fromBitmap(homeMarkerRed)).draggable(true);
         markers.add(mMap.addMarker(homeNewmarker));
 
         if(markers.size() != 1) {
@@ -241,6 +233,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         userLname = in.getStringExtra("userLname");
         userPassword = in.getStringExtra("userPassword");
         userEmail = in.getStringExtra("userEmail");
+        userBdate = in.getStringExtra("userBdate");
 
         //Toast.makeText(this, "get : " + userName, Toast.LENGTH_LONG).show();
 
