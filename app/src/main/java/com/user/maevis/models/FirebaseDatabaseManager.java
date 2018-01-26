@@ -176,13 +176,25 @@ public class FirebaseDatabaseManager {
         return fullName;
     }
 
+    public static String getUserPhoto(String userID) {
+        String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fuser.png?alt=media&token=5adb813c-7ee9-4fd3-9389-0eb9325c10c4";
+
+        for (int x = 0; x < getUserItems().size(); x++) {
+            UserItem userItem = getUserItems().get(x);
+            if (userItem.getUserID().equals(userID)) {
+                userPhoto = userItem.getUserPhoto();
+            }
+        }
+
+        return userPhoto;
+    }
+
     //returns TRUE if username is already used
     public static boolean isUsernameUsed(String username) {
         boolean status=false;
 
         for(int x=0; x < getUserItems().size(); x++) {
             UserItem userItem = getUserItems().get(x);
-
             if(userItem.getUsername().equals(username)) {
                 status = true;
             }

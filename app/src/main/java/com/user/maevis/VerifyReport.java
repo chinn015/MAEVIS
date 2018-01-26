@@ -134,6 +134,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
                 //retrieve full name
                 String fullName = FirebaseDatabaseManager.getFullName(dataSnapshot.child("reportedBy").getValue().toString());
+                String userPhotoImgUrl = FirebaseDatabaseManager.getUserPhoto(dataSnapshot.child("reportedBy").getValue().toString());
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString() + " reported a " +
@@ -149,7 +150,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
                         dataSnapshot.child("reportStatus").getValue().toString(),
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
-                        formatDateTime);
+                        formatDateTime,
+                        userPhotoImgUrl);
 
                 if(item.getReportStatus().equals("Pending")) {
                     listItems.add(item);

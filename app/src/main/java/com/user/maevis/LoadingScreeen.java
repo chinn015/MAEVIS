@@ -65,7 +65,7 @@ public class LoadingScreeen extends AppCompatActivity {
         //initialize Firebase Database Manager
         FirebaseDatabaseManager.initializeFirebaseDatabaseManager();
         PageNavigationManager.initializePageNavigationManager();
-        
+
         FirebaseDatabaseManager.FirebaseUsers.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
