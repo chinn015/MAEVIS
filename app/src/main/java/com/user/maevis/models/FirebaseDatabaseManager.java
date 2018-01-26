@@ -176,6 +176,36 @@ public class FirebaseDatabaseManager {
         return fullName;
     }
 
+    //returns TRUE if username is already used
+    public static boolean isUsernameUsed(String username) {
+        boolean status=false;
+
+        for(int x=0; x < getUserItems().size(); x++) {
+            UserItem userItem = getUserItems().get(x);
+
+            if(userItem.getUsername().equals(username)) {
+                status = true;
+            }
+        }
+
+        return status;
+    }
+
+    //returns TRUE if email is already used
+    public static boolean isEmailUsed(String email) {
+        boolean status=false;
+
+        for(int x=0; x < getUserItems().size(); x++) {
+            UserItem userItem = getUserItems().get(x);
+
+            if(userItem.getEmail().equals(email)) {
+                status = true;
+            }
+        }
+
+        return status;
+    }
+
     //returns (yyyy-mm-dd) date format from inputted (yyyy-mm-dd hh:mm:ss A)
     public static String getDate(String inputDate) {
         String date = inputDate.substring(0,10);

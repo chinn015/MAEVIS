@@ -1,6 +1,7 @@
 package com.user.maevis;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
 
@@ -160,13 +162,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-
         if(deviceToken.equals("")) {
             deviceToken = "NULL";
         }
 
         if(TextUtils.isEmpty(username)) {
             Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(FirebaseDatabaseManager.isUsernameUsed(username)) {
+            showDialogUsernameUsed();
+            return;
+        }
+
+        if(FirebaseDatabaseManager.isEmailUsed(email)) {
+            showDialogEmailUsed();
             return;
         }
 
@@ -236,5 +247,43 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         }
                     }
                 });
+    }
+
+    private void showDialogUsernameUsed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("USERNAME EXISTS");
+        builder.setMessage("Username has already been used. Please try a new one.");
+        builder.setInverseBackgroundForced(true);
+
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    private void showDialogEmailUsed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("EMAIL EXISTS");
+        builder.setMessage("Email has already been used. Please try a new one.");
+        builder.setInverseBackgroundForced(true);
+
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 }

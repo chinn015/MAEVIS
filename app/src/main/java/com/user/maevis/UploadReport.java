@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.models.NotifModel;
 import com.user.maevis.models.ReportModel;
 import com.user.maevis.session.SessionManager;
 
@@ -44,8 +46,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -70,6 +74,11 @@ public class UploadReport extends AppCompatActivity {
     Uri photoURI;
     File imageFile;
 
+    public static NotifModel notifModel;
+    public static DatabaseReference newNotif;
+
+    private List<String> nearbyAdmins;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +100,8 @@ public class UploadReport extends AppCompatActivity {
                 SelectImage();
             }
         });
+
+        nearbyAdmins = new ArrayList<>();
 
         txtFldLocation = (AutofitTextView) findViewById(R.id.txtFldLocation);
         txtFldDescription = (EditText) findViewById(R.id.txtFldDescription);
@@ -207,7 +218,19 @@ public class UploadReport extends AppCompatActivity {
 
                 StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
 
-                filePath.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                Uri uri = selectedImageUri;
+
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+                    String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, selectedImageUri.getLastPathSegment(), null);
+                    uri = Uri.parse(path);
+                } catch (IOException ie) {
+                    Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
+                }
+
+                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
@@ -307,6 +330,45 @@ public class UploadReport extends AppCompatActivity {
 
         newReport = FirebaseDatabaseManager.FirebaseReports.push();
         newReport.setValue(reportModel);
+
+        //send notification to nearby Admins
+        String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
+        String notifMessage = fullName+" sent a "+reportModel.getReportType()+" Report near you.";
+        String notifTitle = "Pending "+reportModel.getReportType()+" Report";
+        String notifReportID = newReport.getKey();
+
+        for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+            if(FirebaseDatabaseManager.getUserItems().get(x).getUserType().equals("Admin")) {
+                UserItem nearbyAdmin = FirebaseDatabaseManager.getUserItems().get(x);
+                double nearbyLatitude = nearbyAdmin.getCurrentLat();
+                double nearbyLongitude = nearbyAdmin.getCurrentLong();
+                float distance, nearby_distance;
+
+                nearby_distance = 1000;
+                Location nearby_admins = new Location("1");
+                Location pendging_report_location = new Location("2");
+
+                nearby_admins.setLatitude(nearbyLatitude);
+                nearby_admins.setLongitude(nearbyLongitude);
+
+                pendging_report_location.setLatitude(reportModel.getLocationLatitude());
+                pendging_report_location.setLongitude(reportModel.getLocationLongitude());
+
+                //Returns the approximate distance in meters between the current location and the given report location.
+                distance = pendging_report_location.distanceTo(nearby_admins);
+
+                if (distance <= nearby_distance) {
+                    nearbyAdmins.add(nearbyAdmin.getUserID());
+                }
+            }
+        }
+
+        for(int x=0; x < nearbyAdmins.size(); x++) {
+            notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyAdmins.get(x));
+            newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
+            newNotif.setValue(notifModel);
+        }
+
 
         Toast.makeText(UploadReport.this, "Report sent!.", Toast.LENGTH_LONG).show();
         finish();

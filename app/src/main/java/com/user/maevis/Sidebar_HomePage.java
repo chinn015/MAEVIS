@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -178,15 +179,41 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             }
         });
 
-        //store data to Lists
-        //initialize Firebase Database Manager
-        FirebaseDatabaseManager.initializeFirebaseDatabaseManager();
-        PageNavigationManager.initializePageNavigationManager();
-
         //listener to store all users from the Firebase Database to a List
         FirebaseDatabaseManager.FirebaseUsers.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                /*final DataSnapshot dSnap = dataSnapshot;
+
+                new CountDownTimer(250, 250) {
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        UserItem user = new UserItem(dSnap.getKey().toString(),
+                                dSnap.child("address").getValue().toString(),
+                                dSnap.child("birthdate").getValue().toString(),
+                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("currentLat").getValue()),
+                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("currentLong").getValue()),
+                                dSnap.child("deviceToken").getValue().toString(),
+                                dSnap.child("email").getValue().toString(),
+                                dSnap.child("firstName").getValue().toString(),
+                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("homeLat").getValue()),
+                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("homeLong").getValue()),
+                                dSnap.child("lastName").getValue().toString(),
+                                dSnap.child("userPhoto").getValue().toString(),
+                                dSnap.child("userStatus").getValue().toString(),
+                                dSnap.child("userType").getValue().toString(),
+                                dSnap.child("username").getValue().toString());
+
+                        FirebaseDatabaseManager.getUserItems().add(user);
+                    }
+                }.start();*/
+
                 UserItem user = new UserItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("address").getValue().toString(),
                         dataSnapshot.child("birthdate").getValue().toString(),
