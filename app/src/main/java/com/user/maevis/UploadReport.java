@@ -92,7 +92,7 @@ public class UploadReport extends AppCompatActivity {
 
         ivImage = (ImageView) findViewById(R.id.ivImage);
 
-        Button fab = (Button) findViewById(R.id.fab);
+        TextView fab = (TextView) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -289,10 +289,7 @@ public class UploadReport extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_upload_report) {
-            //Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG).show();
-            Toast.makeText(UploadReport.this, "Logged in " + SessionManager.isLoggedIn() + " as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName(), Toast.LENGTH_LONG).show();
             uploadReport();
-
             //finish();
             //startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
 
@@ -370,7 +367,7 @@ public class UploadReport extends AppCompatActivity {
         }
 
 
-        Toast.makeText(UploadReport.this, "Report sent!.", Toast.LENGTH_LONG).show();
+        Toast.makeText(UploadReport.this, "Report sent!", Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
 
