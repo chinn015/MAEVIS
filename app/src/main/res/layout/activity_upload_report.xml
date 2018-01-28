@@ -43,6 +43,7 @@
         android:maxLines="3"
         autofit:minTextSize="16sp"
         android:background="@drawable/border_bottom"
+        android:text=""
         />
 
     <TextView
@@ -91,7 +92,7 @@
         android:layout_below="@+id/txtFldDescription"
         android:layout_alignStart="@+id/txtFldLocation"
         android:background="#fafafa"
-        android:text="Add Photo/Video"
+        android:text="Add Photo"
         android:textSize="18sp"
         android:textColor="@color/colorPrimary"
         android:textAllCaps="false"

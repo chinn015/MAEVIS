@@ -113,26 +113,47 @@
         android:layout_marginBottom="10dp"
         android:textCursorDrawable="@drawable/cursor_text_white" />
 
+    <!--<me.grantland.widget.AutofitTextView-->
+        <!--android:id="@+id/txtFldAddress"-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:background="@drawable/txtfld_rounded"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:hint="Address [Street, Brgy, City]"-->
+        <!--android:textColorHint="#FFFFFF"-->
+        <!--android:textSize="16sp"-->
+        <!--android:layout_below="@+id/txtFldBirthdate"-->
+        <!--android:layout_alignStart="@+id/txtFldBirthdate"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:textCursorDrawable="@drawable/cursor_text_white"-->
+        <!--android:maxLines="3"-->
+        <!--autofit:minTextSize="16sp"-->
+        <!--android:paddingTop="8dp"-->
+        <!--android:text="asddssssssssssssssssssssssssssssssssssssssssssddddddddddddddddddddddddddddddsssssssssssssssssss"/>-->
+
     <me.grantland.widget.AutofitTextView
         android:id="@+id/txtFldAddress"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:inputType="textPersonName"
-        android:background="@drawable/txtfld_rounded"
-        android:textColor="#FFFFFF"
         android:paddingLeft="15dp"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:maxLines="4"
+        autofit:minTextSize="16sp"
+        android:text=""
         android:hint="Address [Street, Brgy, City]"
-        android:textColorHint="#FFFFFF"
-        android:textSize="17dp"
+        android:background="@drawable/txtfld_rounded"
         android:layout_below="@+id/txtFldBirthdate"
         android:layout_alignStart="@+id/txtFldBirthdate"
         android:layout_marginBottom="20dp"
         android:textCursorDrawable="@drawable/cursor_text_white"
-        android:maxLines="3"
-        autofit:minTextSize="18sp"
-        android:paddingTop="8dp"/>
-
-
+        android:paddingTop="8dp"
+        android:paddingRight="4dp"
+        android:textColorHint="@color/colorAccent"
+        android:paddingBottom="8dp"
+    />
     <Button
         android:id="@+id/btnCreateAccount"
         android:layout_width="250dp"

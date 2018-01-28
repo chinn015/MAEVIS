@@ -3,6 +3,7 @@ package com.user.maevis;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,8 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
         Picasso.with(context).load(listItem.getUserPhoto()).into(holder.userPhoto);
 
+        holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#f2cfcc"), PorterDuff.Mode.DARKEN);
+
         switch(listItem.getReportType()){
             case "Fire":
                     Picasso.with(context).load(reportIcons[0]).into(holder.imageReportType);
@@ -73,9 +76,12 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             switch (listItem.getReportStatus()){
                 case "Verified" :
                     Picasso.with(context).load(R.mipmap.lbl_approved).into(holder.reportStatus);
+                    holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
                     break;
+
                 case "Declined" :
                     Picasso.with(context).load(R.mipmap.lbl_rejected).into(holder.reportStatus);
+                    holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
                     break;
                 case "Pending" :
                     holder.reportStatus.setVisibility(View.GONE);

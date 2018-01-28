@@ -144,7 +144,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             i.putExtra("userBdate", userBdate);
 
             startActivity(i);
-            //finish();
+            finish();
         }
     }
 

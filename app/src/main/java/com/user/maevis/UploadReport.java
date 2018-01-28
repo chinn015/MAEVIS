@@ -213,7 +213,7 @@ public class UploadReport extends AppCompatActivity {
                 ivImage.setImageURI(selectedImageUri);
 
                 //upload photo
-                progressDialog.setMessage("Uploading photo from camera.");
+                progressDialog.setMessage("Uploading photo from gallery.");
                 progressDialog.show();
 
                 StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
