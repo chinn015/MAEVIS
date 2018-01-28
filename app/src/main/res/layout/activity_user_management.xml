@@ -35,7 +35,7 @@
             android:layout_marginStart="19dp"
             android:layout_marginTop="57dp"
             android:elevation="8dp"
-            android:src="@drawable/img_user"
+            android:src="@drawable/user"
             app:border_color="#FFF"
             app:border_width="2dp"
             app:layout_anchorGravity="top|center_horizontal"
@@ -51,7 +51,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="26dp"
             android:layout_toEndOf="@+id/imgViewProfilePic"
-            android:text="FirstName LastName"
+            android:text="Name"
             android:textSize="20dp" />
 
         <ImageView
@@ -71,19 +71,20 @@
             android:layout_height="wrap_content"
             android:text="active"
             android:textSize="15dp"
-            android:layout_alignBottom="@+id/imgUserStatus"
-            android:layout_toEndOf="@+id/imgUserStatus"
-            android:layout_marginStart="14dp" />
+            android:layout_alignTop="@+id/imgUserStatus"
+            android:layout_alignEnd="@+id/txtViewUnverified"
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:id="@+id/txtViewUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="username"
+            android:text="welma015"
             android:textSize="15dp"
             android:textColor="@color/colorPrimary"
-            android:layout_above="@+id/imgUserStatus"
-            android:layout_alignStart="@+id/imgUserStatus" />
+            android:layout_below="@+id/viewUMName"
+            android:layout_alignStart="@+id/viewUMName"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,7 +95,7 @@
             android:id="@+id/textView"
             android:textColor="@color/colorPrimary"
             android:layout_below="@+id/imgViewProfilePic"
-            android:layout_toStartOf="@+id/userStatus" />
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -148,9 +149,9 @@
             android:textAllCaps="false"
             android:textColor="@color/colorAccent"
             android:textSize="20dp"
-            android:layout_marginTop="24dp"
             android:layout_below="@+id/textView3"
-            android:layout_alignEnd="@+id/txtViewVerified" />
+            android:layout_alignEnd="@+id/textView"
+            android:layout_marginTop="30dp" />
 
 
     </RelativeLayout>

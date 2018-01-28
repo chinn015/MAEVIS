@@ -319,6 +319,8 @@ public class SidebarSettings extends AppCompatActivity {
 
         SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), SessionManager.getUserPhoto());
 
+        Intent i = new Intent(this, Sidebar_HomePage.class);
+        startActivity(i);
         finish();
     }
 
@@ -387,17 +389,17 @@ public class SidebarSettings extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save_changes) {
-            //Toast.makeText(SidebarSettings.this, "Logged in "+ SessionManager.isLoggedIn()+" as: "+ SessionManager.getFirstName()+" "+ SessionManager.getLastName(), Toast.LENGTH_LONG).show();
-
             showUpdateConfirmationDialog();
             return true;
+        } else if (id == android.R.id.home) {
+            displayDiscardDialog();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void showUpdateConfirmationDialog() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle("Update Profile");
         builder.setMessage("Are you sure you want to apply these changes?");
@@ -408,6 +410,31 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+
+    public void displayDiscardDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Discard changes?");
+        builder.setMessage("You have unsaved changes.");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(
+                        new Intent(SidebarSettings.this, Sidebar_HomePage.class));
+            }
+        });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

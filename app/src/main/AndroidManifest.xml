@@ -127,11 +127,7 @@
         </activity>
         <activity
             android:name=".SidebarSettings"
-            android:label="Settings"
-            android:parentActivityName=".Sidebar_HomePage">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
+            android:label="Settings" >
         </activity>
         <activity
             android:name=".SidebarHotline"

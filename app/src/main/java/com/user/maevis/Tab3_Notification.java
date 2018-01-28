@@ -42,7 +42,7 @@ public class Tab3_Notification extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab1_home, container, false);
-        
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
@@ -80,8 +80,8 @@ public class Tab3_Notification extends Fragment {
 
                 ListItem item = new ListItem(dataSnapshot.getKey().toString(),
                         fullName + " reported a " +
-                        dataSnapshot.child("reportType").getValue().toString() + " at " +
-                        dataSnapshot.child("location").getValue().toString(),
+                                dataSnapshot.child("reportType").getValue().toString() + " at " +
+                                dataSnapshot.child("location").getValue().toString(),
                         dataSnapshot.child("dateTime").getValue().toString(),
                         dataSnapshot.child("description").getValue().toString(),
                         dataSnapshot.child("imageURL").getValue().toString(),
