@@ -4,79 +4,84 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginLeft="2dp"
+    android:layout_height="90dp"
     android:layout_marginBottom="1dp"
     android:layout_marginTop="1dp"
     app:cardCornerRadius="4dp"
     >
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/notifReportLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector"
-        android:id="@+id/notifReportLayout">
+        android:backgroundTint="#f2cfcc">
 
         <ImageView
             android:id="@+id/user_photo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:scaleType="fitXY"
-            android:src="@drawable/img_user"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:src="@drawable/img_user" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="7dp"
             android:layout_toRightOf="@+id/user_photo"
-            android:layout_toEndOf="@+id/user_photo">
+            android:padding="7dp">
 
             <ImageView
                 android:id="@+id/reportType"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@mipmap/btn_fire1"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/btn_fire1" />
 
             <TextView
+                android:id="@+id/textViewDateTimeNotif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="datetime"
-                android:id="@+id/textViewDateTimeNotif"
-                android:paddingLeft="5dp"
-                android:textSize="12dp"
                 android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/reportType" />
+                android:layout_toEndOf="@+id/reportType"
+                android:paddingLeft="5dp"
+                android:text="datetime"
+                android:textSize="12dp" />
 
             <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="datetime"-->
-                <!--android:id="@+id/textViewDateTimeNotif"-->
-                <!--android:layout_alignBottom="@+id/reportType"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:textSize="12dp"/>-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="datetime"-->
+            <!--android:id="@+id/textViewDateTimeNotif"-->
+            <!--android:layout_alignBottom="@+id/reportType"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:textSize="12dp"/>-->
 
             <TextView
                 android:id="@+id/textViewHeadNotif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:maxLines="2"
-                android:text="Hello World"
                 android:paddingLeft="5dp"
                 android:paddingTop="2dp"
-                android:textColor="#000"
-                android:layout_alignParentTop="true"
+                android:text="Hello World"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            />
+                android:textColor="#000" />
+
+            <ImageView
+                android:id="@+id/reportStatus"
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/lbl_approved"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
 

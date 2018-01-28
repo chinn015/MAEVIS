@@ -63,7 +63,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         maevis_logo.setImageResource(R.drawable.maevis_logo);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
         FirebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
 
@@ -144,7 +144,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             i.putExtra("userBdate", userBdate);
 
             startActivity(i);
-            //finish();
+            finish();
         }
     }
 
@@ -215,7 +215,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         double currentLong = 123.897093;
         double homeLat = 10.316590;
         double homeLong = 123.897093;
-        final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fuser.png?alt=media&token=5adb813c-7ee9-4fd3-9389-0eb9325c10c4";
+        final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
         final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
 
@@ -241,7 +241,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
 
                             finish();
-                            startActivity(new Intent(getApplicationContext(), Login.class));
+                            startActivity(new Intent(getApplicationContext(), SidebarHelp.class));
                         } else {
                             Toast.makeText(SignUp.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
                         }

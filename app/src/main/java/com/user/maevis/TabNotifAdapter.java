@@ -2,6 +2,8 @@ package com.user.maevis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +28,6 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
     private List<ListItem> listItems;
     private static ListItem clickedItem = null;
     private Context context;
-
     static boolean clickedStatus = false;
 
     int[] reportIcons = {
@@ -34,7 +35,6 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             R.mipmap.btn_flood,
             R.mipmap.btn_accident
     };
-
 
     public TabNotifAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -56,6 +56,8 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
         Picasso.with(context).load(listItem.getUserPhoto()).into(holder.userPhoto);
 
+        holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#f2cfcc"), PorterDuff.Mode.DARKEN);
+
         switch(listItem.getReportType()){
             case "Fire":
                     Picasso.with(context).load(reportIcons[0]).into(holder.imageReportType);
@@ -70,6 +72,25 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                     break;
         }
 
+        if(SessionManager.getUserType().equals("Admin")){
+            switch (listItem.getReportStatus()){
+                case "Verified" :
+                    Picasso.with(context).load(R.mipmap.lbl_approved).into(holder.reportStatus);
+                    holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
+                    break;
+
+                case "Declined" :
+                    Picasso.with(context).load(R.mipmap.lbl_rejected).into(holder.reportStatus);
+                    holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
+                    break;
+                case "Pending" :
+                    holder.reportStatus.setVisibility(View.GONE);
+            }
+        }else if(SessionManager.getUserType().equals("Regular User")){
+            holder.reportStatus.setVisibility(View.GONE);
+        }
+
+
         /*holder.textViewDesc.setText(listItem.getDesc());
         Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/
 
@@ -79,8 +100,8 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                 /*clickedStatus = true;
                 Tab2_Location.clickedStatus = false;*/
 
+                clickedStatus = true;
                 PageNavigationManager.clickTabNotifListItem(listItem);
-
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
                 //setClickedItem(listItem);
 
@@ -91,6 +112,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                 }
             }
         });
+
     }
 
     @Override
@@ -107,6 +129,8 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
         public RelativeLayout notifReportLayout;
         public ImageView imageReportType;
         public ImageView userPhoto;
+        public ImageView reportStatus;
+
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -118,6 +142,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportType);
             userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
+            reportStatus = (ImageView) itemView.findViewById(R.id.reportStatus);
 
         }
     }

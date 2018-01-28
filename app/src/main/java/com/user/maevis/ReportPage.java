@@ -5,6 +5,7 @@ import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -97,6 +98,28 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
                     .into(viewReportType);
+        }else if(TabProfileTimelineAdapter.getClickedItem() != null){
+            viewReportHead.setText(TabProfileTimelineAdapter.getClickedItem().getHead());
+            viewReportDesc.setText(TabProfileTimelineAdapter.getClickedItem().getDescription());
+            viewReportDateTime.setText(TabProfileTimelineAdapter.getClickedItem().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(TabProfileTimelineAdapter.getClickedItem().getImageURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(TabProfileTimelineAdapter.getClickedItem().getReportType())
+                    .into(viewReportType);
+        }else if(TabNotifAdapterRegUser.getClickedItem() != null){
+            viewReportHead.setText(TabNotifAdapterRegUser.getClickedItem().getHead());
+            viewReportDesc.setText(TabNotifAdapterRegUser.getClickedItem().getDescription());
+            viewReportDateTime.setText(TabNotifAdapterRegUser.getClickedItem().getDisplayDateTime());
+            Picasso.with(getApplicationContext())
+                    .load(TabNotifAdapterRegUser.getClickedItem().getImageThumbnailURL())
+                    .fit()
+                    .into(viewReportImage);
+            Picasso.with(getApplicationContext())
+                    .load(TabNotifAdapterRegUser.getClickedItem().getReportType())
+                    .into(viewReportType);
         }
 
         viewUserImage.setOnClickListener(this);
@@ -173,4 +196,40 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     public static void setClickedUserItem(UserItem clickedUserItem) {
         ReportPage.clickedUserItem = clickedUserItem;
     }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home  && TabProfileTimelineAdapter.getClickedItem() != null) {
+
+            startActivity(new Intent(ReportPage.this, SidebarProfile.class));
+            finish();
+
+        }else if (id == android.R.id.home  && PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
+
+            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
+            finish();
+
+        }else if (id == android.R.id.home  && PageNavigationManager.getClickedTabLocListItemVerified() != null){
+
+            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
+            finish();
+
+        }else if (id == android.R.id.home  && TabNotifAdapterRegUser.getClickedItem() != null){
+
+            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
+            finish();
+
+        }
+
+
+        TabProfileTimelineAdapter.setClickedItem(null);
+        PageNavigationManager.setClickedTabHomeListItemVerified(null);
+        PageNavigationManager.setClickedTabLocListItemVerified(null);
+        TabNotifAdapterRegUser.setClickedItem(null);
+
+        return super.onOptionsItemSelected(item);
+    }
 }

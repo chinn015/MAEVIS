@@ -189,7 +189,7 @@ public class Tab4_Search extends Fragment {
             );
 
             searchView.setQueryHint("Search Location, Report, User");
-            searchView.setIconified(false);
+            //searchView.setIconified(false);
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 

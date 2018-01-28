@@ -118,6 +118,7 @@ public class SidebarHelp extends AppCompatActivity {
 
     private void launchHomeScreen() {
         startActivity(new Intent(SidebarHelp.this, Sidebar_HomePage.class));
+        finish();
     }
 
     //	viewpager change listener

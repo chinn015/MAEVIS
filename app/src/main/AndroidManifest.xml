@@ -127,11 +127,7 @@
         </activity>
         <activity
             android:name=".SidebarSettings"
-            android:label="Settings"
-            android:parentActivityName=".Sidebar_HomePage">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
+            android:label="Settings" >
         </activity>
         <activity
             android:name=".SidebarHotline"
@@ -140,11 +136,7 @@
         <activity android:name=".SidebarProfile" />
         <activity android:name=".SidebarHelp" />
         <activity android:name=".ReportPage"
-            android:label="Report"
-            android:parentActivityName=".Sidebar_HomePage">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
+            android:label="Report">
         </activity>
 
         <activity android:name=".NotificationView"
@@ -165,10 +157,10 @@
 
         <activity android:name=".AddHomeAddress"
             android:label="Add Home Address"
-            android:parentActivityName=".SidebarSettings">
+            android:parentActivityName=".SignUp">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
-                android:value=".SidebarSettings" />
+                android:value=".SignUp" />
         </activity>
 
 

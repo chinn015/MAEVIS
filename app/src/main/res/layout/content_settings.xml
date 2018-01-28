@@ -182,15 +182,39 @@
         android:layout_alignStart="@+id/txtViewEmail"
         android:layout_marginTop="13dp" />
 
+    <!--<me.grantland.widget.AutofitTextView-->
+        <!--android:id="@+id/txtFldEditAddress"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:paddingLeft="15dp"-->
+        <!--android:textSize="15dp"-->
+        <!--android:textCursorDrawable="@drawable/cursor_text_red"-->
+        <!--android:backgroundTint="@color/colorAccent"-->
+        <!--android:layout_below="@+id/txtViewAddress"-->
+        <!--android:background="@drawable/txtfld_rounded"-->
+        <!--android:layout_marginTop="14dp"-->
+        <!--android:layout_marginStart="35dp"-->
+        <!--android:layout_marginBottom="50dp"-->
+        <!--android:maxLines="3"-->
+        <!--autofit:minTextSize="18sp"/>-->
+
     <me.grantland.widget.AutofitTextView
         android:id="@+id/txtFldEditAddress"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:inputType="textPersonName"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/colorAccent"
         android:paddingLeft="15dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
         android:textSize="15dp"
+        android:maxLines="4"
+        autofit:minTextSize="15dp"
+        android:text=""
+        android:hint="Address [Street, Brgy, City]"
+        android:layout_alignStart="@+id/txtFldBirthdate"
+        android:paddingTop="8dp"
+        android:paddingRight="4dp"
         android:textCursorDrawable="@drawable/cursor_text_red"
         android:backgroundTint="@color/colorAccent"
         android:layout_below="@+id/txtViewAddress"
@@ -198,9 +222,8 @@
         android:layout_marginTop="14dp"
         android:layout_marginStart="35dp"
         android:layout_marginBottom="50dp"
-        android:maxLines="3"
-        autofit:minTextSize="18sp"/>
-
+        android:paddingBottom="8dp"
+        />
 
 
 </RelativeLayout>

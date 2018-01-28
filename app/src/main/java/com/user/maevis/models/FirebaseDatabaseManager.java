@@ -177,7 +177,7 @@ public class FirebaseDatabaseManager {
     }
 
     public static String getUserPhoto(String userID) {
-        String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fuser.png?alt=media&token=5adb813c-7ee9-4fd3-9389-0eb9325c10c4";
+        String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
         for (int x = 0; x < getUserItems().size(); x++) {
             UserItem userItem = getUserItems().get(x);
