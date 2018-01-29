@@ -330,8 +330,8 @@ public class UploadReport extends AppCompatActivity {
 
         //send notification to nearby Admins
         String fullName = FirebaseDatabaseManager.getFullName(reportModel.getReportedBy());
-        String notifMessage = fullName+" sent a "+reportModel.getReportType()+" Report near you.";
-        String notifTitle = "Pending "+reportModel.getReportType()+" Report";
+        //String notifMessage = fullName+" sent a "+reportModel.getReportType()+" Report near you.";
+        String notifTitle = "MAEVIS: Pending "+reportModel.getReportType()+" Report";
         String notifReportID = newReport.getKey();
 
         for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
@@ -361,7 +361,9 @@ public class UploadReport extends AppCompatActivity {
         }
 
         for(int x=0; x < nearbyAdmins.size(); x++) {
-            notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyAdmins.get(x));
+            String messageToAdmin = "["+FirebaseDatabaseManager.getFullName(nearbyAdmins.get(x))+"] "+fullName+" sent a "+reportModel.getReportType()+" Report near you.";
+            notifModel = new NotifModel(messageToAdmin, notifReportID, notifTitle, nearbyAdmins.get(x));
+            //notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyAdmins.get(x));
             newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
             newNotif.setValue(notifModel);
         }

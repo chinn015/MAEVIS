@@ -59,6 +59,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     public static DatabaseReference newNotif;
 
     private List<String> nearbyUsers;
+    private List<String> nearbyHomes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +118,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         imageList = new ArrayList<>();
         mergedReportsID = new ArrayList<>();
         nearbyUsers = new ArrayList<>();
+        nearbyHomes = new ArrayList<>();
 
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
@@ -286,37 +288,59 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         newReportVerified.setValue(reportVerifiedModel);
 
         String fullName = FirebaseDatabaseManager.getFullName(reportVerifiedModel.getReportedBy());
-        String notifMessage = fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
-        String notifTitle = reportVerifiedModel.getReportType()+" Report";
+        String notifMessageUser = fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
+        String notifMessageHome = fullName+" reported a "+reportVerifiedModel.getReportType()+" near your home.";
+        String notifTitle = "MAEVIS: "+reportVerifiedModel.getReportType()+" Report";
         String notifReportID = newReportVerified.getKey();
 
         for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
             UserItem nearbyUser = FirebaseDatabaseManager.getUserItems().get(x);
             double nearbyLatitude = nearbyUser.getCurrentLat();
             double nearbyLongitude = nearbyUser.getCurrentLong();
-            float distance, nearby_distance;
+            double nearbyHomeLat = nearbyUser.getHomeLat();
+            double nearbyHomeLong = nearbyUser.getHomeLong();
+            float nearbyUser_distance, nearbyHome_distance, nearby_distance;
 
             nearby_distance = 1000;
             Location nearby_users = new Location("1");
             Location verified_report_location = new Location("2");
+            Location nearby_homes = new Location("3");
             //String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
 
             nearby_users.setLatitude(nearbyLatitude);
             nearby_users.setLongitude(nearbyLongitude);
 
+            nearby_homes.setLatitude(nearbyHomeLat);
+            nearby_homes.setLongitude(nearbyHomeLong);
+
             verified_report_location.setLatitude(reportVerifiedModel.getLocationLatitude());
             verified_report_location.setLongitude(reportVerifiedModel.getLocationLongitude());
 
             //Returns the approximate distance in meters between the current location and the given report location.
-            distance = verified_report_location.distanceTo(nearby_users);
+            nearbyUser_distance = verified_report_location.distanceTo(nearby_users);
+            nearbyHome_distance = verified_report_location.distanceTo(nearby_users);
 
-            if(distance <= nearby_distance){
+            if(nearbyUser_distance <= nearby_distance){
                 nearbyUsers.add(nearbyUser.getUserID());
+            }
+
+            if(nearbyHome_distance <= nearby_distance){
+                nearbyHomes.add(nearbyUser.getUserID());
             }
         }
 
         for(int x=0; x < nearbyUsers.size(); x++) {
-            notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyUsers.get(x));
+            String messageToUser = "["+FirebaseDatabaseManager.getFullName(nearbyUsers.get(x))+"] "+fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
+            notifModel = new NotifModel(messageToUser, notifReportID, notifTitle, nearbyUsers.get(x));
+            //notifModel = new NotifModel(notifMessageUser, notifReportID, notifTitle, nearbyUsers.get(x));
+            newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
+            newNotif.setValue(notifModel);
+        }
+
+        for(int x=0; x < nearbyHomes.size(); x++) {
+            String messageToHome = "["+FirebaseDatabaseManager.getFullName(nearbyUsers.get(x))+"'s Home] "+fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
+            notifModel = new NotifModel(messageToHome, notifReportID, notifTitle, nearbyHomes.get(x));
+            //notifModel = new NotifModel(notifMessageHome, notifReportID, notifTitle, nearbyHomes.get(x));
             newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
             newNotif.setValue(notifModel);
         }
