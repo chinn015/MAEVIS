@@ -1,22 +1,31 @@
 package com.user.maevis;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-public class TabMediaAdapter extends RecyclerView.Adapter<TabMediaAdapter.ViewHolder>   {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+/**
+ * Created by User on 1/8/2018.
+ */
+
+public class TabMediaAdapter extends RecyclerView.Adapter<TabMediaAdapter.ViewHolder> {
 
     private List<ListItem> listItems;
-    private static ListItem clickedItem = null;
     private Context context;
+    private static ListItem clickedItem = null;
 
     public TabMediaAdapter(List<ListItem> listItems, Context context) {
         this.listItems = listItems;
@@ -33,8 +42,19 @@ public class TabMediaAdapter extends RecyclerView.Adapter<TabMediaAdapter.ViewHo
     public void onBindViewHolder(TabMediaAdapter.ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
 
-        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);
+        Picasso.with(context)
+                .load(listItem.getImageURL())
+                .fit()
+                .into(holder.imageViewReport);
     }
+
+//    public static ListItem getClickedItem() {
+//        return clickedItem;
+//    }
+//
+//    public static void setClickedItem(ListItem clickedItem) {
+//        TabMediaAdapter.clickedItem = clickedItem;
+//    }
 
     @Override
     public int getItemCount() {
@@ -44,15 +64,12 @@ public class TabMediaAdapter extends RecyclerView.Adapter<TabMediaAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageViewReport;
-        public RelativeLayout photoReportLayout;
 
         public ViewHolder (View itemView){
             super(itemView);
 
             imageViewReport = (ImageView) itemView.findViewById(R.id.photoReport);
-            photoReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
 
         }
     }
-
 }
