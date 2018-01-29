@@ -131,7 +131,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             gpsTracker = new GPSTracker(getApplicationContext());
             mUserLocation = gpsTracker.getLocation();
             userAddress = getUserLocAddress(mUserLocation.getLatitude(), mUserLocation.getLongitude());
-            Toast.makeText(this, "hey " + userAddress, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Location: " + userAddress, Toast.LENGTH_LONG).show();
         }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -140,12 +140,16 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
+                        onStart();
                         break;
                     case 1: toolbar.setTitle("Location");
+                        onStart();
                         break;
                     case 2: toolbar.setTitle("Notification");
+                        onStart();
                         break;
                     case 3: toolbar.setTitle("Search");
+                        onStart();
                         break;
                 }
 
@@ -161,13 +165,16 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             @Override
             public void onPageSelected(int position) {
                 if (position == 3) {
+                    onStart();
                     btnHomeLoc.show();
                     btnUserLoc.show();
                 } else if (position == 2) {
                     //Sidebar_HomePage.badge.updateTabBadge(0);
+                    onStart();
                     btnHomeLoc.hide();
                     btnUserLoc.hide();
                 }else{
+                    onStart();
                     btnHomeLoc.hide();
                     btnUserLoc.hide();
                 }
@@ -175,7 +182,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                onStart();
             }
         });
 

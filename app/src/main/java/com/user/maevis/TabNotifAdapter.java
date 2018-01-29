@@ -84,12 +84,10 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                     holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
                     break;
                 case "Pending" :
+                    //holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
                     holder.reportStatus.setVisibility(View.GONE);
             }
-        }else if(SessionManager.getUserType().equals("Regular User")){
-            holder.reportStatus.setVisibility(View.GONE);
         }
-
 
         /*holder.textViewDesc.setText(listItem.getDesc());
         Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/

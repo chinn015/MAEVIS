@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -161,6 +162,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String userType = "Regular User";
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        double homeLat = AddHomeAddress.userHomeLat;
+        double homeLong = AddHomeAddress.userHomeLong;
+        double currentLat = 10.316590;
+        double currentLong = 123.897093;
 
         if(deviceToken.equals("")) {
             deviceToken = "NULL";
@@ -211,10 +216,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        double currentLat = 10.316590;
-        double currentLong = 123.897093;
-        double homeLat = 10.316590;
-        double homeLong = 123.897093;
         final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
         final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
@@ -236,7 +237,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             float cLat = (float) userModel.getCurrentLat();
                             float cLong= (float) userModel.getCurrentLong();
                             float hLat = (float) userModel.getHomeLat();
-                            float hLong = (float) userModel.getHomeLat();
+                            float hLong = (float) userModel.getHomeLong();
 
                             SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
 

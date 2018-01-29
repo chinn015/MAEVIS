@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by User on 1/8/2018.
  */
@@ -43,6 +45,7 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDescription());
         holder.textViewDateTime.setText(listItem.getDisplayDateTime());
+        Picasso.with(context).load(listItem.getUserPhoto()).into(holder.userPhoto);
         Picasso.with(context)
                 .load(listItem.getImageURL())
                 .fit()
@@ -83,7 +86,7 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
         public ImageView imageViewReport;
         public RelativeLayout reportLayout;
         public ImageView imageReportType;
-
+        public CircleImageView userPhoto;
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -94,7 +97,7 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
             imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
             reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
-
+            userPhoto = (CircleImageView) itemView.findViewById(R.id.user_photo);
         }
     }
 }

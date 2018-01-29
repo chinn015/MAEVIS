@@ -150,7 +150,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                     //FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
 
-                    new CountDownTimer(500, 1000) {
+                    new CountDownTimer(750, 1000) {
 
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -169,9 +169,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                     }.start();
 
-
+                    progressDialog.dismiss();
                     finish();
                     startActivity(new Intent(Login.this, Sidebar_HomePage.class));
+
                 }
             }
         };
@@ -387,7 +388,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                     FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
                                     Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() + " " + SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
                                 }
-                                progressDialog.dismiss();
+                                //progressDialog.dismiss();
                             }
                         });
 
