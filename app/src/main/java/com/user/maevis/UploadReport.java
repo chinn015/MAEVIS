@@ -69,15 +69,16 @@ public class UploadReport extends AppCompatActivity {
 
     ImageView ivImage, ivReportType;
     VideoView videoView;
-    Integer REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
+    Integer PHOTO_CODE, REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
     String mCurrentPhotoPath;
-    Uri photoURI;
+    Uri photoURI, finalImageURI;
     File imageFile;
 
     public static NotifModel notifModel;
     public static DatabaseReference newNotif;
 
     private List<String> nearbyAdmins;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +130,7 @@ public class UploadReport extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (items[i].equals("Camera")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     String pictureName = getPictureName();
@@ -138,17 +139,17 @@ public class UploadReport extends AppCompatActivity {
                     photoURI = pictureUri;
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
 
+                    PHOTO_CODE = REQUEST_CAMERA;
+
                     startActivityForResult(intent, REQUEST_CAMERA);
-
-//                    Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-//                    startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-
                 } else if (items[i].equals("Gallery")) {
 
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(intent, SELECT_FILE);
 
+                    PHOTO_CODE = SELECT_FILE;
+
+                    startActivityForResult(intent, SELECT_FILE);
                 } else if (items[i].equals("Cancel")) {
                     dialogInterface.dismiss();
                 }
@@ -170,84 +171,13 @@ public class UploadReport extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-
             if(requestCode == REQUEST_CAMERA) {;
                 ivImage.setImageURI(photoURI);
-
-                //upload photo
-                progressDialog.setMessage("Uploading photo from camera.");
-                progressDialog.show();
-
-                StorageReference filePath = firebaseStorage.child("Photos").child(photoURI.getLastPathSegment());
-
-                Uri uri = photoURI;
-
-                try {
-                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
-                    String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, photoURI.getLastPathSegment(), null);
-                    uri = Uri.parse(path);
-                } catch (IOException ie) {
-                    Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
-                }
-
-                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        setImageURL(downloadUrl.toString());
-
-                        Toast.makeText(UploadReport.this, "Sent! " + getImageURL(), Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                });
+                finalImageURI = photoURI;
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 ivImage.setImageURI(selectedImageUri);
-
-                //upload photo
-                progressDialog.setMessage("Uploading photo from gallery.");
-                progressDialog.show();
-
-                StorageReference filePath = firebaseStorage.child("Photos").child(selectedImageUri.getLastPathSegment());
-
-                Uri uri = selectedImageUri;
-
-                try {
-                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
-                    String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, selectedImageUri.getLastPathSegment(), null);
-                    uri = Uri.parse(path);
-                } catch (IOException ie) {
-                    Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
-                }
-
-                filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        //imageURL.concat(downloadUrl.toString());
-                        setImageURL(downloadUrl.toString());
-
-                        //Toast.makeText(UploadReport.this, "Report ready to be sent.", Toast.LENGTH_LONG).show();
-                        Toast.makeText(UploadReport.this, "Sent! " + getImageURL(), Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                });
+                finalImageURI = selectedImageUri;
             }
         }
     }
@@ -289,11 +219,56 @@ public class UploadReport extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_upload_report) {
-            uploadReport();
-            //finish();
-            //startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
+            String description = txtFldDescription.getText().toString();
+
+            if (TextUtils.isEmpty(description)) {
+                Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (finalImageURI == null) {
+                Toast.makeText(this, "Please include a photo.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("Photos").child(finalImageURI.getLastPathSegment());
+
+            progressDialog.setMessage("Sending report.");
+            progressDialog.show();
+            progressDialog.setCanceledOnTouchOutside(false);
+
+            try {
+                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+                String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
+                finalImageURI = Uri.parse(path);
+
+                filePath.putFile(finalImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        setImageURL(downloadUrl.toString());
+
+                        uploadReport();
+
+                        Toast.makeText(UploadReport.this, "Report sent." + getImageURL(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                });
+            } catch (IOException ie) {
+                Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
 
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -315,11 +290,6 @@ public class UploadReport extends AppCompatActivity {
 
         if (TextUtils.isEmpty(description)) {
             Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (TextUtils.isEmpty(location)) {
-            Toast.makeText(this, "Please enter location.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -367,7 +337,6 @@ public class UploadReport extends AppCompatActivity {
             newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
             newNotif.setValue(notifModel);
         }
-
 
         Toast.makeText(UploadReport.this, "Report sent!", Toast.LENGTH_LONG).show();
         finish();

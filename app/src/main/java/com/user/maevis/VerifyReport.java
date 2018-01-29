@@ -281,7 +281,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         double locationLongitude = clickedReportBasis.getLocationLongitude();
         String reportStatus = "Active";
         String reportType = clickedReportBasis.getReportType();
-        String reportedBy = SessionManager.getUserID();
+        //String reportedBy = SessionManager.getUserID();
+        String reportedBy = clickedReportBasis.getReportedBy();
         List<String> mergedReportsID = getMergedReportsID();
 
         reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy);
