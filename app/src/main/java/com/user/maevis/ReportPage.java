@@ -63,6 +63,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabHomeListItemVerified().getReportType()))
                     .into(viewReportType);
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getUserPhoto())
+                    .into(viewUserImage);
+
         }else if (PageNavigationManager.getClickedTabLocListItemVerified() != null){
             viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
@@ -74,6 +78,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
                     .into(viewReportType);
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getUserPhoto())
+                    .into(viewUserImage);
+
         }else if(TabProfileTimelineAdapter.getClickedItem() != null){
             viewReportHead.setText(TabProfileTimelineAdapter.getClickedItem().getHead());
             viewReportDesc.setText(TabProfileTimelineAdapter.getClickedItem().getDescription());
@@ -85,6 +93,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(TabProfileTimelineAdapter.getClickedItem().getReportType())
                     .into(viewReportType);
+            Picasso.with(getApplicationContext())
+                    .load(TabProfileTimelineAdapter.getClickedItem().getUserPhoto())
+                    .into(viewUserImage);
+
         }else if(TabNotifAdapterRegUser.getClickedItem() != null){
             viewReportHead.setText(TabNotifAdapterRegUser.getClickedItem().getHead());
             viewReportDesc.setText(TabNotifAdapterRegUser.getClickedItem().getDescription());
@@ -96,6 +108,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Picasso.with(getApplicationContext())
                     .load(TabNotifAdapterRegUser.getClickedItem().getReportType())
                     .into(viewReportType);
+            Picasso.with(getApplicationContext())
+                    .load(TabNotifAdapterRegUser.getClickedItem().getUserPhoto())
+                    .into(viewUserImage);
         }
 
         viewUserImage.setOnClickListener(this);

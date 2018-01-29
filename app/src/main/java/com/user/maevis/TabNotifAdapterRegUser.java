@@ -2,6 +2,8 @@ package com.user.maevis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.session.SessionManager;
 
 import java.util.List;
 
@@ -52,6 +55,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         holder.textViewHead.setText(listItemVerified.getHead());
         holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
         Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
+        holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#f2cfcc"), PorterDuff.Mode.DARKEN);
 
         switch(listItemVerified.getReportType()){
             case "Fire":
@@ -65,6 +69,10 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
             case "Vehicular Accident":
                     Picasso.with(context).load(reportIcons[2]).into(holder.imageReportType);
                     break;
+        }
+
+        if(SessionManager.getUserType().equals("Regular User")){
+           holder.reportStatus.setVisibility(View.GONE);
         }
 
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
@@ -103,6 +111,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         public RelativeLayout notifReportLayout;
         public ImageView imageReportType;
         public ImageView userPhoto;
+        public ImageView reportStatus;
 
 
         public ViewHolder (View itemView){
@@ -115,8 +124,7 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
             notifReportLayout = (RelativeLayout) itemView.findViewById(R.id.notifReportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportType);
             userPhoto = (ImageView) itemView.findViewById(R.id.user_photo);
-
-
+            reportStatus = (ImageView) itemView.findViewById(R.id.reportStatus);
         }
     }
 

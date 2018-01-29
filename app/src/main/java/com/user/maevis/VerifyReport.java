@@ -33,6 +33,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class VerifyReport extends AppCompatActivity implements View.OnClickListener {
 
     private TextView viewNotifHead;
@@ -40,7 +42,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private TextView viewNotifDateTime;
     private ImageView viewNotifImage;
     private ImageView viewNotifReportType;
-    private ImageView imgViewProfilePic;
+    private CircleImageView imgViewProfilePic;
 
     private Button btnVerifyReport;
     private Button btnDeclineReport;
@@ -75,7 +77,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         viewNotifDateTime = (TextView) findViewById(R.id.viewNotifDateTime);
         viewNotifImage = (ImageView) findViewById(R.id.viewNotifImage);
         viewNotifReportType = (ImageView) findViewById(R.id.viewReportType);
-        imgViewProfilePic = (ImageView) findViewById(R.id.imgViewProfilePic);
+        imgViewProfilePic = (CircleImageView) findViewById(R.id.imgViewProfilePic);
 
         imgViewProfilePic.setOnClickListener(this);
 
@@ -92,6 +94,11 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage((PageNavigationManager.getClickedTabLocListItemPending().getReportType())))
                     .into(viewNotifReportType);
+
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabLocListItemPending().getUserPhoto())
+                    .into(imgViewProfilePic);
+
         } else if (PageNavigationManager.getClickedTabNotifListItem() != null) {
             viewNotifHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
             viewNotifDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
@@ -104,6 +111,10 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage((PageNavigationManager.getClickedTabNotifListItem().getReportType())))
                     .into(viewNotifReportType);
+
+            Picasso.with(getApplicationContext())
+                    .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
+                    .into(imgViewProfilePic);
         }
 
         btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
