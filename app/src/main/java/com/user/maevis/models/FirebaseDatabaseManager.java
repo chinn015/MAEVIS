@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.user.maevis.ListItem;
 import com.user.maevis.ListItemVerified;
 import com.user.maevis.UserItem;
@@ -20,6 +22,7 @@ public class FirebaseDatabaseManager {
     public static final DatabaseReference FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
     public static final DatabaseReference FirebaseReportsVerified = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/ReportsVerified");
     public static final DatabaseReference FirebaseNotifications = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Notifications");
+    public static final StorageReference FirebasePhotoStorage = FirebaseStorage.getInstance().getReference();
 
     private static List<ListItem> listItems;
     private static List<ListItem> verifiedReports;
