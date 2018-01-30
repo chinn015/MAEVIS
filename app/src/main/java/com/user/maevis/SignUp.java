@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -35,7 +36,7 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+public class SignUp extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     DatabaseReference FirebaseUsers;
     private EditText txtFldUsername;
@@ -81,6 +82,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         txtFldBirthdate.setOnClickListener(this);
         btnCreateAccount.setOnClickListener(this);
+        btnCreateAccount.setOnTouchListener(this);
         //btnLogin.setOnClickListener(this);
 
         currentDate = Calendar.getInstance();
@@ -286,5 +288,17 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            btnCreateAccount.setBackgroundResource(R.drawable.btn_rounded);
+            btnCreateAccount.setTextColor(Color.WHITE);
+        } else if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            btnCreateAccount.setBackgroundResource(R.drawable.btn_rounded1);
+            btnCreateAccount.setTextColor(Color.BLACK);
+        }
+        return false;
     }
 }

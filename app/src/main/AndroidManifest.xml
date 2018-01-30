@@ -44,7 +44,8 @@
 
         <activity
             android:name=".LoadingScreeen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,10 +54,12 @@
         </activity>
         <activity
             android:name=".Login"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SignUp"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SelectionPage" />
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
@@ -108,7 +111,8 @@
             android:name=".UploadReport"
             android:label="Upload Report"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".SelectionPage">
+            android:parentActivityName=".SelectionPage"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".SelectionPage" />
@@ -116,40 +120,50 @@
 
         <activity
             android:name=".Sidebar_HomePage"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".VerifyReport"
             android:label="Verify Report"
-            android:parentActivityName=".Sidebar_HomePage">
+            android:parentActivityName=".Sidebar_HomePage"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".Sidebar_HomePage" />
         </activity>
         <activity
             android:name=".SidebarSettings"
-            android:label="Settings" >
+            android:label="Settings"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".SidebarHotline"
             android:label="Emergency Hotline"
+            android:screenOrientation="portrait"
             />
-        <activity android:name=".SidebarProfile" />
-        <activity android:name=".SidebarHelp" />
+        <activity android:name=".SidebarProfile"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SidebarHelp"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ReportPage"
-            android:label="Report">
+            android:label="Report"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name=".NotificationView"
             android:label="Report"
-            android:parentActivityName=".Sidebar_HomePage">
+            android:parentActivityName=".Sidebar_HomePage"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
+                android:value=".Sidebar_HomePage"
+                android:screenOrientation="portrait"/>
         </activity>
 
         <activity android:name=".UpdateHomeAddress"
             android:label="Update Home Address"
-            android:parentActivityName=".SidebarSettings">
+            android:parentActivityName=".SidebarSettings"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".SidebarSettings" />
@@ -157,15 +171,18 @@
 
         <activity android:name=".AddHomeAddress"
             android:label="Add Home Address"
-            android:parentActivityName=".SignUp">
+            android:parentActivityName=".SignUp"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT.ACTIVITY"
-                android:value=".SignUp" />
+                android:value=".SignUp"
+                android:screenOrientation="portrait"/>
         </activity>
 
 
         <activity android:name=".UserManagement"
-            android:label="User Management"/>
+            android:label="User Management"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name="com.user.maevis.controllers.FirebaseInstanceIdNotif">

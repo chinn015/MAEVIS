@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Base64;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -64,7 +65,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
+public class Login extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private static final int RC_SIGN_IN = 234;
     private static final String TAG = "Login";
@@ -128,6 +129,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         btnSignInFb = (Button) findViewById(R.id.btnSignFb);
         btnSignInGoogle = (Button) findViewById(R.id.btnSignInGoogle);
 
+
         //firebase references
         mAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
@@ -138,6 +140,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         userModel = new UserModel();
         UserSession = new SessionManager(getApplicationContext());
 
+        btnLogin.setOnTouchListener(this);
         btnLogin.setOnClickListener(this);
         btnSignInFb.setOnClickListener(this);
         btnSignInGoogle.setOnClickListener(this);
@@ -470,6 +473,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            btnLogin.setBackgroundResource(R.drawable.btn_rounded);
+            btnLogin.setTextColor(Color.WHITE);
+        } else if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            btnLogin.setBackgroundResource(R.drawable.btn_rounded1);
+            btnLogin.setTextColor(Color.BLACK);
+        }
+        return false;
+    }
 }
 
 
