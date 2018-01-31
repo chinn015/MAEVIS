@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -228,7 +229,12 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                 }
             }
         }else if(v == mCommentButton){
-            postComment();
+
+            if (TextUtils.isEmpty(mCommentField.getText())) {
+                Toast.makeText(this, "Please enter comment.", Toast.LENGTH_SHORT).show();
+            }else{
+                postComment();
+            }
         }
     }
 
