@@ -19,9 +19,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +34,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -143,49 +146,73 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0: toolbar.setTitle("Home");
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
                         onStart();
                         break;
+
                     case 1: toolbar.setTitle("Location");
+                        btnHomeLoc.show();
+                        btnUserLoc.show();
                         onStart();
                         break;
                     case 2: toolbar.setTitle("Notification");
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
                         onStart();
                         break;
                     case 3: toolbar.setTitle("Search");
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
                         onStart();
                         break;
                 }
 
-                if (position == 1) {
-                    btnHomeLoc.show();
-                    btnUserLoc.show();
-                } else {
-                    btnHomeLoc.hide();
-                    btnUserLoc.hide();
-                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 3) {
-                    onStart();
-                    btnHomeLoc.show();
-                    btnUserLoc.show();
-                } else if (position == 2) {
-                    //Sidebar_HomePage.badge.updateTabBadge(0);
-                    onStart();
-                    btnHomeLoc.hide();
-                    btnUserLoc.hide();
-                }else{
-                    onStart();
-                    btnHomeLoc.hide();
-                    btnUserLoc.hide();
+                switch(position) {
+                    case 0:
+                        Fragment newFragment = new Tab1_Home();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.homeLayout, newFragment);
+                        transaction.commit();
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
+                        onStart();
+                        break;
+
+                    case 1:
+
+                        Fragment newFragment1 = new Tab2_Location();
+                        FragmentTransaction transaction1 = getSupportFragmentManager().beginTransaction();
+                        transaction1.replace(R.id.map, newFragment1);
+                        transaction1.commit();
+                        btnHomeLoc.show();
+                        btnUserLoc.show();
+                        onStart();
+
+                        break;
+
+                    case 2:
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
+                        break;
+
+                    case 3:
+                        btnHomeLoc.hide();
+                        btnUserLoc.hide();
+                        break;
+
+
                 }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
                 onStart();
+
             }
         });
 
@@ -193,36 +220,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         FirebaseDatabaseManager.FirebaseUsers.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                /*final DataSnapshot dSnap = dataSnapshot;
-
-                new CountDownTimer(250, 250) {
-
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        UserItem user = new UserItem(dSnap.getKey().toString(),
-                                dSnap.child("address").getValue().toString(),
-                                dSnap.child("birthdate").getValue().toString(),
-                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("currentLat").getValue()),
-                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("currentLong").getValue()),
-                                dSnap.child("deviceToken").getValue().toString(),
-                                dSnap.child("email").getValue().toString(),
-                                dSnap.child("firstName").getValue().toString(),
-                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("homeLat").getValue()),
-                                FirebaseDatabaseManager.parseLongToDouble(dSnap.child("homeLong").getValue()),
-                                dSnap.child("lastName").getValue().toString(),
-                                dSnap.child("userPhoto").getValue().toString(),
-                                dSnap.child("userStatus").getValue().toString(),
-                                dSnap.child("userType").getValue().toString(),
-                                dSnap.child("username").getValue().toString());
-
-                        FirebaseDatabaseManager.getUserItems().add(user);
-                    }
-                }.start();*/
 
                 UserItem user = new UserItem(dataSnapshot.getKey().toString(),
                         dataSnapshot.child("address").getValue().toString(),
@@ -378,7 +375,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     }
 
     private void setupTabIcons() {
-
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);
         tabLayout.getTabAt(0).getIcon().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
 
@@ -604,4 +600,15 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Intent refresh = new Intent(this, Sidebar_HomePage.class);
+            startActivity(refresh);
+            this.finish();
+        }
+    }
+
 }

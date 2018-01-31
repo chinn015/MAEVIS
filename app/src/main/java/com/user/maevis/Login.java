@@ -19,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -76,7 +77,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,  View.OnTouchListener {
 
     private static final int RC_SIGN_IN = 234;
     private static final String TAG = "Login";
@@ -136,6 +137,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         btnSignInFb = (Button) findViewById(R.id.btnSignFb);
         btnSignInGoogle = (Button) findViewById(R.id.btnSignInGoogle);
 
+
         //firebase references
         //mAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
@@ -146,6 +148,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         userModel = new UserModel();
         UserSession = new SessionManager(getApplicationContext());
 
+        btnLogin.setOnTouchListener(this);
         btnLogin.setOnClickListener(this);
         btnSignInFb.setOnClickListener(this);
         btnSignInGoogle.setOnClickListener(this);
@@ -617,6 +620,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            btnLogin.setBackgroundResource(R.drawable.btn_rounded);
+            btnLogin.setTextColor(Color.WHITE);
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            btnLogin.setBackgroundResource(R.drawable.btn_rounded1);
+            btnLogin.setTextColor(Color.BLACK);
+        }
+        return false;
+    }
     private void showNoInternetConnection() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
