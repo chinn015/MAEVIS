@@ -61,7 +61,9 @@
             android:name=".SignUp"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
-        <activity android:name=".SelectionPage" />
+
+        <activity android:name=".SelectionPage"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
 
 import java.util.List;
@@ -78,21 +79,11 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItemVerified);
+                PageNavigationManager.clickTabNotifRegListItem(listItemVerified);
 
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItemVerified);
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);
-
-                /*clickedStatus = true;
-                TabHomeAdapter.clickedStatus = false;
-
-                Intent i;
-                i = new Intent(context, VerifyReport.class);
-                context.startActivity(i);*/
             }
         });
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.PageNavigationManager;
 
 import java.util.List;
 
@@ -57,7 +58,9 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItem);
+                //setClickedItem(listItem);
+                PageNavigationManager.clickTabNotifListItem(listItem);
+
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);

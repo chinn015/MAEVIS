@@ -89,25 +89,15 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             }
         }
 
-        /*holder.textViewDesc.setText(listItem.getDesc());
-        Picasso.with(context).load(listItem.getImageURL()).into(holder.imageViewReport);*/
-
         holder.notifReportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                /*clickedStatus = true;
-                Tab2_Location.clickedStatus = false;*/
-
-                clickedStatus = true;
                 PageNavigationManager.clickTabNotifListItem(listItem);
                 Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
-                //setClickedItem(listItem);
 
-                if(SessionManager.getUserType().equals("Admin")) {
-                    Intent i;
-                    i = new Intent(context, VerifyReport.class);
-                    context.startActivity(i);
-                }
+                Intent i;
+                i = new Intent(context, VerifyReport.class);
+                context.startActivity(i);
             }
         });
 
