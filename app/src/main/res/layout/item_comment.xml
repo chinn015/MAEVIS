@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/comment_photo"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/img_user" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/comment_photo"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:backgroundTint="#f2cfcc">
 
-        <TextView
-            android:id="@+id/comment_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="John Doe"
-            android:textStyle="bold" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/comment_photo"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/img_user"
+            android:layout_alignParentStart="true"
+            android:layout_margin="5dp"/>
+
 
         <TextView
             android:id="@+id/comment_body"
             style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="This is the comment text..." />
+            tools:text="This is the comment text..."
+            android:layout_alignStart="@+id/comment_author"
+            android:layout_marginTop="35dp"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/comment_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="John Doe"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/comment_photo"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="12dp"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

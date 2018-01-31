@@ -183,9 +183,6 @@
                 android:value=".SignUp"
                 android:screenOrientation="portrait"/>
         </activity>
-        <activity
-            android:name=".UserManagement"
-            android:label="User Management" />
 
         <activity android:name=".UserManagement"
             android:label="User Management"
@@ -203,7 +200,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".item_comments"></activity>
+        <!--<activity android:name=".item_comments"></activity>-->
     </application>
 
 </manifest>
