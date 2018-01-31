@@ -1,16 +1,19 @@
 package com.user.maevis;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +50,12 @@ import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.grantland.widget.AutofitTextView;
 
@@ -63,11 +72,20 @@ public class SidebarSettings extends AppCompatActivity {
 
     private String oldPass;
 
-    ImageView ivImage;
+    private static String imageURL = "";
+
+    private ProgressDialog progressDialog;
+
+    //ImageView ivImage;
     VideoView videoView;
-    Integer REQUEST_CAMERA=1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE=0;
-    CircleImageView btnChangePhoto;
+    CircleImageView ivImage;
     AutofitTextView txtFldAddress;
+    Integer PHOTO_CODE, REQUEST_CAMERA = 1, REQUEST_VIDEO_CAPTURE = 1, SELECT_FILE = 0;
+    String mCurrentPhotoPath;
+    Uri photoURI, finalImageURI;
+    File imageFile;
+    private Intent intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +95,8 @@ public class SidebarSettings extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
+
         //User logged in
         username = (EditText) findViewById(R.id.txtFldEditUsername);
         password = (EditText) findViewById(R.id.txtFldEditPassword);
@@ -84,8 +104,8 @@ public class SidebarSettings extends AppCompatActivity {
         lName = (EditText) findViewById(R.id.txtFldEditLastname);
         email = (EditText) findViewById(R.id.txtFldEditEmail);
         txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
-        btnChangePhoto = (CircleImageView) findViewById(R.id.imgChangePhoto);
-        Picasso.with(this).load(SessionManager.getUserPhoto()).into(btnChangePhoto);
+        ivImage = (CircleImageView) findViewById(R.id.imgChangePhoto);
+        Picasso.with(this).load(SessionManager.getUserPhoto()).into(ivImage);
 
         dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
         dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
@@ -93,7 +113,7 @@ public class SidebarSettings extends AppCompatActivity {
         dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
         dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
-        btnChangePhoto.setOnClickListener(new View.OnClickListener() {
+        ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -210,6 +230,15 @@ public class SidebarSettings extends AppCompatActivity {
 
     }
 
+    public void setImageURL(String imgURL) {
+        this.imageURL = imgURL;
+    }
+
+    public String getImageURL() {
+        return this.imageURL;
+    }
+
+
     private void saveData(){
         //Toast.makeText(this, "Updated Profile", Toast.LENGTH_SHORT).show();
 
@@ -268,6 +297,8 @@ public class SidebarSettings extends AppCompatActivity {
         dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
+        dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(getImageURL());
+
 
         AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
 
@@ -317,7 +348,7 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
-        SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), SessionManager.getUserPhoto());
+        SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), getImageURL());
 
         Intent i = new Intent(this, Sidebar_HomePage.class);
         startActivity(i);
@@ -326,7 +357,8 @@ public class SidebarSettings extends AppCompatActivity {
 
     private void SelectImage(){
 
-        final CharSequence[] items={"Camera","Gallery", "Cancel"};
+
+        final CharSequence[] items = {"Camera", "Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SidebarSettings.this);
         builder.setTitle("Add Image");
@@ -336,16 +368,28 @@ public class SidebarSettings extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (items[i].equals("Camera")) {
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    String pictureName = getPictureName();
+                    imageFile = new File(pictureDirectory, pictureName);
+                    //Uri pictureUri = Uri.fromFile(imageFile);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Uri pictureUri = FileProvider.getUriForFile(getApplicationContext(), "com.your.package.fileProvider", imageFile);
+                    photoURI = pictureUri;
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+
+                    PHOTO_CODE = REQUEST_CAMERA;
+
                     startActivityForResult(intent, REQUEST_CAMERA);
-
                 } else if (items[i].equals("Gallery")) {
 
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(intent, SELECT_FILE);
 
+                    PHOTO_CODE = SELECT_FILE;
+
+                    startActivityForResult(intent, SELECT_FILE);
                 } else if (items[i].equals("Cancel")) {
                     dialogInterface.dismiss();
                 }
@@ -359,19 +403,17 @@ public class SidebarSettings extends AppCompatActivity {
     public  void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode,data);
 
-        if(resultCode== Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
+            if(requestCode == REQUEST_CAMERA) {;
 
-            if(requestCode==REQUEST_CAMERA){
+                ivImage.setImageURI(photoURI);
+                finalImageURI = photoURI;
 
-                Bundle bundle = data.getExtras();
-                final Bitmap bmp = (Bitmap) bundle.get("data");
-                btnChangePhoto.setImageBitmap(bmp);
-
-            }else if(requestCode==SELECT_FILE){
+            } else if (requestCode == SELECT_FILE) {
 
                 Uri selectedImageUri = data.getData();
-                btnChangePhoto.setImageURI(selectedImageUri);
-
+                ivImage.setImageURI(selectedImageUri);
+                finalImageURI = selectedImageUri;
             }
         }
     }
@@ -406,7 +448,46 @@ public class SidebarSettings extends AppCompatActivity {
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-               saveData();
+               //saveData();
+                if(getImageURL() != null) {
+                    StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
+
+                    progressDialog.setMessage("Updating profile.");
+                    progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
+
+                    try {
+                        Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+                        String path = MediaStore.Images.Media.insertImage(SidebarSettings.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
+                        finalImageURI = Uri.parse(path);
+
+                        filePath.putFile(finalImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                setImageURL(downloadUrl.toString());
+
+                                saveData();
+
+                                Toast.makeText(SidebarSettings.this, "Report sent." + getImageURL(), Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SidebarSettings.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+                        });
+                    } catch (IOException ie) {
+                        Toast.makeText(SidebarSettings.this, "Upload error.", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                }else{
+                    saveData();
+                }
             }
         });
 
@@ -445,4 +526,12 @@ public class SidebarSettings extends AppCompatActivity {
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
+
+    public String getPictureName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd_HHmmss");
+        String timestamp = sdf.format(new Date());
+
+        return "IMGMAEVIS"+timestamp+".jpg";
+    }
+
 }
