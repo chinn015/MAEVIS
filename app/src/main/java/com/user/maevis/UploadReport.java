@@ -135,7 +135,9 @@ public class UploadReport extends AppCompatActivity {
                     File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     String pictureName = getPictureName();
                     imageFile = new File(pictureDirectory, pictureName);
-                    Uri pictureUri = Uri.fromFile(imageFile);
+                    //Uri pictureUri = Uri.fromFile(imageFile);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Uri pictureUri = FileProvider.getUriForFile(getApplicationContext(), "com.your.package.fileProvider", imageFile);
                     photoURI = pictureUri;
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
 
