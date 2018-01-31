@@ -64,6 +64,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private TextView mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
+    private CircleImageView viewUserPhoto;
 
     /*private static UserItem clickedUserItem = null;
     static boolean clickedUserItemStatus = false;*/
@@ -88,10 +89,16 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
         viewUserImage = (CircleImageView) findViewById(R.id.imgViewProfilePic);
+        viewUserPhoto = (CircleImageView) findViewById(R.id.user_photo);
 
         mCommentField = findViewById(R.id.comment);
         mCommentButton = findViewById(R.id.button_post_comment);
         mCommentsRecycler = findViewById(R.id.recycler_comments);
+
+        Picasso.with(getApplicationContext())
+                .load(SessionManager.getUserPhoto())
+                .fit()
+                .into(viewUserPhoto);
 
         if(PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
             mPostKey = PageNavigationManager.getClickedTabHomeListItemVerified().getReportID();
@@ -292,12 +299,14 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
         public TextView authorView;
         public TextView bodyView;
+        public CircleImageView commentPhoto;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
 
             authorView = itemView.findViewById(R.id.comment_author);
             bodyView = itemView.findViewById(R.id.comment_body);
+            commentPhoto = itemView.findViewById(R.id.comment_photo);
         }
     }
 
@@ -416,6 +425,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.author);
             holder.bodyView.setText(comment.text);
+
+            Picasso.with(mContext).load(FirebaseDatabaseManager.getUserPhoto(comment.uid)).into(holder.commentPhoto);
+
         }
 
         @Override
