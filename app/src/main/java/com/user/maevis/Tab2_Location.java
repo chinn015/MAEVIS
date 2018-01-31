@@ -225,8 +225,8 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             }
         }
 
-        Log.d("username", SessionManager.getUsername());
-        Log.d("address", SessionManager.getAddress());
+        /*Log.d("username", SessionManager.getUsername());
+        Log.d("address", SessionManager.getAddress());*/
 
         //Display location markers for pendingReports to be validated by the admin
         if(SessionManager.getUserType().equals("Admin")) {

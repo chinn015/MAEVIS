@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.user.maevis.UserItem;
 
 import java.util.HashMap;
 
@@ -65,6 +66,28 @@ public class SessionManager {
         sessionEditor.putFloat(KEY_HOMELAT, homeLat);
         sessionEditor.putFloat(KEY_HOMELONG, homeLong);
         sessionEditor.putString(KEY_USERPHOTO, userPhoto);
+        //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
+
+        sessionEditor.commit();
+    }
+
+    public static void createLoginSession(UserItem userItem) {
+        sessionEditor.putString(KEY_USERID, userItem.getUserID());
+        sessionEditor.putString(KEY_USERNAME, userItem.getUsername());
+        sessionEditor.putString(KEY_EMAIL, userItem.getEmail());
+        sessionEditor.putString(KEY_FIRSTNAME, userItem.getFirstName());
+        sessionEditor.putString(KEY_LASTNAME, userItem.getLastName());
+        sessionEditor.putString(KEY_BIRTHDATE, userItem.getBirthdate());
+        sessionEditor.putString(KEY_ADDRESS, userItem.getAddress());
+        sessionEditor.putString(KEY_USERSTATUS, userItem.getUserStatus());
+        sessionEditor.putBoolean(KEY_SESSIONSTATUS, true);
+        sessionEditor.putString(KEY_USERTYPE, userItem.getUserType());
+        sessionEditor.putString(KEY_DEVICE_TOKEN, userItem.getDeviceToken());
+        sessionEditor.putFloat(KEY_CURRENTLAT, (float) userItem.getCurrentLat());
+        sessionEditor.putFloat(KEY_CURRENTLONG, (float) userItem.getCurrentLong());
+        sessionEditor.putFloat(KEY_HOMELAT, (float) userItem.getHomeLat());
+        sessionEditor.putFloat(KEY_HOMELONG, (float) userItem.getHomeLong());
+        sessionEditor.putString(KEY_USERPHOTO, userItem.getUserPhoto());
         //sessionEditor.putString(KEY_DEVICE_TOKEN, deviceToken);
 
         sessionEditor.commit();

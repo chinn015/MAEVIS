@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -31,6 +32,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -523,7 +526,22 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             case R.id.nav_logout :
                 SessionManager.clearSession();
                 SessionManager.getFirebaseAuth().signOut();
-                Toast.makeText(Sidebar_HomePage.this, "Logged out.", Toast.LENGTH_LONG).show();
+
+                if(Login.getmGoogleSignInClient() != null) {
+                    Login.getmGoogleSignInClient().signOut()
+                            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // ...
+                                }
+                            });
+                    Toast.makeText(Sidebar_HomePage.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(Sidebar_HomePage.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                    //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
+                }
+
+                //Toast.makeText(Sidebar_HomePage.this, "Logged out.", Toast.LENGTH_LONG).show();
 
                 i = new Intent(Sidebar_HomePage.this, LoadingScreeen.class);
                 startActivity(i);
