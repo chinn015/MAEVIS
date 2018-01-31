@@ -145,19 +145,23 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                     case 0: toolbar.setTitle("Home");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
+                        onStart();
                         break;
 
                     case 1: toolbar.setTitle("Location");
                         btnHomeLoc.show();
                         btnUserLoc.show();
+                        onStart();
                         break;
                     case 2: toolbar.setTitle("Notification");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
+                        onStart();
                         break;
                     case 3: toolbar.setTitle("Search");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
+                        onStart();
                         break;
                 }
 
@@ -184,6 +188,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         transaction1.commit();
                         btnHomeLoc.show();
                         btnUserLoc.show();
+                        onStart();
+
                         break;
 
                     case 2:
@@ -202,6 +208,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                onStart();
+
             }
         });
 
