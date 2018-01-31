@@ -20,31 +20,28 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
-
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/maevis_logo6"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
-
-        <service
-            android:name=".FirebaseMessagingService">
+        android:theme="@style/AppTheme">
+        <service android:name=".FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <!--<service-->
-            <!--android:name=".MyFirebaseInstanceIDService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <!-- <service -->
+        <!-- android:name=".MyFirebaseInstanceIDService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
 
         <activity
             android:name=".LoadingScreeen"
@@ -66,24 +63,26 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".SelectionPage" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -99,17 +98,20 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <uses-feature
             android:glEsVersion="0x00020000"
             android:required="true" />
+
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
+
         <permission
             android:name="com.user.maevis.permission.MAPS_RECEIVE"
             android:protectionLevel="signature" />
-        <uses-permission android:name="com.user.maevis.permission.MAPS_RECEIVE" />
 
+        <uses-permission android:name="com.user.maevis.permission.MAPS_RECEIVE" />
 
         <activity
             android:name=".UploadReport"
@@ -121,7 +123,6 @@
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".SelectionPage" />
         </activity>
-
         <activity
             android:name=".Sidebar_HomePage"
             android:theme="@style/AppTheme.NoActionBar"
@@ -163,8 +164,8 @@
                 android:value=".Sidebar_HomePage"
                 android:screenOrientation="portrait"/>
         </activity>
-
-        <activity android:name=".UpdateHomeAddress"
+        <activity
+            android:name=".UpdateHomeAddress"
             android:label="Update Home Address"
             android:parentActivityName=".SidebarSettings"
             android:screenOrientation="portrait">
@@ -172,8 +173,8 @@
                 android:name="android.support.PARENT.ACTIVITY"
                 android:value=".SidebarSettings" />
         </activity>
-
-        <activity android:name=".AddHomeAddress"
+        <activity
+            android:name=".AddHomeAddress"
             android:label="Add Home Address"
             android:parentActivityName=".SignUp"
             android:screenOrientation="portrait">
@@ -182,7 +183,9 @@
                 android:value=".SignUp"
                 android:screenOrientation="portrait"/>
         </activity>
-
+        <activity
+            android:name=".UserManagement"
+            android:label="User Management" />
 
         <activity android:name=".UserManagement"
             android:label="User Management"
@@ -191,17 +194,16 @@
         <service
             android:name="com.user.maevis.controllers.FirebaseInstanceIdNotif">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name="com.user.maevis.controllers.FirebaseMessagingServiceNotif">
+        <service android:name=".controllers.FirebaseMessagingServiceNotif">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".item_comments"></activity>
     </application>
 
 </manifest>
