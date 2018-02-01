@@ -2,6 +2,7 @@ package com.user.maevis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
         Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
 
-        holder.reportLayout.setOnClickListener(new View.OnClickListener(){
+        holder.cardHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
@@ -90,41 +91,15 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 context.startActivity(i);
             }
         });
-    }
 
-    /*@Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final ListItem listItem = listItems.get(position);
-
-        holder.textViewHead.setText(listItem.getHead());
-        holder.textViewDesc.setText(listItem.getDescription());
-        holder.textViewDateTime.setText(listItem.getDisplayDateTime());
-        Picasso.with(context)
-                .load(listItem.getImageURL())
-                .fit()
-                .into(holder.imageViewReport);
-
-        Picasso.with(context).load(listItem.getReportTypeImage(listItem.getReportType())).into(holder.imageReportType);
-
-        holder.reportLayout.setOnClickListener(new View.OnClickListener(){
+        holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
-                setClickedItem(listItem);
-                Intent i;
-                i = new Intent(context, ReportPage.class);
-                context.startActivity(i);
+            public void onClick(View view) {
+                Toast.makeText(context, "You clicked star", Toast.LENGTH_LONG).show();
             }
         });
-    }*/
-
-    /*public static ListItem getClickedItem() {
-        return clickedItem;
     }
 
-    public static void setClickedItem(ListItem clickedItem) {
-        TabHomeAdapter.clickedItem = clickedItem;
-    }*/
 
     public static ListItemVerified getClickedItemVerified() {
         return clickedItemVerified;
@@ -160,7 +135,8 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         public RelativeLayout reportLayout;
         public ImageView imageReportType;
         public CircleImageView userPhoto;
-
+        public CardView cardHome;
+        public ImageView star;
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -169,9 +145,12 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             textViewDesc = (TextView) itemView.findViewById(R.id.textViewDesc);
             textViewDateTime = (TextView) itemView.findViewById(R.id.textViewDateTime);
             imageViewReport = (ImageView) itemView.findViewById(R.id.imageViewReport);
-            reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
+            reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportBottomLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
             userPhoto = (CircleImageView) itemView.findViewById(R.id.user_photo);
+            cardHome = (CardView) itemView.findViewById(R.id.cardHome);
+            star = (ImageView) itemView.findViewById(R.id.star);
+
 
         }
     }
