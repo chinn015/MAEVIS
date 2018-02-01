@@ -30,8 +30,10 @@ import com.user.maevis.session.SessionManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -295,8 +297,11 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         //String reportedBy = SessionManager.getUserID();
         String reportedBy = clickedReportBasis.getReportedBy();
         List<String> mergedReportsID = getMergedReportsID();
+        int starCount = 0;
+        Map<String, Boolean> stars = new HashMap<>();
 
-        reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy);
+
+        reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy, starCount, stars);
         newReportVerified.setValue(reportVerifiedModel);
 
         String fullName = FirebaseDatabaseManager.getFullName(reportVerifiedModel.getReportedBy());

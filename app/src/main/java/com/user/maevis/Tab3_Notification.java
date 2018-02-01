@@ -27,8 +27,10 @@ import com.user.maevis.session.SessionManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class Tab3_Notification extends Fragment {
@@ -174,6 +176,13 @@ public class Tab3_Notification extends Fragment {
                     imageList.add(report.getValue().toString());
                 }
 
+                Map<String, Boolean> stars = new HashMap<>();
+                Iterator<DataSnapshot> starList = dataSnapshot.child("stars").getChildren().iterator();
+                while(starList.hasNext()){
+                    DataSnapshot star = starList.next();
+                    stars.put(star.getKey(), (Boolean) star.getValue());
+                }
+
                 ListItemVerified itemVerified = new ListItemVerified(dataSnapshot.getKey().toString(),
                         fullName+" reported a " +
                                 dataSnapshot.child("reportType").getValue().toString() + " at " +
@@ -190,7 +199,9 @@ public class Tab3_Notification extends Fragment {
                         dataSnapshot.child("reportType").getValue().toString(),
                         dataSnapshot.child("reportedBy").getValue().toString(),
                         formatDateTime,
-                        userPhotoImgUrl);
+                        userPhotoImgUrl,
+                        Integer.valueOf(dataSnapshot.child("starCount").getValue().toString()),
+                        stars);
 
                 float distance, limit_distance;
 

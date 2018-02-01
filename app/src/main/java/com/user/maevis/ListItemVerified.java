@@ -2,7 +2,9 @@ package com.user.maevis;
 
 import android.support.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by User on 1/8/2018.
@@ -24,10 +26,12 @@ public class ListItemVerified implements Comparable<ListItem> {
     private String reportedBy; //admin ID
     private String displayDateTime; //date sorting shit
     private String userPhoto;
+    public int starCount = 0;
+    public Map<String, Boolean> stars = new HashMap<>();
 
 
     //CONSTRUCTORS
-    public ListItemVerified(String reportID, String head, String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, String displayDateTime, String userPhoto) {
+    public ListItemVerified(String reportID, String head, String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, String displayDateTime, String userPhoto, int starCount, Map<String, Boolean> stars) {
         this.reportID = reportID;
         this.head = head;
         this.dateTime = dateTime;
@@ -43,6 +47,12 @@ public class ListItemVerified implements Comparable<ListItem> {
         this.mergedReportsID = mergedReportsID;
         this.displayDateTime = displayDateTime;
         this.userPhoto = userPhoto;
+        this.starCount = starCount;
+        this.stars = stars;
+    }
+
+    public ListItemVerified() {
+
     }
 
     //GETTER SETTER
@@ -160,6 +170,22 @@ public class ListItemVerified implements Comparable<ListItem> {
 
     public void setUserPhoto(String userPhoto) {
         this.userPhoto = userPhoto;
+    }
+
+    public int getStarCount() {
+        return starCount;
+    }
+
+    public void setStarCount(int starCount) {
+        this.starCount = starCount;
+    }
+
+    public Map<String, Boolean> getStars() {
+        return stars;
+    }
+
+    public void setStars(Map<String, Boolean> stars) {
+        this.stars = stars;
     }
 
     @Override
