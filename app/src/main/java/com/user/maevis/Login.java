@@ -267,8 +267,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
 
         if(v == btnSignInGoogle) {
-            signIn();
-            //signInWithGoogle();
+            signInGoogle();
             return;
         }
 
@@ -278,34 +277,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             startActivity(createAcc);
         }
     }
-
-    //GOOGLE SIGN IN SHIT
-    /*private void signInWithGoogle() {
-        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(intent, GOOGLE_REQ_CODE);
-    }
-
-    private void handleGoogleSignInResult(GoogleSignInResult result) {
-        if(result.isSuccess()) {
-            GoogleSignInAccount account = result.getSignInAccount();
-            String name = account.getDisplayName();
-            String email = account.getEmail();
-            String imgURL = account.getPhotoUrl().toString();
-
-            Toast.makeText(this, "GOOGLE SIGN IN!!!!", Toast.LENGTH_LONG).show();
-            showGoogleAccountDialog(name, email, imgURL);
-            updateUI2(true);
-        } else {
-            Toast.makeText(this, "GOOGLE SIGN IN FAIL!!!!", Toast.LENGTH_LONG).show();
-            updateUI2(false);
-        }
-    }
-
-    private void updateUI2(boolean isLogin) {
-        if(isLogin) {
-
-        }
-    }*/
 
     public static GoogleSignInClient getmGoogleSignInClient() {
         return mGoogleSignInClient;
@@ -345,13 +316,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             // Pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
-        /*if(requestCode == GOOGLE_REQ_CODE) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleGoogleSignInResult(result);
-        } else {
-            Toast.makeText(this, "GOOGLE REQ CODE ERROR!!!!", Toast.LENGTH_LONG).show();
-        }*/
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -417,7 +381,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 });
     }
 
-    private void signIn() {
+    private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -430,7 +394,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
 
-                //Toast.makeText(Login.this, "Loggin in thru Fb", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "Loggin in thru Fb", Toast.LENGTH_SHORT).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 

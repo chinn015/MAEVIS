@@ -551,6 +551,23 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         return true;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Login.getGoogleApiClient().stopAutoManage(this);
+        Login.getGoogleApiClient().disconnect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Login.getGoogleApiClient() != null && Login.getGoogleApiClient().isConnected()) {
+            Login.getGoogleApiClient().stopAutoManage((this));
+            Login.getGoogleApiClient().disconnect();
+        }
+    }
+
     public void countReports() {
         DatabaseReference dataRef = null;
         if (dataRef == null) {
