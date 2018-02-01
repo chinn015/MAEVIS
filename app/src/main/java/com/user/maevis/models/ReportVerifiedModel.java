@@ -1,6 +1,8 @@
 package com.user.maevis.models;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by User on 1/8/2018.
@@ -18,10 +20,12 @@ public class ReportVerifiedModel {
     private String reportType;
     private String reportedBy;
     private List<String> mergedReportsID;
+    public int starCount = 0;
+    public Map<String, Boolean> stars = new HashMap<>();
 
 
     //CONSTRUCTOR
-    public ReportVerifiedModel(String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy) {
+    public ReportVerifiedModel(String dateTime, String description, List<String> imageList, String imageThumbnailURL, String location, double locationLatitude, double locationLongitude, List<String> mergedReportsID, String reportStatus, String reportType, String reportedBy, int starCount, Map<String, Boolean> stars) {
         this.dateTime = dateTime;
         this.description = description;
         this.imageList = imageList;
@@ -33,6 +37,8 @@ public class ReportVerifiedModel {
         this.reportStatus = reportStatus;
         this.reportType = reportType;
         this.reportedBy = reportedBy;
+        this.starCount = starCount;
+        this.stars = stars;
     }
 
     //GETTER SETTERS

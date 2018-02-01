@@ -2,8 +2,10 @@ package com.user.maevis;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +15,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.PageNavigationManager;
+import com.user.maevis.models.ReportVerifiedModel;
+import com.user.maevis.session.SessionManager;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -23,6 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHolder> {
 
+    private static final String TAG = "TabHomeAdapter";
 
     private List<ListItem> listItems;
     private List<ListItemVerified> listItemsVerified;
@@ -65,6 +77,9 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.imageReportType);
         Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
 
+        holder.numStars.setText(""+listItemVerified.getStarCount());
+        //Toast.makeText(context, "star count : " + listItemVerified.getStarCount(), Toast.LENGTH_LONG).show();
+
         holder.cardHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -92,10 +107,26 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             }
         });
 
+        //Picasso.with(context).load(R.drawable.ic_toggle_star_24).into(holder.star);
+
+        // Determine if the current user has liked this post and set UI accordingly
+        if (listItemVerified.getStars().containsKey(SessionManager.getUserID())) {
+           // holder.star.setImageResource(R.drawable.ic_toggle_star_24);
+            Picasso.with(context).load(R.drawable.ic_toggle_star_24).into(holder.star);
+
+        } else {
+            //holder.star.setImageResource(R.drawable.ic_toggle_star_outline_24);
+            Picasso.with(context).load(R.drawable.ic_toggle_star_outline_24).into(holder.star);
+
+        }
+
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You clicked star", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You clicked star!!!", Toast.LENGTH_LONG).show();
+                DatabaseReference globalRef = FirebaseDatabaseManager.FirebaseReportsVerified.child(listItemVerified.getReportID());
+
+                onStarClicked(globalRef);
             }
         });
     }
@@ -137,6 +168,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         public CircleImageView userPhoto;
         public CardView cardHome;
         public ImageView star;
+        public TextView numStars;
 
         public ViewHolder (View itemView){
             super(itemView);
@@ -150,8 +182,45 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             userPhoto = (CircleImageView) itemView.findViewById(R.id.user_photo);
             cardHome = (CardView) itemView.findViewById(R.id.cardHome);
             star = (ImageView) itemView.findViewById(R.id.star);
-
+            numStars = (TextView)itemView.findViewById(R.id.post_num_stars);
 
         }
+
     }
+
+    // [START post_stars_transaction]
+    private void onStarClicked(DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                //ReportVerifiedModel report = mutableData.getValue(ReportVerifiedModel.class);
+                ListItemVerified report = mutableData.getValue(ListItemVerified.class);
+                if (report == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (report.stars.containsKey(SessionManager.getUserID())) {
+                    // Unstar the post and remove self from stars
+                    report.starCount = report.starCount - 1;
+                    report.stars.remove(SessionManager.getUserID());
+                } else {
+                    // Star the post and add self to stars
+                    report.starCount = report.starCount + 1;
+                    report.stars.put(SessionManager.getUserID(), true);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(report);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b,
+                                   DataSnapshot dataSnapshot) {
+                // Transaction completed
+                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+            }
+        });
+    }
+    // [END post_stars_transaction]
 }
