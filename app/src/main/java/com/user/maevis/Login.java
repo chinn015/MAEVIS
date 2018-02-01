@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -37,6 +40,9 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -55,6 +61,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.ChildEventListener;
@@ -69,6 +76,7 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
 
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -76,6 +84,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,  View.OnTouchListener {
 
@@ -137,7 +153,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         btnSignInFb = (Button) findViewById(R.id.btnSignFb);
         btnSignInGoogle = (Button) findViewById(R.id.btnSignInGoogle);
 
-
         //firebase references
         //mAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");
@@ -170,6 +185,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
                         @Override
                         public void onFinish() {
+                            Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();
                             //Toast.makeText(Login.this, SessionManager.getUserID(), Toast.LENGTH_LONG).show();
                             //Log.d("USER ID: ", SessionManager.getUserID());
                             /*FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
@@ -185,6 +201,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     if(progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
+
                     finish();
                     startActivity(new Intent(Login.this, Sidebar_HomePage.class));
 
@@ -245,8 +262,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                showFacebookEmailUsed();
+                                /*Toast.makeText(getApplicationContext(), "User with Email id already exists",
+                                        Toast.LENGTH_SHORT).show();*/
+                            } else {
+                                Toast.makeText(Login.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         // ...
@@ -275,6 +299,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             //finish();
             Intent createAcc = new Intent(Login.this, SignUp.class);
             startActivity(createAcc);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        googleApiClient.stopAutoManage(this);
+        googleApiClient.disconnect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.stopAutoManage(this);
+            googleApiClient.disconnect();
         }
     }
 
@@ -349,6 +390,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                showFacebookEmailUsed();
+                                /*Toast.makeText(getApplicationContext(), "User with Email id already exists",
+                                        Toast.LENGTH_SHORT).show();*/
+                                return;
+                            }
+
                             Log.d(TAG, "signInWithCredential:success");
 
                             if(!FirebaseDatabaseManager.isEmailUsed(email)) {
@@ -370,6 +418,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 Toast.makeText(Login.this, "Existing user. Logging in.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
+                            if(task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                showFacebookEmailUsed();
+                                /*Toast.makeText(getApplicationContext(), "User with Email id already exists",
+                                        Toast.LENGTH_SHORT).show();*/
+                            }
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
@@ -394,22 +447,100 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
 
+                final String userID = loginResult.getAccessToken().getUserId();
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                        String profileImg = "https://graph.facebook.com/" +userID+ "/picture?type=normal";
+                        displayUserInfo(jsonObject, profileImg);
+                        Log.d("Graph Request", "GRAPH REQUEST!!!");
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "first_name, last_name, email, id, picture");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
+
                 Toast.makeText(Login.this, "Loggin in thru Fb", Toast.LENGTH_SHORT).show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
+                Toast.makeText(Login.this, "FB ON CANCEL", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
+                Toast.makeText(Login.this, "FB ON ERROR", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "facebook:onError", error);
                 // ...
             }
         });
+    }
+
+    public void displayUserInfo(JSONObject object, String profileImage){
+        //UserItem userItem = null;
+
+        try {
+            final String email = object.getString("email");
+            String username = "NULL";
+            String password = "NULL";
+            String firstName = object.getString("first_name");
+            String lastName = object.getString("last_name");
+            String birthdate = "NULL";
+            String address = "NULL";
+            String userType = "Regular User";
+            String userStatus = "Active";
+            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+            double homeLat = 10.316590;
+            double homeLong = 123.897093;
+            double currentLat = 10.316590;
+            double currentLong = 123.897093;
+            final String userPhoto = profileImage;
+
+            final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
+
+            if(!FirebaseDatabaseManager.isEmailUsed(email)) {
+                FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                DatabaseReference newUser = FirebaseDatabaseManager.FirebaseUsers.child(user.getUid());
+                newUser.setValue(userModel);
+
+                float cLat = (float) userModel.getCurrentLat();
+                float cLong= (float) userModel.getCurrentLong();
+                float hLat = (float) userModel.getHomeLat();
+                float hLong = (float) userModel.getHomeLong();
+
+                SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
+                showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
+                Toast.makeText(Login.this, "New User with FB. Add to Firebase!!!", Toast.LENGTH_SHORT).show();
+            } else {
+                FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                UserItem userItem = FirebaseDatabaseManager.getUserItem(user.getUid());
+                SessionManager.createLoginSession(userItem);
+                Toast.makeText(Login.this, "Existing user with FB. Logging in.", Toast.LENGTH_SHORT).show();
+
+                if(userItem == null) {
+                    Log.d("USERITEM NULL", "User Item Null");
+                } else {
+                    Log.d("USERITEM NOT NULL", "User Item Not Null");
+                }
+
+                showFBDetailsDialog(userItem);
+            }
+
+            //showFBDetailsDialog(firstName, lastName, email, profileImage);
+            showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
+            //showFBDetailsDialog(firstName, lastName, email, profileImage);
+            //showFBDetailsDialog(userItem);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loginUser() {
@@ -721,24 +852,51 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
     }
 
-    public void showGoogleAccountDialog(String name, String email, String photoURL) {
+    public void showFacebookEmailUsed() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Google Sign In");
-        builder.setMessage("Name: "+name+" Email: "+email+" PhotoURL: "+photoURL);
+        builder.setTitle("Facebook Email Already Used");
+        builder.setMessage("The email address associated with your Facebook account has already been used.");
         builder.setInverseBackgroundForced(true);
-        builder.setNegativeButton("ENABLE LOCATION", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
+                dialog.dismiss();
             }
         });
         android.app.AlertDialog alert = builder.create();
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
+    public void showFBDetailsDialog(String firstName, String lastName, String email, String profileImage) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Facebook Logged In");
+        builder.setMessage("FirstName: "+firstName+" LastName: "+lastName+" Email: "+email+" FBURL: "+profileImage);
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
+    public void showFBDetailsDialog(UserItem userItem) {
+        Log.d("FB LOGIN DETAILS", userItem.getAddress());
+        Log.d("FB LOGIN DETAILS", userItem.getUserType());
+        Log.d("FB LOGIN DETAILS", userItem.getUsername());
+        Log.d("FB LOGIN DETAILS", userItem.getBirthdate());
+        Log.d("FB LOGIN DETAILS", userItem.getDeviceToken());
+        Log.d("FB LOGIN DETAILS", userItem.getEmail());
+        Log.d("FB LOGIN DETAILS", userItem.getFirstName());
+        Log.d("FB LOGIN DETAILS", userItem.getLastName());
+        Log.d("FB LOGIN DETAILS", userItem.getUserID());
+        Log.d("FB LOGIN DETAILS", userItem.getUserPhoto());
+        Log.d("FB LOGIN DETAILS", userItem.getUserStatus());
+
     }
 
     @Override
