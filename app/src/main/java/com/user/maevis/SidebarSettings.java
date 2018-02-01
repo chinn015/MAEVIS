@@ -64,7 +64,7 @@ public class SidebarSettings extends AppCompatActivity {
 
     private EditText username, password, fName, lName, email;
 
-    private DatabaseReference dbUsername, dbPassword, dbFName, dbLName, dbEmail, dbAddress;
+    private DatabaseReference dbUsername, dbPassword, dbFName, dbLName, dbEmail, dbAddress, dbUserPhoto;
 
     private static final String REQUIRED = "Required";
 
@@ -113,6 +113,8 @@ public class SidebarSettings extends AppCompatActivity {
         dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
         dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
         dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
+        dbUserPhoto = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("userPhoto");
+
         ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -297,7 +299,12 @@ public class SidebarSettings extends AppCompatActivity {
         dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(getImageURL());
+
+        if(getImageURL() != null) {
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(getImageURL());
+        }else{
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(SessionManager.getUserPhoto());
+        }
 
 
         AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
@@ -450,6 +457,7 @@ public class SidebarSettings extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                //saveData();
                 if(getImageURL() != null) {
+                    Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_LONG).show();
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
                     progressDialog.setMessage("Updating profile.");
@@ -457,6 +465,8 @@ public class SidebarSettings extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
 
                     try {
+                        Toast.makeText(getApplicationContext(), "null0", Toast.LENGTH_LONG).show();
+
                         Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                         bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
