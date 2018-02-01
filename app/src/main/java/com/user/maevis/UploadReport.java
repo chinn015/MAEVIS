@@ -93,7 +93,7 @@ public class UploadReport extends AppCompatActivity {
 
         ivImage = (ImageView) findViewById(R.id.ivImage);
 
-        TextView fab = (TextView) findViewById(R.id.fab);
+        Button fab = (Button) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
