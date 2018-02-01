@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -64,6 +65,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private TextView mCommentField;
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
+    private CircleImageView viewUserPhoto;
 
     /*private static UserItem clickedUserItem = null;
     static boolean clickedUserItemStatus = false;*/
@@ -81,12 +83,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPostKey = PageNavigationManager.getClickedTabHomeListItemVerified().getReportID();
-
-        // Initialize Database
-        mPostReference = FirebaseDatabase.getInstance().getReference().child("Reports").child(mPostKey);
-        mCommentsReference = FirebaseDatabase.getInstance().getReference().child("Comments").child(mPostKey);
-
         // Initialize Views
         viewReportHead = (TextView) findViewById(R.id.viewReportHead);
         viewReportDesc = (TextView) findViewById(R.id.viewReportDesc);
@@ -94,12 +90,19 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
         viewUserImage = (CircleImageView) findViewById(R.id.imgViewProfilePic);
+        viewUserPhoto = (CircleImageView) findViewById(R.id.user_photo);
 
         mCommentField = findViewById(R.id.comment);
         mCommentButton = findViewById(R.id.button_post_comment);
         mCommentsRecycler = findViewById(R.id.recycler_comments);
 
+        Picasso.with(getApplicationContext())
+                .load(SessionManager.getUserPhoto())
+                .fit()
+                .into(viewUserPhoto);
+
         if(PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
+            mPostKey = PageNavigationManager.getClickedTabHomeListItemVerified().getReportID();
             viewReportHead.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDisplayDateTime());
@@ -115,6 +118,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                     .into(viewUserImage);
 
         }else if (PageNavigationManager.getClickedTabLocListItemVerified() != null){
+            mPostKey = PageNavigationManager.getClickedTabLocListItemVerified().getReportID();
             viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
@@ -129,36 +133,42 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                     .load(PageNavigationManager.getClickedTabLocListItemVerified().getUserPhoto())
                     .into(viewUserImage);
 
-        }else if(TabProfileTimelineAdapter.getClickedItem() != null){
-            viewReportHead.setText(TabProfileTimelineAdapter.getClickedItem().getHead());
-            viewReportDesc.setText(TabProfileTimelineAdapter.getClickedItem().getDescription());
-            viewReportDateTime.setText(TabProfileTimelineAdapter.getClickedItem().getDisplayDateTime());
+        }else if(PageNavigationManager.getClickedTabNotifListItem() != null){
+            mPostKey = PageNavigationManager.getClickedTabNotifListItem().getReportID();
+            viewReportHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
+            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
+            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
             Picasso.with(getApplicationContext())
-                    .load(TabProfileTimelineAdapter.getClickedItem().getImageURL())
+                    .load(PageNavigationManager.getClickedTabNotifListItem().getImageURL())
                     .fit()
                     .into(viewReportImage);
             Picasso.with(getApplicationContext())
-                    .load(TabProfileTimelineAdapter.getClickedItem().getReportType())
+                    .load(PageNavigationManager.getClickedTabNotifListItem().getReportType())
                     .into(viewReportType);
             Picasso.with(getApplicationContext())
-                    .load(TabProfileTimelineAdapter.getClickedItem().getUserPhoto())
+                    .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
                     .into(viewUserImage);
 
-        }else if(TabNotifAdapterRegUser.getClickedItem() != null){
-            viewReportHead.setText(TabNotifAdapterRegUser.getClickedItem().getHead());
-            viewReportDesc.setText(TabNotifAdapterRegUser.getClickedItem().getDescription());
-            viewReportDateTime.setText(TabNotifAdapterRegUser.getClickedItem().getDisplayDateTime());
+        }else if(PageNavigationManager.getClickedTabNotifRegListItem() != null){
+            mPostKey = PageNavigationManager.getClickedTabNotifRegListItem().getReportID();
+            viewReportHead.setText(PageNavigationManager.getClickedTabNotifRegListItem().getHead());
+            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDescription());
+            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDisplayDateTime());
             Picasso.with(getApplicationContext())
-                    .load(TabNotifAdapterRegUser.getClickedItem().getImageThumbnailURL())
+                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getImageThumbnailURL())
                     .fit()
                     .into(viewReportImage);
             Picasso.with(getApplicationContext())
-                    .load(TabNotifAdapterRegUser.getClickedItem().getReportType())
+                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getReportType())
                     .into(viewReportType);
             Picasso.with(getApplicationContext())
-                    .load(TabNotifAdapterRegUser.getClickedItem().getUserPhoto())
+                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getUserPhoto())
                     .into(viewUserImage);
         }
+
+        // Initialize Database
+        mPostReference = FirebaseDatabase.getInstance().getReference().child("Reports").child(mPostKey);
+        mCommentsReference = FirebaseDatabase.getInstance().getReference().child("Comments").child(mPostKey);
 
         viewUserImage.setOnClickListener(this);
         mCommentButton.setOnClickListener(this);
@@ -219,7 +229,12 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                 }
             }
         }else if(v == mCommentButton){
-            postComment();
+
+            if (TextUtils.isEmpty(mCommentField.getText())) {
+                Toast.makeText(this, "Please enter comment.", Toast.LENGTH_SHORT).show();
+            }else{
+                postComment();
+            }
         }
     }
 
@@ -290,12 +305,14 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
         public TextView authorView;
         public TextView bodyView;
+        public CircleImageView commentPhoto;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
 
             authorView = itemView.findViewById(R.id.comment_author);
             bodyView = itemView.findViewById(R.id.comment_body);
+            commentPhoto = itemView.findViewById(R.id.comment_photo);
         }
     }
 
@@ -414,6 +431,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.author);
             holder.bodyView.setText(comment.text);
+
+            Picasso.with(mContext).load(FirebaseDatabaseManager.getUserPhoto(comment.uid)).into(holder.commentPhoto);
+
         }
 
         @Override

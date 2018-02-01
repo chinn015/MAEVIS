@@ -3,6 +3,7 @@
     <color name="colorPrimary">#6b1913</color>
     <color name="colorPrimaryDark">#282828</color>
     <color name="colorAccent">#FFFFFF</color>
+    <color name="statusbar">#560600</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#771811</color>
