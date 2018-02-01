@@ -85,7 +85,7 @@
         android:id="@+id/txtFldEmail"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:background="@drawable/txtfld_rounded"
         android:textColor="#FFFFFF"
         android:paddingLeft="15dp"
