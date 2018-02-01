@@ -297,10 +297,16 @@ public class SidebarSettings extends AppCompatActivity {
         dbUsername.child("Users").child(SessionManager.getUserID()).child("lastName").setValue(last);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("email").setValue(emailAdd);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
 
-        if(getImageURL() != null) {
+        if(homeLat == 0 && homeLong == null){
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(SessionManager.getHomeLat());
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(SessionManager.getHomeLong());
+        }else{
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
+            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
+        }
+
+        if(finalImageURI != null) {
             dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(getImageURL());
         }else{
             dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(SessionManager.getUserPhoto());
@@ -355,7 +361,11 @@ public class SidebarSettings extends AppCompatActivity {
             }
         });
 
-        SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), getImageURL());
+        if(finalImageURI != null) {
+            SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), getImageURL());
+        }else{
+            SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), SessionManager.getUserPhoto());
+        }
 
         Intent i = new Intent(this, Sidebar_HomePage.class);
         startActivity(i);
@@ -456,7 +466,7 @@ public class SidebarSettings extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                //saveData();
-                if(getImageURL() != null) {
+                if (finalImageURI != null) {
                     Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_LONG).show();
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
@@ -495,6 +505,7 @@ public class SidebarSettings extends AppCompatActivity {
                         Toast.makeText(SidebarSettings.this, "Upload error.", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
+
                 }else{
                     saveData();
                 }

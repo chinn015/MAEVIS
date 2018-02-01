@@ -73,7 +73,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
                     Picasso.with(context).load(listItemVerified.getReportTypeImage(listItemVerified.getReportType())).into(holder.reportType);
                     Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
                     Picasso.with(context)
-                            .load(R.drawable.img_user)
+                            .load(listItemVerified.getUserPhoto())
                             .fit()
                             .into(holder.imageThumbnail);
                     break;
