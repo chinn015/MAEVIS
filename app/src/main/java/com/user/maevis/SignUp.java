@@ -236,6 +236,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             return;
         }
 
+        if(isEmailValid(email) != true){
+            txtFldEmail.setError("Please enter a valid email address.");
+            return;
+        }
+
         String regex = "(.)*(\\d)(.)*";
         Pattern pattern = Pattern.compile(regex);
         boolean containsNumber = pattern.matcher(password).matches();
@@ -254,7 +259,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
         final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, userPhoto, userStatus, userType, username);
-        FirebaseDatabaseManager.setNewUserModelTemp(userModel);
+        //FirebaseDatabaseManager.setNewUserModelTemp(userModel);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -266,8 +271,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                         progressDialog.dismiss();
                         if(task.isSuccessful()) {
                             Toast.makeText(SignUp.this, "Account registered.", Toast.LENGTH_SHORT).show();
-
-                            final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                            addUserToFirebaseDatabase(userModel);
+                            /*final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
 
                             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -288,7 +293,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            });
+                            });*/
+                            finish();
+                            startActivity(new Intent(SignUp.this, EmailVerification.class));
                         } else {
                             Log.e("REG FAIL", "");
                             Toast.makeText(SignUp.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
@@ -378,4 +385,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         return super.onKeyDown(keyCode, event);
     }
 
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 }
