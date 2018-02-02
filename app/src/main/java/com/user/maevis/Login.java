@@ -712,7 +712,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         android.app.AlertDialog alert = builder.create();
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-
     }
 
     @Override

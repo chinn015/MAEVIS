@@ -212,6 +212,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".EmailVerification"></activity>
+
         <!--<activity android:name=".item_comments"></activity>-->
     </application>
 

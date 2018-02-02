@@ -38,6 +38,7 @@ import com.user.maevis.session.SessionManager;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
+
     DatabaseReference FirebaseUsers;
     private EditText txtFldUsername;
     private EditText txtFldPassword;
@@ -225,26 +226,51 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
 
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        SessionManager.getFirebaseAuth().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if(task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            DatabaseReference newUser = FirebaseUsers.child(user.getUid());
-                            newUser.setValue(userModel);
+                            Toast.makeText(SignUp.this, "Account registered.", Toast.LENGTH_SHORT).show();
 
-                            Toast.makeText(SignUp.this, "Registered Successfully!", Toast.LENGTH_SHORT).show();
+                            //final FirebaseUser user = task.getResult().getUser();
+                            final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                            /*DatabaseReference newUser = FirebaseUsers.child(user.getUid());
+                            newUser.setValue(userModel);*/
+
+                            progressDialog.dismiss();
+
+                            progressDialog.setMessage("Sending email verification.");
+                            progressDialog.show();
+
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(SignUp.this,
+                                                "Verification email sent to " + user.getEmail(),
+                                                Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        Toast.makeText(SignUp.this,
+                                                "Failed to send verification email.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    progressDialog.dismiss();
+                                }
+                            });
+/*
                             float cLat = (float) userModel.getCurrentLat();
                             float cLong= (float) userModel.getCurrentLong();
                             float hLat = (float) userModel.getHomeLat();
                             float hLong = (float) userModel.getHomeLong();
 
                             SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
-
+*/
                             finish();
-                            startActivity(new Intent(getApplicationContext(), SidebarHelp.class));
+                            startActivity(new Intent(getApplicationContext(), EmailVerification.class));
                         } else {
                             Toast.makeText(SignUp.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
                         }
