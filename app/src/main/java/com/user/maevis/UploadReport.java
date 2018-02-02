@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,6 +118,36 @@ public class UploadReport extends AppCompatActivity {
         Picasso.with(getApplicationContext())
                 .load(ListItem.getReportMarkerImage(SelectionPage.getReportType()))
                 .into(ivReportType);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            displayDiscardDialog();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void displayDiscardDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Discard changes?");
+        builder.setMessage("You have unsaved changes.");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 
     private void SelectImage() {
@@ -271,6 +303,8 @@ public class UploadReport extends AppCompatActivity {
 
             return true;
 
+        }else if (id == android.R.id.home) {
+            displayDiscardDialog();
         }
 
         return super.onOptionsItemSelected(item);
