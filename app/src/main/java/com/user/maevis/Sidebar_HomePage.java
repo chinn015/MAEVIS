@@ -126,7 +126,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         profilePic = (CircleImageView) headerView.findViewById(R.id.user_photo);
         Picasso.with(this).load(SessionManager.getUserPhoto()).into(profilePic);
         user_location = (TextView) headerView.findViewById(R.id.txtViewUserLocation);
-        user_location.setText(SessionManager.getAddress());
+
+        if(SessionManager.getAddress().equals("NULL")){
+            user_location.setVisibility(View.INVISIBLE);
+        }else {
+            user_location.setText(SessionManager.getAddress());
+        }
 
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

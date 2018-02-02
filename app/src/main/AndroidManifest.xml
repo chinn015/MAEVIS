@@ -208,6 +208,8 @@
         </provider>
 
         <activity android:name=".EmailVerification"></activity>
+        <activity android:name=".AddBdayAddress"
+            android:screenOrientation="portrait"/>
 
         <!--<activity android:name=".item_comments"></activity>-->
     </application>

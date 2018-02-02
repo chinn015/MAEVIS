@@ -14,7 +14,7 @@
         android:layout_height="150dp"
         app:srcCompat="@drawable/maevis_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp" />
 
     <EditText
@@ -50,6 +50,22 @@
         android:textCursorDrawable="@drawable/cursor_text_white" />
 
     <EditText
+        android:id="@+id/txtFldSignUpConPassword"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:hint="Confirm Password"
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_below="@+id/txtFldSignUpPassword"
+        android:layout_alignStart="@+id/txtFldSignUpPassword" />
+
+
+    <EditText
         android:id="@+id/txtFldFirstName"
         android:layout_width="125dp"
         android:layout_height="40dp"
@@ -60,10 +76,10 @@
         android:hint="First Name"
         android:textColorHint="#FFFFFF"
         android:textSize="17dp"
-        android:layout_below="@+id/txtFldSignUpPassword"
-        android:layout_alignStart="@+id/txtFldSignUpPassword"
-        android:layout_marginBottom="10dp"
-        android:textCursorDrawable="@drawable/cursor_text_white" />
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_below="@+id/txtFldSignUpConPassword"
+        android:layout_alignStart="@+id/txtFldSignUpConPassword"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/txtFldLastName"
@@ -76,10 +92,11 @@
         android:hint="Last Name"
         android:textColorHint="#FFFFFF"
         android:textSize="17dp"
-        android:layout_below="@+id/txtFldSignUpPassword"
+        android:layout_below="@+id/txtFldSignUpConPassword"
         android:layout_toEndOf="@+id/txtFldFirstName"
         android:layout_marginStart="10dp"
-        android:textCursorDrawable="@drawable/cursor_text_white" />
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/txtFldEmail"
@@ -95,7 +112,8 @@
         android:layout_below="@+id/txtFldFirstName"
         android:layout_alignStart="@+id/txtFldFirstName"
         android:layout_marginBottom="10dp"
-        android:textCursorDrawable="@drawable/cursor_text_white" />
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/txtFldBirthdate"
@@ -112,26 +130,6 @@
         android:layout_alignStart="@+id/txtFldEmail"
         android:layout_marginBottom="10dp"
         android:textCursorDrawable="@drawable/cursor_text_white" />
-
-    <!--<me.grantland.widget.AutofitTextView-->
-        <!--android:id="@+id/txtFldAddress"-->
-        <!--android:layout_width="250dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:background="@drawable/txtfld_rounded"-->
-        <!--android:textColor="#FFFFFF"-->
-        <!--android:paddingLeft="15dp"-->
-        <!--android:hint="Address [Street, Brgy, City]"-->
-        <!--android:textColorHint="#FFFFFF"-->
-        <!--android:textSize="16sp"-->
-        <!--android:layout_below="@+id/txtFldBirthdate"-->
-        <!--android:layout_alignStart="@+id/txtFldBirthdate"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:textCursorDrawable="@drawable/cursor_text_white"-->
-        <!--android:maxLines="3"-->
-        <!--autofit:minTextSize="16sp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:text="asddssssssssssssssssssssssssssssssssssssssssssddddddddddddddddddddddddddddddsssssssssssssssssss"/>-->
 
     <me.grantland.widget.AutofitTextView
         android:id="@+id/txtFldAddress"
