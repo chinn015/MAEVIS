@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.user.maevis.EmailVerification">
+
+    <TextView
+        android:id="@+id/verifyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="Please check your email and click the link to verify your account."
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="104dp" />
+
+    <TextView
+        android:id="@+id/resendText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/resendEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="58dp"
+        android:gravity="center"
+        android:text="If email isn't received after 60 seconds, press Resend Email."
+        tools:layout_editor_absoluteX="124dp"
+        tools:layout_editor_absoluteY="104dp" />
+
+    <Button
+        android:id="@+id/resendEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeLeft"
+        android:layout_marginTop="106dp"
+        android:layout_toStartOf="@+id/timeLeft"
+        android:enabled="false"
+        android:text="Resend Email" />
+
+    <TextView
+        android:id="@+id/timeLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="60"
+        android:textSize="30sp"/>
+
+    <Button
+        android:id="@+id/proceedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/resendEmail"
+        android:layout_alignBottom="@+id/resendEmail"
+        android:layout_toEndOf="@+id/timeLeft"
+        android:text="Proceed" />
+
+</RelativeLayout>
