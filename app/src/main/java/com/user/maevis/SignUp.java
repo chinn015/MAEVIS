@@ -46,6 +46,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     DatabaseReference FirebaseUsers;
     private EditText txtFldUsername;
     private EditText txtFldPassword;
+    private EditText txtFldConPassword;
     private EditText txtFldFirstName;
     private EditText txtFldLastName;
     private EditText txtFldEmail;
@@ -86,6 +87,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         txtFldEmail = (EditText) findViewById(R.id.txtFldEmail);
         txtFldBirthdate = (EditText) findViewById(R.id.txtFldBirthdate);
         txtFldAddress = (TextView) findViewById(R.id.txtFldAddress);
+        txtFldConPassword = (EditText) findViewById(R.id.txtFldSignUpConPassword);
 
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         //btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -112,6 +114,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             txtFldPassword.setText(AddHomeAddress.userPassword);
             txtFldAddress.setText(AddHomeAddress.userHomeAddress);
             txtFldBirthdate.setText(AddHomeAddress.userBdate);
+            txtFldConPassword.setText(AddHomeAddress.userConPassword);
+
+
         }
 
     }
@@ -143,9 +148,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             final String userFname = txtFldFirstName.getText().toString();
             final String userLname = txtFldLastName.getText().toString();
             final String userBdate = txtFldBirthdate.getText().toString();
+            final String userConPassword = txtFldConPassword.getText().toString();
 
             i.putExtra("userName", userName);
             i.putExtra("userPassword", userPassword);
+            i.putExtra("userConPassword", userConPassword);
             i.putExtra("userEmail", userEmail);
             i.putExtra("userFname", userFname);
             i.putExtra("userLname", userLname);
@@ -159,13 +166,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     private void createAccount() {
         //String primaryKey = Integer.toString(++pk);
 
-        String email = txtFldEmail.getText().toString();
-        String username = txtFldUsername.getText().toString();
-        String password = txtFldPassword.getText().toString();
-        String firstName = txtFldFirstName.getText().toString();
-        String lastName = txtFldLastName.getText().toString();
-        String birthdate = txtFldBirthdate.getText().toString();
-        String address = txtFldAddress.getText().toString();
+        String email = txtFldEmail.getText().toString().trim();
+        String username = txtFldUsername.getText().toString().trim();
+        String password = txtFldPassword.getText().toString().trim();
+        String conPassword = txtFldConPassword.getText().toString().trim();
+        String firstName = txtFldFirstName.getText().toString().trim();
+        String lastName = txtFldLastName.getText().toString().trim();
+        String birthdate = txtFldBirthdate.getText().toString().trim();
+        String address = txtFldAddress.getText().toString().trim();
         String userType = "Regular User";
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
@@ -179,7 +187,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
 
         if(TextUtils.isEmpty(username)) {
-            Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
+            txtFldUsername.setError("Please input your username.");
             return;
         }
 
@@ -194,32 +202,32 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
 
         if(TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+            txtFldPassword.setError("Please input your password.");
             return;
         }
 
         if(TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Please enter your email.", Toast.LENGTH_SHORT).show();
+            txtFldEmail.setError("Please input your email.");
             return;
         }
 
         if(TextUtils.isEmpty(firstName)) {
-            Toast.makeText(this, "Enter your first name.", Toast.LENGTH_SHORT).show();
+            txtFldFirstName.setError("Please input your first name.");
             return;
         }
 
         if(TextUtils.isEmpty(lastName)) {
-            Toast.makeText(this, "Enter your last name.", Toast.LENGTH_SHORT).show();
+            txtFldLastName.setError("Please input your last name.");
             return;
         }
 
         if(TextUtils.isEmpty(birthdate)) {
-            Toast.makeText(this, "Enter your birthdate.", Toast.LENGTH_SHORT).show();
+            txtFldBirthdate.setError("Please input your birthdate.");
             return;
         }
 
         if(TextUtils.isEmpty(address)) {
-            Toast.makeText(this, "Enter your first address.", Toast.LENGTH_SHORT).show();
+            txtFldAddress.setError("Please locate your home address.");
             return;
         }
 
@@ -234,6 +242,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
 
         if(password.length() < 8 && containsNumber != true){
             txtFldPassword.setError("Passsword must have at least 8 characters with at least 1 digit");
+            return;
+        }
+
+        if(!password.equals(conPassword)){
+            txtFldConPassword.setError("Please confirm your password.");
             return;
         }
 

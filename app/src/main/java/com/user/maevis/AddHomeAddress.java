@@ -54,7 +54,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
     Bitmap homeMarkerRed;
     MarkerOptions homeNewmarker = null;
     ArrayList<Marker> markers = new ArrayList<>();
-    static String userName, userPassword, userEmail, userFname, userLname, userBdate;
+    static String userName, userPassword, userConPassword, userEmail, userFname, userLname, userBdate;
 
 
     @Override
@@ -257,6 +257,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
         userFname = in.getStringExtra("userFname");
         userLname = in.getStringExtra("userLname");
         userPassword = in.getStringExtra("userPassword");
+        userConPassword = in.getStringExtra("userConPassword");
         userEmail = in.getStringExtra("userEmail");
         userBdate = in.getStringExtra("userBdate");
 

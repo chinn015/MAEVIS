@@ -15,9 +15,9 @@
         android:elevation="8dp"
         app:border_width="2dp"
         app:border_color="#FFF"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        />
+        android:layout_marginTop="86dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/textViewChangePhoto" />
 
     <TextView
         android:id="@+id/textViewChangePhoto"
@@ -38,12 +38,9 @@
         android:text="USERNAME"
         android:textSize="15dp"
         android:textColor="@color/colorAccent"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="230dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
+        android:layout_marginTop="38dp"
         android:layout_below="@+id/textViewChangePhoto"
-        />
+        android:layout_alignStart="@+id/txtFldEditUsername" />
 
     <EditText
         android:id="@+id/txtFldEditUsername"
@@ -89,6 +86,34 @@
         android:layout_marginStart="35dp" />
 
     <TextView
+        android:id="@+id/txtViewConPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONFIRM PASSWORD"
+        android:textSize="15dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/txtFldEditPassword"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="40dp"/>
+
+    <EditText
+        android:id="@+id/txtFldEditConPassword"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="0dp"
+        android:textColor="@color/colorAccent"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:backgroundTint="@color/colorAccent"
+        android:inputType="textPassword"
+        android:background="@drawable/txtfld_rounded"
+        android:layout_below="@+id/txtViewConPassword"
+        android:layout_alignStart="@+id/txtViewFirstname"
+        android:layout_marginTop="15dp"/>
+
+
+    <TextView
         android:id="@+id/txtViewFirstname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +122,7 @@
         android:textColor="@color/colorAccent"
         android:layout_below="@+id/txtFldEditPassword"
         android:layout_alignStart="@+id/txtViewPassword"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="95dp" />
 
     <EditText
         android:id="@+id/txtFldEditFirstname"
@@ -157,9 +182,9 @@
 
     <EditText
         android:id="@+id/txtFldEditEmail"
+        android:inputType="textEmailAddress"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:inputType="textPersonName"
         android:layout_marginLeft="10dp"
         android:textColor="@color/colorAccent"
         android:paddingLeft="15dp"

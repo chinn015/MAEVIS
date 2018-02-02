@@ -233,6 +233,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 .requestProfile()
                 .requestEmail()
                 .build();
+
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
         googleApiClient.connect();
 
@@ -563,12 +564,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
         //validations
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
+            txtFldLoginUsername.setError("Please input your username.");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+            txtFldLoginPassword.setError("Please input your password.");
             return;
         }
 

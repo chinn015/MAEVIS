@@ -56,7 +56,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     Bitmap homeMarkerRed;
     MarkerOptions homeNewmarker = null;
     ArrayList<Marker> markers = new ArrayList<>();
-    static String userName, userPassword, userEmail, userFname, userLname;
+    static String userName, userPassword, userEmail, userFname, userLname, userConPassword;
 
 
     @Override
@@ -252,6 +252,8 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         userLname = in.getStringExtra("userLname");
         userPassword = in.getStringExtra("userPassword");
         userEmail = in.getStringExtra("userEmail");
+        userConPassword = in.getStringExtra("userConPassword");
+
 
         //Toast.makeText(this, "get : " + userName, Toast.LENGTH_LONG).show();
 
