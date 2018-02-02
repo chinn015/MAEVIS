@@ -61,6 +61,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
 
+    private static UserModel userModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,8 +166,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     }
 
     private void createAccount() {
-        //String primaryKey = Integer.toString(++pk);
-
         String email = txtFldEmail.getText().toString().trim();
         String username = txtFldUsername.getText().toString().trim();
         String password = txtFldPassword.getText().toString().trim();
@@ -254,6 +254,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
         final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, userPhoto, userStatus, userType, username);
+        FirebaseDatabaseManager.setNewUserModelTemp(userModel);
 
         progressDialog.setMessage("Registering User.");
         progressDialog.show();
@@ -266,15 +267,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                         if(task.isSuccessful()) {
                             Toast.makeText(SignUp.this, "Account registered.", Toast.LENGTH_SHORT).show();
 
-                            //final FirebaseUser user = task.getResult().getUser();
                             final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
-                            /*DatabaseReference newUser = FirebaseUsers.child(user.getUid());
-                            newUser.setValue(userModel);*/
-
-                            progressDialog.dismiss();
-
-                            progressDialog.setMessage("Sending email verification.");
-                            progressDialog.show();
 
                             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -284,30 +277,46 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                                                 "Verification email sent to " + user.getEmail(),
                                                 Toast.LENGTH_SHORT).show();
 
+                                        addUserToFirebaseDatabase(userModel);
+                                        //finish();
+                                        startActivity(new Intent(SignUp.this, EmailVerification.class));
+                                        //AuthStateListener from Login.java will get excecuted once user is created and
+                                        //logged in at the same time which will then redirect to EmailVerification.java
                                     } else {
                                         Toast.makeText(SignUp.this,
                                                 "Failed to send verification email.",
                                                 Toast.LENGTH_SHORT).show();
                                     }
-
-                                    progressDialog.dismiss();
                                 }
                             });
-/*
-                            float cLat = (float) userModel.getCurrentLat();
-                            float cLong= (float) userModel.getCurrentLong();
-                            float hLat = (float) userModel.getHomeLat();
-                            float hLong = (float) userModel.getHomeLong();
-
-                            SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
-*/
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), EmailVerification.class));
                         } else {
+                            Log.e("REG FAIL", "");
                             Toast.makeText(SignUp.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
+        //finish();
+    }
+
+    public static void addUserToFirebaseDatabase(UserModel userModel) {
+        DatabaseReference newUser = FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getFirebaseAuth().getCurrentUser().getUid());
+        newUser.setValue(userModel);
+
+        float cLat = (float) userModel.getCurrentLat();
+        float cLong= (float) userModel.getCurrentLong();
+        float hLat = (float) userModel.getHomeLat();
+        float hLong = (float) userModel.getHomeLong();
+
+        SessionManager.createLoginSession(SessionManager.getFirebaseAuth().getCurrentUser().getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userModel.getUserPhoto());
+    }
+
+    public static UserModel getUserModel() {
+        return userModel;
+    }
+
+    public static void setUserModel(UserModel userModel) {
+        SignUp.userModel = userModel;
     }
 
     private void showDialogUsernameUsed() {

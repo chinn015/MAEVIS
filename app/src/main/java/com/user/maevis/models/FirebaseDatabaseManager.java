@@ -31,6 +31,8 @@ public class FirebaseDatabaseManager {
     private static List<ListItemVerified> doneVerifiedReports;
     private static List<UserItem> userItems;
 
+    private static UserModel newUserModelTemp;
+
     public FirebaseDatabaseManager() {
 
     }
@@ -42,6 +44,7 @@ public class FirebaseDatabaseManager {
         activeVerifiedReports = new ArrayList<>(); //List of all active officially verified Reports
         doneVerifiedReports = new ArrayList<>(); //List of all done officially verified Reports
         userItems = new ArrayList<>(); //List of all Users
+        newUserModelTemp = new UserModel();
     }
 
     //GETTER SETTER
@@ -93,8 +96,12 @@ public class FirebaseDatabaseManager {
         FirebaseDatabaseManager.doneVerifiedReports = doneVerifiedReports;
     }
 
-    public static void getReportsForAdmin() {
+    public static UserModel getNewUserModelTemp() {
+        return newUserModelTemp;
+    }
 
+    public static void setNewUserModelTemp(UserModel newUserModelTemp) {
+        FirebaseDatabaseManager.newUserModelTemp = newUserModelTemp;
     }
 
     //FUNCTIONS THAT CAN BE USED GLOBALLY
