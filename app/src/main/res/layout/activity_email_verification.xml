@@ -68,6 +68,7 @@
         android:layout_alignBaseline="@+id/resendEmail"
         android:layout_alignBottom="@+id/resendEmail"
         android:layout_toEndOf="@+id/timeLeft"
+        android:enabled="false"
         android:text="Proceed" />
 
     <Button
