@@ -330,7 +330,7 @@ public class SidebarSettings extends AppCompatActivity {
             email.setError("Please enter a valid email address.");
             return;
         }
-        
+
         dbUsername = FirebaseDatabase.getInstance().getReference();
         dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);

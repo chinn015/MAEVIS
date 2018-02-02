@@ -53,9 +53,11 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         btnProceed.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
-        progressBar.setProgress(100);
-        myCountDownTimer = new MyCountDownTimer(10000, 1000);
-        myCountDownTimer.start();
+        /*progressBar.setProgress(100);
+        myCountDownTimer = new MyCountDownTimer(60000, 1000);
+        myCountDownTimer.start();*/
+
+        resend();
     }
 
     public class MyCountDownTimer extends CountDownTimer {
@@ -67,14 +69,29 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         @Override
         public void onTick(long millisUntilFinished) {
             timeLeft.setText(String.valueOf(millisUntilFinished / 1000 + "s"));
-            int progress = (int) (millisUntilFinished/100);
+            int progress = (int) (millisUntilFinished/600);
             progressBar.setProgress(progress);
+
+            final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+
+            user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(user.isEmailVerified()) {
+                        myCountDownTimer.cancel();
+                        myCountDownTimer = null;
+                        finish();
+                        startActivity(new Intent(EmailVerification.this, Sidebar_HomePage.class));
+                    }
+                }
+            });
         }
 
         @Override
         public void onFinish() {
-            timeLeft.setText("Timer is finished.");
+            timeLeft.setText("0s");
             progressBar.setProgress(0);
+            resendEmail.setEnabled(true);
         }
 
     }
@@ -161,6 +178,11 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                 progressDialog.dismiss();
             }
         });
+
+        progressBar.setProgress(100);
+        myCountDownTimer = new MyCountDownTimer(60000, 1000);
+        myCountDownTimer.start();
+        resendEmail.setEnabled(false);
     }
 
     private void showEmailNotVerifiedDialog() {
