@@ -107,7 +107,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
     private CallbackManager mCallbackManager;
 
-    private TextView txtVwCreateAcc;
+    private TextView txtVwCreateAcc, txtVwForgotPass;
     private EditText txtFldLoginUsername, txtFldLoginPassword;
     private Button btnLogin, btnSignInFb, btnSignInGoogle;
     //private static FirebaseAuth mAuth;
@@ -148,6 +148,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
         //references
         txtVwCreateAcc = (TextView) findViewById(R.id.btnSignUp);
+        txtVwForgotPass = (TextView) findViewById(R.id.btnForgotPassword);
         txtFldLoginUsername = (EditText) findViewById(R.id.txtFldLoginUsername);
         txtFldLoginPassword = (EditText) findViewById(R.id.txtFldLoginPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -169,6 +170,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         btnSignInFb.setOnClickListener(this);
         btnSignInGoogle.setOnClickListener(this);
         txtVwCreateAcc.setOnClickListener(this);
+        txtVwForgotPass.setOnClickListener(this);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -411,6 +413,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             Intent createAcc = new Intent(Login.this, SignUp.class);
             startActivity(createAcc);
         }
+
+        if (v == txtVwForgotPass){
+            Intent forgotPass = new Intent(Login.this, ForgotPass.class);
+            startActivity(forgotPass);
+        }
     }
 
     @Override
@@ -575,8 +582,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     while (users.hasNext()) {
                         DataSnapshot user = users.next();
 
-                        if (user.child("username").getValue().toString().equals(username) &&
-                                user.child("password").getValue().toString().equals(password)) {
+                        if (user.child("username").getValue().toString().equals(username)) {
                             String sUserID = user.getKey().toString();
                             String sUsername = user.child("username").getValue().toString();
                             String sEmail = user.child("email").getValue().toString();
