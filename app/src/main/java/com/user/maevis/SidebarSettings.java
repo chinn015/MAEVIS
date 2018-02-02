@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -230,6 +231,14 @@ public class SidebarSettings extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            displayDiscardDialog();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public void setImageURL(String imgURL) {
@@ -533,8 +542,7 @@ public class SidebarSettings extends AppCompatActivity {
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                startActivity(
-                        new Intent(SidebarSettings.this, Sidebar_HomePage.class));
+                finish();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

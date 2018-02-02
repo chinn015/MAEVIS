@@ -118,12 +118,7 @@
         <activity
             android:name=".UploadReport"
             android:label="Upload Report"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".SelectionPage"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".SelectionPage" />
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".Sidebar_HomePage"
@@ -211,6 +206,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".EmailVerification"></activity>
 
         <!--<activity android:name=".item_comments"></activity>-->
     </application>
