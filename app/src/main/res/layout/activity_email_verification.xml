@@ -49,6 +49,18 @@
         android:text="60"
         android:textSize="30sp"/>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/progressbar_states" />
+
     <Button
         android:id="@+id/proceedButton"
         android:layout_width="wrap_content"

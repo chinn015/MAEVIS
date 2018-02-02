@@ -33,6 +33,9 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
 
     private ProgressDialog progressDialog;
 
+    private ProgressBar progressBar;
+    private MyCountDownTimer myCountDownTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         resendEmail = findViewById(R.id.resendEmail);
         btnProceed = (Button) findViewById(R.id.proceedButton);
         logoutButton = findViewById(R.id.logoutButton);
+        progressBar = findViewById(R.id.progressBar);
 
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle); //instantiate a progress diaglog
 
@@ -49,23 +53,30 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         btnProceed.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
-        Timer();
+        progressBar.setProgress(100);
+        myCountDownTimer = new MyCountDownTimer(10000, 1000);
+        myCountDownTimer.start();
     }
 
-    private void Timer(){
+    public class MyCountDownTimer extends CountDownTimer {
 
-        new CountDownTimer(10000, 1000) {
-            @Override
-            public void onTick(long l) {
-                timeLeft.setText(l / 1000+"");
-            }
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
 
-            @Override
-            public void onFinish() {
-                timeLeft.setText(0+"");
-                resendEmail.setEnabled(true);
-            }
-        }.start();
+        @Override
+        public void onTick(long millisUntilFinished) {
+            timeLeft.setText(String.valueOf(millisUntilFinished / 1000 + "s"));
+            int progress = (int) (millisUntilFinished/100);
+            progressBar.setProgress(progress);
+        }
+
+        @Override
+        public void onFinish() {
+            timeLeft.setText("Timer is finished.");
+            progressBar.setProgress(0);
+        }
+
     }
 
     @Override
