@@ -262,7 +262,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         builder.setCancelable(false);
 
         builder.setTitle("Update Home Address");
-        builder.setMessage("Locate your home address by tapping any area on the map.");
+        builder.setMessage("Locate your home address by tapping any area on the map. You can drag and hold the Home Marker to adjust.");
         builder.setInverseBackgroundForced(true);
         builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

@@ -3,9 +3,11 @@ package com.user.maevis;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.ImageView;
@@ -14,6 +16,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -65,6 +69,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         ImageView maevis_logo = (ImageView)findViewById(R.id.imgLogo);
         maevis_logo.setImageResource(R.drawable.maevis_logo);
 
+        Window window = this.getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
+
+
+
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
@@ -113,12 +122,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             createAccount();
         }
 
-        /*if(v == btnLogin) {
-            Intent loginPage = new Intent(SignUp.this, Login.class);
-            finish();
-            startActivity(loginPage);
-        }*/
-
         if (v == txtFldBirthdate) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(SignUp.this, AlertDialog.THEME_HOLO_LIGHT,
                     new DatePickerDialog.OnDateSetListener() {
@@ -128,6 +131,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                     txtFldBirthdate.setText(birthDay + "/" + birthMonth + "/" + birthYear);
                 }
             }, year, month, day);
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
             datePickerDialog.show();
         }
 
@@ -218,6 +222,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             Toast.makeText(this, "Enter your first address.", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(username.length() < 8){
+            txtFldUsername.setError("Username must have at least 8 characters");
+            return;
+        }
+
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        boolean containsNumber = pattern.matcher(password).matches();
+
+        if(password.length() < 8 && containsNumber != true){
+            txtFldPassword.setError("Passsword must have at least 8 characters with at least 1 digit");
+            return;
+        }
+
 
         final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
@@ -327,4 +346,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
         return false;
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            //txtFldAddress.setText("");
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.grantland.widget.AutofitTextView;
@@ -299,6 +300,19 @@ public class SidebarSettings extends AppCompatActivity {
             return;
         }
 
+        if(userName.length() < 8){
+            username.setError("Username must have at least 8 characters");
+            return;
+        }
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        boolean containsNumber = pattern.matcher(pass).matches();
+
+        if(pass.length() < 8 && containsNumber != true){
+            password.setError("Passsword must have at least 8 characters with at least 1 digit");
+            return;
+        }
+
         dbUsername = FirebaseDatabase.getInstance().getReference();
         dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
@@ -476,7 +490,6 @@ public class SidebarSettings extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                //saveData();
                 if (finalImageURI != null) {
-                    Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_LONG).show();
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
                     progressDialog.setMessage("Updating profile.");
@@ -484,7 +497,6 @@ public class SidebarSettings extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
 
                     try {
-                        Toast.makeText(getApplicationContext(), "null0", Toast.LENGTH_LONG).show();
 
                         Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -500,7 +512,7 @@ public class SidebarSettings extends AppCompatActivity {
 
                                 saveData();
 
-                                Toast.makeText(SidebarSettings.this, "Report sent." + getImageURL(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(SidebarSettings.this, "Update Successful!.", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -511,7 +523,7 @@ public class SidebarSettings extends AppCompatActivity {
                             }
                         });
                     } catch (IOException ie) {
-                        Toast.makeText(SidebarSettings.this, "Upload error.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SidebarSettings.this, "Update error.", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
 

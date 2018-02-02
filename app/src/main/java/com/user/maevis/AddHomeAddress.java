@@ -269,7 +269,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
         builder.setCancelable(false);
 
         builder.setTitle("Add Home Address");
-        builder.setMessage("Locate your home address by tapping any area on the map.");
+        builder.setMessage("Locate your home address by tapping any area on the map. You can drag and hold the Home Marker to adjust.");
         builder.setInverseBackgroundForced(true);
         builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

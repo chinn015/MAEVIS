@@ -54,7 +54,6 @@ public class SelectionPage extends Activity implements View.OnClickListener {
         }
 
         if(v == btnCloseSelectionPage){
-            startActivity(new Intent(this, Sidebar_HomePage.class));
             finish();
         }
 

@@ -186,7 +186,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
                         @Override
                         public void onFinish() {
-                            Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();
                             //Toast.makeText(Login.this, SessionManager.getUserID(), Toast.LENGTH_LONG).show();
                             //Log.d("USER ID: ", SessionManager.getUserID());
                             /*FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
