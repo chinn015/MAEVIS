@@ -334,7 +334,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 double currentLong = 123.897093;
                                 final String userPhoto = profileImage;
 
-                                final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
+                                final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, userPhoto, userStatus, userType, username);
 
                                 if(!FirebaseDatabaseManager.isEmailUsed(email)) {
                                     FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
@@ -496,7 +496,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         double currentLat = 10.316590;
         double currentLong = 123.897093;
         final String userPhoto = acct.getPhotoUrl().toString();
-        final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
+        final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, userPhoto, userStatus, userType, username);
 
         //showGoogleAccountDialog(firstName, email, userPhoto);
         progressDialog.setMessage("Signing in with Google.");

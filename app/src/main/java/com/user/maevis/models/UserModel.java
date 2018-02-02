@@ -17,7 +17,6 @@ public class UserModel {
     private double homeLat;
     private double homeLong;
     private String lastName;
-    private String password;
     private String userPhoto;
     private String userStatus;
     private String userType;
@@ -25,7 +24,7 @@ public class UserModel {
 
     //Constructor
 
-    public UserModel(String address, String birthdate, double currentLat, double currentLong, String deviceToken, String email, String firstName, double homeLat, double homeLong, String lastName, String password, String userPhoto, String userStatus, String userType, String username) {
+    public UserModel(String address, String birthdate, double currentLat, double currentLong, String deviceToken, String email, String firstName, double homeLat, double homeLong, String lastName, String userPhoto, String userStatus, String userType, String username) {
         this.address = address;
         this.birthdate = birthdate;
         this.currentLat = currentLat;
@@ -36,17 +35,15 @@ public class UserModel {
         this.homeLat = homeLat;
         this.homeLong = homeLong;
         this.lastName = lastName;
-        this.password = password;
         this.userPhoto = userPhoto;
         this.userStatus = userStatus;
         this.userType = userType;
         this.username = username;
     }
 
-    public UserModel(String email, String username, String password) {
+    public UserModel(String email, String username) {
         this.email = email;
         this.username = username;
-        this.password = password;
     }
 
     public UserModel() {
@@ -61,14 +58,6 @@ public class UserModel {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getDeviceToken() {
