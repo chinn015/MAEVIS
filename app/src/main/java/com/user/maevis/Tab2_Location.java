@@ -336,6 +336,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 case "Admin":
                     if(FirebaseDatabaseManager.isInActiveVerifiedReports(markerReportIDs.get(id))) {
                         PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
+                        PageNavigationManager.setClickedUserID(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)).getReportedBy());
                         i = new Intent(getContext(), ReportPage.class);
                         startActivity(i);
                     } else {

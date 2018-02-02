@@ -204,17 +204,28 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
 
         if(SessionManager.isLoggedIn()) {
             if (id == R.id.action_update_address) {
-                Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(this, SidebarSettings.class);
-                startActivity(i);
-                finish();
-                return true;
+
+                if(userHomeLat == 0 & userHomeLong == 0){
+                    showUpdateHomeAddressDialog();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(this, SidebarSettings.class);
+                    startActivity(i);
+                    finish();
+                    return true;
+                }
+
             }
         }else{
             if (id == R.id.action_update_address) {
-                Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, SignUp.class));
-                finish();
+
+                if(userHomeLat == 0 & userHomeLong == 0) {
+                    showAddHomeAddressDialog();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Update successful!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(this, SignUp.class));
+                    finish();
+                }
                 return true;
             }
         }
@@ -257,7 +268,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
 
-        builder.setTitle("Update Home Address");
+        builder.setTitle("Add Home Address");
         builder.setMessage("Locate your home address by tapping any area on the map.");
         builder.setInverseBackgroundForced(true);
         builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
@@ -269,5 +280,42 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
     }
+
+    private void showAddHomeAddressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        builder.setTitle("Add Home Address");
+        builder.setMessage("Please locate your home address.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+    }
+
+    private void showUpdateHomeAddressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+
+        builder.setTitle("Update Home Address");
+        builder.setMessage("Please locate your home address.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
+    }
+
 
 }
