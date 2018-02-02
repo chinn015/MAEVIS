@@ -245,8 +245,57 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         Toast.makeText(this, "You are loggin in.", Toast.LENGTH_LONG).show();
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void signInFb(){
+        LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("email", "public_profile"));
+
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+
+                final String userID = loginResult.getAccessToken().getUserId();
+                final LoginResult loginRes = loginResult;
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                        String profileImg = "https://graph.facebook.com/" +userID+ "/picture?type=normal";
+                        //displayUserInfo(jsonObject, profileImg);
+                        handleFacebookAccessToken(loginRes.getAccessToken(), jsonObject, profileImg);
+                        Log.d("Graph Request", "GRAPH REQUEST!!!");
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "first_name, last_name, email, id, picture");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
+
+                Toast.makeText(Login.this, "Loggin in thru Fb", Toast.LENGTH_SHORT).show();
+                //handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(Login.this, "FB ON CANCEL", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(Login.this, "FB ON ERROR", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "facebook:onError", error);
+                // ...
+            }
+        });
+    }
+
+    private void handleFacebookAccessToken(AccessToken token, JSONObject obj, String profImg) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        final JSONObject object = obj;
+        final String profileImage = profImg;
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         SessionManager.getFirebaseAuth().signInWithCredential(credential)
@@ -255,10 +304,65 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            /*Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
 
-                            updateUI();
+                            updateUI();*/
+                            try {
+                                final String email = object.getString("email");
+                                String username = "NULL";
+                                String password = "NULL";
+                                String firstName = object.getString("first_name");
+                                String lastName = object.getString("last_name");
+                                String birthdate = "NULL";
+                                String address = "NULL";
+                                String userType = "Regular User";
+                                String userStatus = "Active";
+                                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                                double homeLat = 10.316590;
+                                double homeLong = 123.897093;
+                                double currentLat = 10.316590;
+                                double currentLong = 123.897093;
+                                final String userPhoto = profileImage;
+
+                                final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
+
+                                if(!FirebaseDatabaseManager.isEmailUsed(email)) {
+                                    FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                                    DatabaseReference newUser = FirebaseDatabaseManager.FirebaseUsers.child(user.getUid());
+                                    newUser.setValue(userModel);
+
+                                    float cLat = (float) userModel.getCurrentLat();
+                                    float cLong= (float) userModel.getCurrentLong();
+                                    float hLat = (float) userModel.getHomeLat();
+                                    float hLong = (float) userModel.getHomeLong();
+
+                                    SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
+                                    showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
+                                    Toast.makeText(Login.this, "New User with FB. Add to Firebase!!!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                                    UserItem userItem = FirebaseDatabaseManager.getUserItem(user.getUid());
+                                    SessionManager.createLoginSession(userItem);
+                                    Toast.makeText(Login.this, "Existing user with FB. Logging in.", Toast.LENGTH_SHORT).show();
+
+                                    if(userItem == null) {
+                                        Log.d("USERITEM NULL", "User Item Null");
+                                    } else {
+                                        Log.d("USERITEM NOT NULL", "User Item Not Null");
+                                    }
+
+                                    //showFBDetailsDialog(userItem);
+                                }
+
+                                //showFBDetailsDialog(firstName, lastName, email, profileImage);
+                                showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
+                                //showFBDetailsDialog(firstName, lastName, email, profileImage);
+                                //showFBDetailsDialog(userItem);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -437,110 +541,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signInFb(){
-        LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("email", "public_profile"));
-
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-
-                final String userID = loginResult.getAccessToken().getUserId();
-
-                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                        String profileImg = "https://graph.facebook.com/" +userID+ "/picture?type=normal";
-                        displayUserInfo(jsonObject, profileImg);
-                        Log.d("Graph Request", "GRAPH REQUEST!!!");
-                    }
-                });
-
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "first_name, last_name, email, id, picture");
-                graphRequest.setParameters(parameters);
-                graphRequest.executeAsync();
-
-                Toast.makeText(Login.this, "Loggin in thru Fb", Toast.LENGTH_SHORT).show();
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Toast.makeText(Login.this, "FB ON CANCEL", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(Login.this, "FB ON ERROR", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "facebook:onError", error);
-                // ...
-            }
-        });
-    }
-
-    public void displayUserInfo(JSONObject object, String profileImage){
-        //UserItem userItem = null;
-
-        try {
-            final String email = object.getString("email");
-            String username = "NULL";
-            String password = "NULL";
-            String firstName = object.getString("first_name");
-            String lastName = object.getString("last_name");
-            String birthdate = "NULL";
-            String address = "NULL";
-            String userType = "Regular User";
-            String userStatus = "Active";
-            String deviceToken = FirebaseInstanceId.getInstance().getToken();
-            double homeLat = 10.316590;
-            double homeLong = 123.897093;
-            double currentLat = 10.316590;
-            double currentLong = 123.897093;
-            final String userPhoto = profileImage;
-
-            final UserModel userModel = new UserModel(address, birthdate, currentLat, currentLong, deviceToken, email, firstName, homeLat, homeLong, lastName, password, userPhoto, userStatus, userType, username);
-
-            if(!FirebaseDatabaseManager.isEmailUsed(email)) {
-                FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
-                DatabaseReference newUser = FirebaseDatabaseManager.FirebaseUsers.child(user.getUid());
-                newUser.setValue(userModel);
-
-                float cLat = (float) userModel.getCurrentLat();
-                float cLong= (float) userModel.getCurrentLong();
-                float hLat = (float) userModel.getHomeLat();
-                float hLong = (float) userModel.getHomeLong();
-
-                SessionManager.createLoginSession(user.getUid(), userModel.getUsername(), userModel.getEmail(), userModel.getFirstName(), userModel.getLastName(), userModel.getBirthdate(), userModel.getAddress(), userModel.getUserStatus(), userModel.getUserType(), userModel.getDeviceToken(), cLat, cLong, hLat, hLong, userPhoto);
-                showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
-                Toast.makeText(Login.this, "New User with FB. Add to Firebase!!!", Toast.LENGTH_SHORT).show();
-            } else {
-                FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
-                UserItem userItem = FirebaseDatabaseManager.getUserItem(user.getUid());
-                SessionManager.createLoginSession(userItem);
-                Toast.makeText(Login.this, "Existing user with FB. Logging in.", Toast.LENGTH_SHORT).show();
-
-                if(userItem == null) {
-                    Log.d("USERITEM NULL", "User Item Null");
-                } else {
-                    Log.d("USERITEM NOT NULL", "User Item Not Null");
-                }
-
-                showFBDetailsDialog(userItem);
-            }
-
-            //showFBDetailsDialog(firstName, lastName, email, profileImage);
-            showFBDetailsDialog(SessionManager.getFirstName(), SessionManager.getLastName(), SessionManager.getEmail(), SessionManager.getUserPhoto());
-            //showFBDetailsDialog(firstName, lastName, email, profileImage);
-            //showFBDetailsDialog(userItem);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     public void loginUser() {

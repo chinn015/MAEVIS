@@ -324,6 +324,7 @@ public class FirebaseDatabaseManager {
         UserItem userItem = null;
 
         for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
+            Log.d("USERZX", FirebaseDatabaseManager.getUserItems().get(x).getEmail());
             if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
                         /*clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
                         clickedUserItemStatus = true;*/

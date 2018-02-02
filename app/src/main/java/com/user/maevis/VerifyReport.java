@@ -81,6 +81,20 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         imgViewProfilePic.setOnClickListener(this);
 
+        btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
+        btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
+
+        btnVerifyReport.setOnClickListener(this);
+        btnDeclineReport.setOnClickListener(this);
+
+        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
+
+        listItems = new ArrayList<>();
+        imageList = new ArrayList<>();
+        mergedReportsID = new ArrayList<>();
+        nearbyUsers = new ArrayList<>();
+        nearbyHomes = new ArrayList<>();
+
         //display details of clicked item
         if(PageNavigationManager.getClickedTabLocListItemPending() != null) {
             viewNotifHead.setText(PageNavigationManager.getClickedTabLocListItemPending().getHead());
@@ -98,7 +112,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             Picasso.with(getApplicationContext())
                     .load(PageNavigationManager.getClickedTabLocListItemPending().getUserPhoto())
                     .into(imgViewProfilePic);
-
         } else if (PageNavigationManager.getClickedTabNotifListItem() != null) {
             viewNotifHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
             viewNotifDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
@@ -115,21 +128,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             Picasso.with(getApplicationContext())
                     .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
                     .into(imgViewProfilePic);
+
+            if(PageNavigationManager.getClickedTabNotifListItem().getReportStatus().equals("Verified")) {
+                btnVerifyReport.setVisibility(View.GONE);
+                btnDeclineReport.setVisibility(View.GONE);
+            }
         }
-
-        btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
-        btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
-
-        btnVerifyReport.setOnClickListener(this);
-        btnDeclineReport.setOnClickListener(this);
-
-        FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
-
-        listItems = new ArrayList<>();
-        imageList = new ArrayList<>();
-        mergedReportsID = new ArrayList<>();
-        nearbyUsers = new ArrayList<>();
-        nearbyHomes = new ArrayList<>();
 
         FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
