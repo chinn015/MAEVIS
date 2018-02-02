@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.StrictMode;
@@ -213,7 +214,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             showNoInternetConnection();
         }
 
-        checkPermissions();
+        //checkPermissions();
+
+        int Permission_All = 1;
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if(!hasPermissions(this, permissions)) {
+            ActivityCompat.requestPermissions(this, permissions, Permission_All);
+        }
     }
 
     @Override
@@ -524,8 +531,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                         } else {
                             if(task.getException() instanceof FirebaseAuthUserCollisionException) {
                                 showFacebookEmailUsed();
-                                /*Toast.makeText(getApplicationContext(), "User with Email id already exists",
-                                        Toast.LENGTH_SHORT).show();*/
                             }
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -755,6 +760,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         android.app.AlertDialog alert = builder.create();
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for(String permission : permissions) {
+                if(ActivityCompat.checkSelfPermission(context, permission)!=PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public void checkPermissions() {
