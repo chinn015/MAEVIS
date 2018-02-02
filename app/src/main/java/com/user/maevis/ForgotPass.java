@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ForgotPass extends AppCompatActivity implements View.OnClickListener{
+public class ForgotPass extends AppCompatActivity implements View.OnClickListener,  View.OnTouchListener {
 
     private static final String TAG = "ForgotPass";
     private static final String REQUIRED = "Required";
@@ -40,6 +42,8 @@ public class ForgotPass extends AppCompatActivity implements View.OnClickListene
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle); //instantiate a progress diaglog
 
         sendRequest.setOnClickListener(this);
+        sendRequest.setOnTouchListener(this);
+
 
     }
 
@@ -79,7 +83,7 @@ public class ForgotPass extends AppCompatActivity implements View.OnClickListene
         final String emailAdd = emailAddress.getText().toString().trim();
 
         if (TextUtils.isEmpty(emailAdd)){
-            emailAddress.setError(REQUIRED);
+            emailAddress.setError("Please enter your email address.");
             return;
         }
 
@@ -102,5 +106,17 @@ public class ForgotPass extends AppCompatActivity implements View.OnClickListene
                         }
                     }
                 });
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            sendRequest.setBackgroundResource(R.drawable.btn_rounded);
+            sendRequest.setTextColor(Color.WHITE);
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            sendRequest.setBackgroundResource(R.drawable.btn_rounded1);
+            sendRequest.setTextColor(Color.BLACK);
+        }
+        return false;
     }
 }

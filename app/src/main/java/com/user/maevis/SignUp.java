@@ -236,6 +236,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             return;
         }
 
+        if(isEmailValid(email) != true){
+            txtFldEmail.setError("Please enter a valid email address.");
+            return;
+        }
+
         String regex = "(.)*(\\d)(.)*";
         Pattern pattern = Pattern.compile(regex);
         boolean containsNumber = pattern.matcher(password).matches();
@@ -378,4 +383,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         return super.onKeyDown(keyCode, event);
     }
 
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 }

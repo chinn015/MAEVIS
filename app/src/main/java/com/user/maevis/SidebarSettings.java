@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -325,6 +326,11 @@ public class SidebarSettings extends AppCompatActivity {
             return;
         }
 
+        if(isEmailValid(emailAdd) != true){
+            email.setError("Please enter a valid email address.");
+            return;
+        }
+        
         dbUsername = FirebaseDatabase.getInstance().getReference();
         dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
@@ -585,6 +591,13 @@ public class SidebarSettings extends AppCompatActivity {
         String timestamp = sdf.format(new Date());
 
         return "IMGMAEVIS"+timestamp+".jpg";
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 }

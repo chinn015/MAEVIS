@@ -4,26 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.user.maevis.ForgotPass">
+    tools:context="com.user.maevis.Login"
+    android:background="@drawable/bg_login">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/maevis_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Password"
+        android:textSize="25dp"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/imgLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="Note: Please enter your account's email address and wait for the reset password email."
+        android:textColor="@color/colorAccent"
+        android:textSize="15dp"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/sendRequest"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
 
     <EditText
         android:id="@+id/emailAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
-        android:ems="10"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/txtfld_rounded"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
         android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:textColorHint="#FFFFFF"
+        android:textSize="17dp"
+        android:textCursorDrawable="@drawable/cursor_text_white"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView6"
+        android:layout_alignStart="@+id/sendRequest" />
 
     <Button
         android:id="@+id/sendRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:text="Request Reset Link"
+        android:background="@drawable/btn_rounded"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:textSize="17dp"
+        android:onClick="onLogin"
+        android:layout_marginTop="14dp"
         android:layout_below="@+id/emailAdd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:text="Request Reset Link" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context="com.user.maevis.ForgotPass">-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/emailAdd"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="160dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Email"-->
+        <!--android:inputType="textEmailAddress" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/sendRequest"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/emailAdd"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="28dp"-->
+        <!--android:text="Request Reset Link" />-->
+
+<!--</RelativeLayout>-->

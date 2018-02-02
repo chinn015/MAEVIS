@@ -211,6 +211,9 @@
         <activity android:name=".AddBdayAddress"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="com.user.maevis.ForgotPass"
+            android:screenOrientation="portrait"/>
+
         <!--<activity android:name=".item_comments"></activity>-->
     </application>
 
