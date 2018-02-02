@@ -272,28 +272,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                         if(task.isSuccessful()) {
                             Toast.makeText(SignUp.this, "Account registered.", Toast.LENGTH_SHORT).show();
                             addUserToFirebaseDatabase(userModel);
-                            /*final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
 
-                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(SignUp.this,
-                                                "Verification email sent to " + user.getEmail(),
-                                                Toast.LENGTH_SHORT).show();
-
-                                        addUserToFirebaseDatabase(userModel);
-                                        //finish();
-                                        startActivity(new Intent(SignUp.this, EmailVerification.class));
-                                        //AuthStateListener from Login.java will get excecuted once user is created and
-                                        //logged in at the same time which will then redirect to EmailVerification.java
-                                    } else {
-                                        Toast.makeText(SignUp.this,
-                                                "Failed to send verification email.",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });*/
                             finish();
                             startActivity(new Intent(SignUp.this, EmailVerification.class));
                         } else {

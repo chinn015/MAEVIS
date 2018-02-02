@@ -53,10 +53,6 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         btnProceed.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
-        /*progressBar.setProgress(100);
-        myCountDownTimer = new MyCountDownTimer(60000, 1000);
-        myCountDownTimer.start();*/
-
         resend();
     }
 
@@ -80,8 +76,8 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                     if(user.isEmailVerified()) {
                         myCountDownTimer.cancel();
                         myCountDownTimer = null;
-                        finish();
-                        startActivity(new Intent(EmailVerification.this, Sidebar_HomePage.class));
+
+                        btnProceed.setEnabled(true);
                     }
                 }
             });
