@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -131,6 +132,15 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             user_location.setVisibility(View.INVISIBLE);
         }else {
             user_location.setText(SessionManager.getAddress());
+        }
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = SessionManager.getFirebaseAuth().getCurrentUser();
+        if(currentUser != null){
+            if(!currentUser.isEmailVerified()) {
+                finish();
+                startActivity(new Intent(Sidebar_HomePage.this, EmailVerification.class));
+            }
         }
 
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -337,6 +347,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(SessionManager.getCurrentLat());
         FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(SessionManager.getCurrentLong());
+        //Toast.makeText(this, "Sidebar")
     }
 
     private void showDialogBlocked() {
