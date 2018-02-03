@@ -172,46 +172,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         txtVwCreateAcc.setOnClickListener(this);
         txtVwForgotPass.setOnClickListener(this);
 
-        /*authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                final FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null) {
-                    new CountDownTimer(250, 1000) {
-
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();}
-
-                    }.start();
-
-                    user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            //progressDialog.dismiss();
-                            if(progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                            if(user.isEmailVerified()) {
-                                finish();
-                                startActivity(new Intent(Login.this, Sidebar_HomePage.class));
-                            } else {
-                                finish();
-                                startActivity(new Intent(Login.this, EmailVerification.class));
-                            }
-                        }
-                    });
-                }
-            }
-        };*/
-
-
-
         if(!isNetworkAvailable(getApplicationContext())) {
             showNoInternetConnection();
         }
@@ -233,6 +193,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 .requestProfile()
                 .requestEmail()
                 .build();
+
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
         googleApiClient.connect();
 
@@ -571,12 +532,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
         //validations
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
+            txtFldLoginUsername.setError("Please input your username.");
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+            txtFldLoginPassword.setError("Please input your password.");
             return;
         }
 

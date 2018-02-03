@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.grantland.widget.AutofitTextView;
@@ -63,7 +64,7 @@ import me.grantland.widget.AutofitTextView;
 
 public class SidebarSettings extends AppCompatActivity {
 
-    private EditText username, password, fName, lName, email;
+    private EditText username, password, fName, lName, email, conPassword;
 
     private DatabaseReference dbUsername, dbPassword, dbFName, dbLName, dbEmail, dbAddress, dbUserPhoto;
 
@@ -106,6 +107,8 @@ public class SidebarSettings extends AppCompatActivity {
         email = (EditText) findViewById(R.id.txtFldEditEmail);
         txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
         ivImage = (CircleImageView) findViewById(R.id.imgChangePhoto);
+        conPassword = (EditText) findViewById(R.id.txtFldEditConPassword);
+
         Picasso.with(this).load(SessionManager.getUserPhoto()).into(ivImage);
 
         dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
@@ -133,12 +136,14 @@ public class SidebarSettings extends AppCompatActivity {
                 final String userEmail = email.getText().toString();
                 final String userFname = fName.getText().toString();
                 final String userLname = lName.getText().toString();
+                final String userConPassword = conPassword.getText().toString();
 
                 i.putExtra("userName", userName);
                 i.putExtra("userPassword", userPassword);
                 i.putExtra("userEmail", userEmail);
                 i.putExtra("userFname", userFname);
                 i.putExtra("userLname", userLname);
+                i.putExtra("userConPassword", userConPassword);
 
                 startActivity(i);
                 finish();
@@ -155,6 +160,7 @@ public class SidebarSettings extends AppCompatActivity {
             email.setText(UpdateHomeAddress.userEmail);
             txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
             oldPass = UpdateHomeAddress.userPassword;
+            conPassword.setText(UpdateHomeAddress.userConPassword);
             //Toast.makeText(this, "get1 : " + UpdateHomeAddress.userName, Toast.LENGTH_LONG).show();
         }else{
             dbAddress.addValueEventListener(new ValueEventListener() {
@@ -186,6 +192,7 @@ public class SidebarSettings extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     password.setText(dataSnapshot.getValue(String.class));
                     oldPass = dataSnapshot.getValue(String.class);
+                    conPassword.setText(dataSnapshot.getValue(String.class));
                 }
 
                 @Override
@@ -254,14 +261,15 @@ public class SidebarSettings extends AppCompatActivity {
         //Toast.makeText(this, "Updated Profile", Toast.LENGTH_SHORT).show();
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userName = username.getText().toString();
-        final String pass = password.getText().toString();
-        final String first = fName.getText().toString();
-        final String last = lName.getText().toString();
-        final String emailAdd = email.getText().toString();
-        final String add = txtFldAddress.getText().toString();
+        final String userName = username.getText().toString().trim();
+        final String pass = password.getText().toString().trim();
+        final String first = fName.getText().toString().trim();
+        final String last = lName.getText().toString().trim();
+        final String emailAdd = email.getText().toString().trim();
+        final String add = txtFldAddress.getText().toString().trim();
         final Double homeLat = UpdateHomeAddress.userHomeLat;
         final Double homeLong = UpdateHomeAddress.userHomeLong;
+        final String conPass = conPassword.getText().toString().trim();
 
         // Username is required
         if (TextUtils.isEmpty(userName)) {
@@ -296,6 +304,24 @@ public class SidebarSettings extends AppCompatActivity {
         // Address is required
         if (TextUtils.isEmpty(add)) {
             txtFldAddress.setError(REQUIRED);
+            return;
+        }
+
+        if(userName.length() < 8){
+            username.setError("Username must have at least 8 characters");
+            return;
+        }
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        boolean containsNumber = pattern.matcher(pass).matches();
+
+        if(pass.length() < 8 && containsNumber != true){
+            password.setError("Passsword must have at least 8 characters with at least 1 digit");
+            return;
+        }
+
+        if(!pass.equals(conPass)){
+            conPassword.setError("Your new password and confirmation password do not match.");
             return;
         }
 
@@ -476,7 +502,6 @@ public class SidebarSettings extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                //saveData();
                 if (finalImageURI != null) {
-                    Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_LONG).show();
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
                     progressDialog.setMessage("Updating profile.");
@@ -484,7 +509,6 @@ public class SidebarSettings extends AppCompatActivity {
                     progressDialog.setCanceledOnTouchOutside(false);
 
                     try {
-                        Toast.makeText(getApplicationContext(), "null0", Toast.LENGTH_LONG).show();
 
                         Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -500,7 +524,7 @@ public class SidebarSettings extends AppCompatActivity {
 
                                 saveData();
 
-                                Toast.makeText(SidebarSettings.this, "Report sent." + getImageURL(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(SidebarSettings.this, "Update Successful!.", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -511,7 +535,7 @@ public class SidebarSettings extends AppCompatActivity {
                             }
                         });
                     } catch (IOException ie) {
-                        Toast.makeText(SidebarSettings.this, "Upload error.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SidebarSettings.this, "Update error.", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
 

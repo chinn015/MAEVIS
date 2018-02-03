@@ -56,7 +56,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     Bitmap homeMarkerRed;
     MarkerOptions homeNewmarker = null;
     ArrayList<Marker> markers = new ArrayList<>();
-    static String userName, userPassword, userEmail, userFname, userLname;
+    static String userName, userPassword, userEmail, userFname, userLname, userConPassword;
 
 
     @Override
@@ -252,6 +252,8 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         userLname = in.getStringExtra("userLname");
         userPassword = in.getStringExtra("userPassword");
         userEmail = in.getStringExtra("userEmail");
+        userConPassword = in.getStringExtra("userConPassword");
+
 
         //Toast.makeText(this, "get : " + userName, Toast.LENGTH_LONG).show();
 
@@ -262,7 +264,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         builder.setCancelable(false);
 
         builder.setTitle("Update Home Address");
-        builder.setMessage("Locate your home address by tapping any area on the map.");
+        builder.setMessage("Locate your home address by tapping any area on the map. You can drag and hold the Home Marker to adjust.");
         builder.setInverseBackgroundForced(true);
         builder.setNegativeButton("Return", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

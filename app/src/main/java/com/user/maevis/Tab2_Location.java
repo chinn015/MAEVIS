@@ -130,11 +130,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
-        Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
+        Bitmap userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
 
         bitmapHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap home = bitmapHome.getBitmap();
-        Bitmap homeMarker = Bitmap.createScaledBitmap(home, 160, 160, false);
+        Bitmap homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
 
 
         for (int x = 0; x < 6; x++){
@@ -336,6 +336,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 case "Admin":
                     if(FirebaseDatabaseManager.isInActiveVerifiedReports(markerReportIDs.get(id))) {
                         PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
+                        PageNavigationManager.setClickedUserID(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)).getReportedBy());
                         i = new Intent(getContext(), ReportPage.class);
                         startActivity(i);
                     } else {

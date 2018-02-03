@@ -3,9 +3,11 @@ package com.user.maevis;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.ImageView;
@@ -14,6 +16,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -42,6 +46,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     DatabaseReference FirebaseUsers;
     private EditText txtFldUsername;
     private EditText txtFldPassword;
+    private EditText txtFldConPassword;
     private EditText txtFldFirstName;
     private EditText txtFldLastName;
     private EditText txtFldEmail;
@@ -67,6 +72,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         ImageView maevis_logo = (ImageView)findViewById(R.id.imgLogo);
         maevis_logo.setImageResource(R.drawable.maevis_logo);
 
+        Window window = this.getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.colorPrimaryDark));
+
+
+
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
@@ -79,6 +89,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         txtFldEmail = (EditText) findViewById(R.id.txtFldEmail);
         txtFldBirthdate = (EditText) findViewById(R.id.txtFldBirthdate);
         txtFldAddress = (TextView) findViewById(R.id.txtFldAddress);
+        txtFldConPassword = (EditText) findViewById(R.id.txtFldSignUpConPassword);
 
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         //btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -105,6 +116,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             txtFldPassword.setText(AddHomeAddress.userPassword);
             txtFldAddress.setText(AddHomeAddress.userHomeAddress);
             txtFldBirthdate.setText(AddHomeAddress.userBdate);
+            txtFldConPassword.setText(AddHomeAddress.userConPassword);
+
+
         }
 
     }
@@ -115,12 +129,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             createAccount();
         }
 
-        /*if(v == btnLogin) {
-            Intent loginPage = new Intent(SignUp.this, Login.class);
-            finish();
-            startActivity(loginPage);
-        }*/
-
         if (v == txtFldBirthdate) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(SignUp.this, AlertDialog.THEME_HOLO_LIGHT,
                     new DatePickerDialog.OnDateSetListener() {
@@ -130,6 +138,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                     txtFldBirthdate.setText(birthDay + "/" + birthMonth + "/" + birthYear);
                 }
             }, year, month, day);
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
             datePickerDialog.show();
         }
 
@@ -141,9 +150,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             final String userFname = txtFldFirstName.getText().toString();
             final String userLname = txtFldLastName.getText().toString();
             final String userBdate = txtFldBirthdate.getText().toString();
+            final String userConPassword = txtFldConPassword.getText().toString();
 
             i.putExtra("userName", userName);
             i.putExtra("userPassword", userPassword);
+            i.putExtra("userConPassword", userConPassword);
             i.putExtra("userEmail", userEmail);
             i.putExtra("userFname", userFname);
             i.putExtra("userLname", userLname);
@@ -155,13 +166,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
     }
 
     private void createAccount() {
-        String email = txtFldEmail.getText().toString();
-        String username = txtFldUsername.getText().toString();
-        String password = txtFldPassword.getText().toString();
-        String firstName = txtFldFirstName.getText().toString();
-        String lastName = txtFldLastName.getText().toString();
-        String birthdate = txtFldBirthdate.getText().toString();
-        String address = txtFldAddress.getText().toString();
+        String email = txtFldEmail.getText().toString().trim();
+        String username = txtFldUsername.getText().toString().trim();
+        String password = txtFldPassword.getText().toString().trim();
+        String conPassword = txtFldConPassword.getText().toString().trim();
+        String firstName = txtFldFirstName.getText().toString().trim();
+        String lastName = txtFldLastName.getText().toString().trim();
+        String birthdate = txtFldBirthdate.getText().toString().trim();
+        String address = txtFldAddress.getText().toString().trim();
         String userType = "Regular User";
         String userStatus = "Active";
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
@@ -175,7 +187,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
 
         if(TextUtils.isEmpty(username)) {
-            Toast.makeText(this, "Please enter your username.", Toast.LENGTH_SHORT).show();
+            txtFldUsername.setError("Please input your username.");
             return;
         }
 
@@ -190,34 +202,54 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
 
         if(TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+            txtFldPassword.setError("Please input your password.");
             return;
         }
 
         if(TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Please enter your email.", Toast.LENGTH_SHORT).show();
+            txtFldEmail.setError("Please input your email.");
             return;
         }
 
         if(TextUtils.isEmpty(firstName)) {
-            Toast.makeText(this, "Enter your first name.", Toast.LENGTH_SHORT).show();
+            txtFldFirstName.setError("Please input your first name.");
             return;
         }
 
         if(TextUtils.isEmpty(lastName)) {
-            Toast.makeText(this, "Enter your last name.", Toast.LENGTH_SHORT).show();
+            txtFldLastName.setError("Please input your last name.");
             return;
         }
 
         if(TextUtils.isEmpty(birthdate)) {
-            Toast.makeText(this, "Enter your birthdate.", Toast.LENGTH_SHORT).show();
+            txtFldBirthdate.setError("Please input your birthdate.");
             return;
         }
 
         if(TextUtils.isEmpty(address)) {
-            Toast.makeText(this, "Enter your first address.", Toast.LENGTH_SHORT).show();
+            txtFldAddress.setError("Please locate your home address.");
             return;
         }
+
+        if(username.length() < 8){
+            txtFldUsername.setError("Username must have at least 8 characters");
+            return;
+        }
+
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        boolean containsNumber = pattern.matcher(password).matches();
+
+        if(password.length() < 8 && containsNumber != true){
+            txtFldPassword.setError("Passsword must have at least 8 characters with at least 1 digit");
+            return;
+        }
+
+        if(!password.equals(conPassword)){
+            txtFldConPassword.setError("Please confirm your password.");
+            return;
+        }
+
 
         final String userPhoto = "https://firebasestorage.googleapis.com/v0/b/maevis-ecd17.appspot.com/o/UserPhotos%2Fdefault_user.png?alt=media&token=338722ca-9d00-4dd8-bd4a-e3c3bffd3cfa";
 
@@ -336,4 +368,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
         }
         return false;
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            //txtFldAddress.setText("");
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
