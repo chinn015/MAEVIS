@@ -39,6 +39,10 @@ public class UserItem {
         this.username = username;
     }
 
+    public UserItem() {
+
+    }
+
     public String getUserID() {
         return userID;
     }

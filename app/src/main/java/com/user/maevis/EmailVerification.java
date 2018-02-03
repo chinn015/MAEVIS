@@ -3,6 +3,7 @@ package com.user.maevis;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.session.SessionManager;
 
 public class EmailVerification extends AppCompatActivity implements View.OnClickListener{
@@ -27,6 +29,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
     private TextView timeLeft;
     private Button resendEmail;
     private Button btnProceed;
+    private Button logoutButton;
 
     private ProgressDialog progressDialog;
 
@@ -38,10 +41,13 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         timeLeft = findViewById(R.id.timeLeft);
         resendEmail = findViewById(R.id.resendEmail);
         btnProceed = (Button) findViewById(R.id.proceedButton);
+        logoutButton = findViewById(R.id.logoutButton);
 
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle); //instantiate a progress diaglog
 
         resendEmail.setOnClickListener(this);
+        btnProceed.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
 
         Timer();
     }
@@ -71,13 +77,53 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         }
 
         if(view == btnProceed) {
-            FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+            final FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
 
-            if(user.isEmailVerified()) {
-                Toast.makeText(this, "Registration complete!", Toast.LENGTH_LONG).show();
+            progressDialog.setMessage("Processing.");
+            progressDialog.show();
+
+            user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    progressDialog.dismiss();
+
+                    if(user.isEmailVerified()) {
+                        Toast.makeText(EmailVerification.this, "Registration complete!", Toast.LENGTH_LONG).show();
+                        //SignUp.addUserToFirebaseDatabase(FirebaseDatabaseManager.getNewUserModelTemp());
+                        finish();
+                        startActivity(new Intent(EmailVerification.this, Sidebar_HomePage.class));
+                    } else {
+                        Toast.makeText(EmailVerification.this, "Email: "+user.getEmail(), Toast.LENGTH_LONG).show();
+                        showEmailNotVerifiedDialog();
+                    }
+                }
+            });
+
+            return;
+        }
+
+        if(view == logoutButton){
+            SessionManager.clearSession();
+            SessionManager.getFirebaseAuth().signOut();
+
+            if(Login.getmGoogleSignInClient() != null) {
+                Login.getmGoogleSignInClient().signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
+                Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
             } else {
-                //Toast.makeText(this, "Email is not verified. Please verify your email to complete your registration.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
             }
+
+            finish();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+
+            return;
         }
     }
 

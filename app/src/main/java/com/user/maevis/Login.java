@@ -172,14 +172,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         txtVwCreateAcc.setOnClickListener(this);
         txtVwForgotPass.setOnClickListener(this);
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
+        /*authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null) {
-
-                    //FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
-
-                    new CountDownTimer(750, 1000) {
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null) {
+                    new CountDownTimer(250, 1000) {
 
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -188,29 +186,31 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
                         @Override
                         public void onFinish() {
-                            Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();
-                            //Toast.makeText(Login.this, SessionManager.getUserID(), Toast.LENGTH_LONG).show();
-                            //Log.d("USER ID: ", SessionManager.getUserID());
-                            /*FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
-
-                            SessionManager.setCurrentLatLong((float) Tab2_Location.userLatitude, (float) Tab2_Location.userLongitude);
-
-                            FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(SessionManager.getCurrentLat());
-                            FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(SessionManager.getCurrentLong());*/
-                        }
+                            Toast.makeText(Login.this, "Auth State Changed. Will login.", Toast.LENGTH_LONG).show();}
 
                     }.start();
 
-                    if(progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }
-
-                    finish();
-                    startActivity(new Intent(Login.this, Sidebar_HomePage.class));
-
+                    user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            //progressDialog.dismiss();
+                            if(progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                            if(user.isEmailVerified()) {
+                                finish();
+                                startActivity(new Intent(Login.this, Sidebar_HomePage.class));
+                            } else {
+                                finish();
+                                startActivity(new Intent(Login.this, EmailVerification.class));
+                            }
+                        }
+                    });
                 }
             }
-        };
+        };*/
+
+
 
         if(!isNetworkAvailable(getApplicationContext())) {
             showNoInternetConnection();
@@ -239,13 +239,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         super.onStart();
-        SessionManager.getFirebaseAuth().addAuthStateListener(authStateListener);
+        //SessionManager.getFirebaseAuth().addAuthStateListener(authStateListener);
 
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = SessionManager.getFirebaseAuth().getCurrentUser();
 
         if(currentUser != null){
-            updateUI();
+            if(currentUser.isEmailVerified()) {
+                finish();
+                startActivity(new Intent(this, Sidebar_HomePage.class));
+                updateUI();
+            } else {
+                finish();
+                startActivity(new Intent(this, EmailVerification.class));
+            }
+
         }
 
     }
@@ -615,8 +623,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                         //Toast.makeText(Login.this, "User authentication problem. " + SessionManager.getEmail(), Toast.LENGTH_LONG).show();
                                         showAuthProbDialog();
                                     } else {
-                                        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
+                                        //FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
                                         Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() + " " + SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
+
+                                        FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+
+                                        if(user.isEmailVerified()) {
+                                            finish();
+                                            startActivity(new Intent(Login.this, Sidebar_HomePage.class));
+                                        } else {
+                                            finish();
+                                            startActivity(new Intent(Login.this, EmailVerification.class));
+                                        }
+
                                     }
                                     //progressDialog.dismiss();
                                 }
@@ -926,76 +945,3 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*package com.user.maevis;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-
-import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-
-public class Login extends AppCompatActivity {
-    private TextView txtVwCreateAcc;
-    private EditText txtFldLoginUsername, txtFldLoginPassword;
-    private Button btnLogin, btnSignInFb, btnSignInGoogle;
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference firebaseUsers;
-
-    private ProgressDialog progressDialog;
-
-    UserInformation userInformation;
-    //UserSessionManager UserSession;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_login);
-
-        ImageView maevis_logo = (ImageView)findViewById(R.id.imgLogo);
-        maevis_logo.setImageResource(R.drawable.maevis_logo);
-
-    }
-
-    public void onSignUp(View v){
-        if(v.getId() == R.id.btnSignUp){
-            Intent i = new Intent(this, SignUp.class);
-            startActivity(i);
-        }
-    }
-
-    public void onLogin(View v) {
-        if (v.getId() == R.id.btnLogin) {
-            Intent i = new Intent(this, Sidebar_HomePage.class);
-            startActivity(i);
-        }
-    }
-
-}
-*/

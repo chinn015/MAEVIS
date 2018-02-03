@@ -326,6 +326,12 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             }
         });
 
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
+
+        SessionManager.setCurrentLatLong((float) Tab2_Location.userLatitude, (float) Tab2_Location.userLongitude);
+
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(SessionManager.getCurrentLat());
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(SessionManager.getCurrentLong());
     }
 
     private void showDialogBlocked() {
