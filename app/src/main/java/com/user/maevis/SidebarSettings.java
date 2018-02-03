@@ -147,7 +147,7 @@ public class SidebarSettings extends AppCompatActivity {
                 i.putExtra("userConPassword", userConPassword);
 
                 startActivity(i);
-                finish();
+                //finish();
             }
         });
 

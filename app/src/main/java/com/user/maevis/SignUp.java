@@ -138,7 +138,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                     txtFldBirthdate.setText(birthDay + "/" + birthMonth + "/" + birthYear);
                 }
             }, year, month, day);
-            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis()-568024668000L);
             datePickerDialog.show();
         }
 
@@ -161,7 +161,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
             i.putExtra("userBdate", userBdate);
 
             startActivity(i);
-            finish();
+            //finish();
         }
     }
 

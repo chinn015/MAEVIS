@@ -232,7 +232,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
 
         if (id == android.R.id.home  ) {
 
-            startActivity(new Intent(this, SignUp.class));
+            //startActivity(new Intent(this, SignUp.class));
             finish();
             return true;
         }
