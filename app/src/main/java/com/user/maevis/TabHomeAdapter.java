@@ -83,7 +83,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         holder.cardHome.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
                 //setClickedItemVerified(listItemVerified);
 
                 /*for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {

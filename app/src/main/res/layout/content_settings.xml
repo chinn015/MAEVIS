@@ -62,12 +62,12 @@
         android:id="@+id/txtViewPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="PASSWORD"
+        android:layout_marginTop="16dp"
+        android:text="OLD PASSWORD"
         android:textSize="15dp"
         android:textColor="@color/colorAccent"
         android:layout_below="@+id/txtFldEditUsername"
-        android:layout_alignEnd="@+id/txtViewUsername" />
+        android:layout_alignStart="@+id/txtFldEditPassword" />
 
     <EditText
         android:id="@+id/txtFldEditPassword"
@@ -89,7 +89,7 @@
         android:id="@+id/txtViewConPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CONFIRM PASSWORD"
+        android:text="NEW PASSWORD"
         android:textSize="15dp"
         android:textColor="@color/colorAccent"
         android:layout_below="@+id/txtFldEditPassword"

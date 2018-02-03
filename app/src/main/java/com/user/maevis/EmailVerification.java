@@ -9,6 +9,9 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -30,7 +33,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
     private Button resendEmail;
     private Button btnProceed;
     private Button logoutButton;
-
+    private Toolbar toolbar;
     private ProgressDialog progressDialog;
 
     private ProgressBar progressBar;
@@ -40,6 +43,11 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_verification);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         timeLeft = findViewById(R.id.timeLeft);
         resendEmail = findViewById(R.id.resendEmail);
@@ -92,6 +100,44 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_email_verification, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            SessionManager.clearSession();
+            SessionManager.getFirebaseAuth().signOut();
+
+            if(Login.getmGoogleSignInClient() != null) {
+                Login.getmGoogleSignInClient().signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // ...
+                            }
+                        });
+                Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
+            }
+
+            finish();
+            startActivity(new Intent(getApplicationContext(), Login.class));
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onClick(View view) {
         if (view == resendEmail){
@@ -127,6 +173,8 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         }
 
         if(view == logoutButton){
+            myCountDownTimer.cancel();
+            myCountDownTimer = null;
             SessionManager.clearSession();
             SessionManager.getFirebaseAuth().signOut();
 
@@ -145,7 +193,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
             }
 
             finish();
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            startActivity(new Intent(EmailVerification.this, LoadingScreeen.class));
 
             return;
         }

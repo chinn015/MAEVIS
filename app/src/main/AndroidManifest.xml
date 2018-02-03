@@ -207,7 +207,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".EmailVerification"></activity>
+        <activity android:name=".EmailVerification"
+            android:screenOrientation="portrait"
+            android:label="Email Verification">
+        </activity>
+
         <activity android:name=".AddBdayAddress"
             android:screenOrientation="portrait"/>
 

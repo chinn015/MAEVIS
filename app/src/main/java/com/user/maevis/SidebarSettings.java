@@ -284,6 +284,12 @@ public class SidebarSettings extends AppCompatActivity {
             return;
         }
 
+        // Confirm Password is required
+        if (TextUtils.isEmpty(pass)) {
+            conPassword.setError(REQUIRED);
+            return;
+        }
+
         // First Name is required
         if (TextUtils.isEmpty(first)) {
             fName.setError(REQUIRED);
@@ -321,10 +327,10 @@ public class SidebarSettings extends AppCompatActivity {
             return;
         }
 
-        if(!pass.equals(conPass)){
-            conPassword.setError("Your new password and confirmation password do not match.");
-            return;
-        }
+//        if(!pass.equals(conPass)){
+//            conPassword.setError("Your new password and confirmation password do not match.");
+//            return;
+//        }
 
         if(isEmailValid(emailAdd) != true){
             email.setError("Please enter a valid email address.");
@@ -333,7 +339,7 @@ public class SidebarSettings extends AppCompatActivity {
 
         dbUsername = FirebaseDatabase.getInstance().getReference();
         dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
+        //dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("firstName").setValue(first);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("lastName").setValue(last);
         dbUsername.child("Users").child(SessionManager.getUserID()).child("email").setValue(emailAdd);
@@ -354,7 +360,7 @@ public class SidebarSettings extends AppCompatActivity {
         }
 
 
-        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
+        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), pass);
 
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -386,7 +392,7 @@ public class SidebarSettings extends AppCompatActivity {
                 if(task.isSuccessful()){
                     Log.d(TAG, "User re-authenticated.");
 
-                    user.updatePassword(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    user.updatePassword(conPass).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
