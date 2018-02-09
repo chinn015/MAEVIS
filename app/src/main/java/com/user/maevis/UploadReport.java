@@ -286,7 +286,7 @@ public class UploadReport extends AppCompatActivity {
 
                         uploadReport();
 
-                        Toast.makeText(UploadReport.this, "Report sent." + getImageURL(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadReport.this, "Report sent.", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {

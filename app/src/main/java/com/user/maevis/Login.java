@@ -206,6 +206,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         FirebaseUser currentUser = SessionManager.getFirebaseAuth().getCurrentUser();
 
         if(currentUser != null){
+            /*finish();
+            startActivity(new Intent(this, Sidebar_HomePage.class));*/
+
             if(currentUser.isEmailVerified()) {
                 finish();
                 startActivity(new Intent(this, Sidebar_HomePage.class));
@@ -525,8 +528,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     }
 
     public void loginUser() {
-        final String username = txtFldLoginUsername.getText().toString();
-        final String password = txtFldLoginPassword.getText().toString();
+        final String username = txtFldLoginUsername.getText().toString().trim();
+        final String password = txtFldLoginPassword.getText().toString().trim();
 
         Log.v("E_VALUE", "Username: " + username + "  ||  Password: " + password);
 
@@ -588,6 +591,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                         Toast.makeText(Login.this, "Logged in as: " + SessionManager.getFirstName() + " " + SessionManager.getLastName() + " " + SessionManager.getUserStatus(), Toast.LENGTH_SHORT).show();
 
                                         FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
+                                        /*finish();
+                                        startActivity(new Intent(Login.this, Sidebar_HomePage.class));*/
 
                                         if(user.isEmailVerified()) {
                                             finish();

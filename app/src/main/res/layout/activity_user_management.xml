@@ -47,12 +47,11 @@
             android:id="@+id/viewUMName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imgViewProfilePic"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
-            android:layout_toEndOf="@+id/imgViewProfilePic"
             android:text="Name"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_above="@+id/imgUserStatus"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_marginBottom="29dp" />
 
         <ImageView
             android:id="@+id/imgUserStatus"
@@ -61,9 +60,9 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_remove_red_eye_black_24dp"
             android:tint="@color/colorPrimary"
+            android:layout_marginBottom="20dp"
             android:layout_above="@+id/textView"
-            android:layout_alignStart="@+id/viewUMName"
-            android:layout_marginBottom="20dp" />
+            android:layout_toStartOf="@+id/txtViewUnverified" />
 
         <TextView
             android:id="@+id/userStatus"
@@ -71,20 +70,8 @@
             android:layout_height="wrap_content"
             android:text="active"
             android:textSize="15dp"
-            android:layout_alignTop="@+id/imgUserStatus"
-            android:layout_alignEnd="@+id/txtViewUnverified"
-            android:layout_marginTop="5dp"/>
-
-        <TextView
-            android:id="@+id/txtViewUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="welma015"
-            android:textSize="15dp"
-            android:textColor="@color/colorPrimary"
-            android:layout_below="@+id/viewUMName"
-            android:layout_alignStart="@+id/viewUMName"
-            android:layout_marginTop="20dp"/>
+            android:layout_alignBottom="@+id/imgUserStatus"
+            android:layout_toEndOf="@+id/imgUserStatus" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -111,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:text="21"
+            android:text="2"
             android:textSize="15dp"
             android:id="@+id/txtViewUnverified"
             android:layout_alignBaseline="@+id/lblUnverified"
@@ -132,7 +119,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5"
+            android:text="1"
             android:textSize="15dp"
             android:textColor="@color/colorPrimary"
             android:layout_alignBaseline="@+id/textView3"

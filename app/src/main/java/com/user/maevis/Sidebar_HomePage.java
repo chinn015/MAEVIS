@@ -37,7 +37,6 @@ import android.widget.Toast;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -134,15 +133,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             user_location.setText(SessionManager.getAddress());
         }
 
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = SessionManager.getFirebaseAuth().getCurrentUser();
-        if(currentUser != null){
-            if(!currentUser.isEmailVerified()) {
-                finish();
-                startActivity(new Intent(Sidebar_HomePage.this, EmailVerification.class));
-            }
-        }
-
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -163,23 +153,19 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                     case 0: toolbar.setTitle("Home");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
-                        onStart();
                         break;
 
                     case 1: toolbar.setTitle("Location");
                         btnHomeLoc.show();
                         btnUserLoc.show();
-                        onStart();
                         break;
                     case 2: toolbar.setTitle("Notification");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
-                        onStart();
                         break;
                     case 3: toolbar.setTitle("Search");
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
-                        onStart();
                         break;
                 }
 
@@ -195,7 +181,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         transaction.commit();
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
-                        onStart();
+                     onStart();
                         break;
 
                     case 1:
@@ -341,13 +327,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             }
         });
 
-        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(SessionManager.getDeviceToken());
-
-        SessionManager.setCurrentLatLong((float) Tab2_Location.userLatitude, (float) Tab2_Location.userLongitude);
-
-        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(SessionManager.getCurrentLat());
-        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(SessionManager.getCurrentLong());
-        //Toast.makeText(this, "Sidebar")
     }
 
     private void showDialogBlocked() {
@@ -562,8 +541,8 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 //Toast.makeText(Sidebar_HomePage.this, "Logged out.", Toast.LENGTH_LONG).show();
 
                 i = new Intent(Sidebar_HomePage.this, LoadingScreeen.class);
+                finish();
                 startActivity(i);
-                Sidebar_HomePage.this.finish();
                 break;
 
         }
