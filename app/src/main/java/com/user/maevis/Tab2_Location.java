@@ -23,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -38,6 +40,7 @@ import com.user.maevis.controllers.cNotification;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.session.SessionManager;
+
 import android.Manifest;
 
 import android.widget.Toast;
@@ -49,7 +52,7 @@ import java.util.Locale;
 
 
 public class Tab2_Location extends Fragment implements OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener{
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMyLocationChangeListener {
 
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
@@ -61,6 +64,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
     static String userLocAddress;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+    MarkerOptions userNewmarker = null;
+    Bitmap userMarker, homeMarker;
+    ArrayList<Marker> markers = new ArrayList<>();
+    LatLng user_location;
 
     static List<String> markerReportIDs;
     static List<String> markerPendingReportIDs;
@@ -76,10 +83,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         mUserLocation = gpsTracker.getLocation();
 
-        if(mUserLocation != null) {
+        if (mUserLocation != null) {
             userLatitude = mUserLocation.getLatitude();
             userLongitude = mUserLocation.getLongitude();
-        }else{
+        } else {
             userLatitude = 10.316590;
             userLongitude = 123.897093;
             //showDialogGPS();
@@ -87,19 +94,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                     Toast.LENGTH_LONG).show();
         }
 
+        user_location = new LatLng(userLatitude, userLongitude);
         userLocAddress = getUserLocAddress(userLatitude, userLongitude);
         markerReportIDs = new ArrayList<>();
         markerPendingReportIDs = new ArrayList<>();
         markerActiveVerifiedReportIDs = new ArrayList<>();
-
-        /*
-        LocationManager mlocManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if(!enabled) {
-            showDialogGPS();
-        }
-        */
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -113,7 +112,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        final LatLng user_location;
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationChangeListener(this);
         final LatLng home_location;
         BitmapDrawable bitmapUser, bitmapHome;
         BitmapDrawable[] bitmapReports = new BitmapDrawable[6];
@@ -130,27 +134,33 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
-        Bitmap userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
 
         bitmapHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap home = bitmapHome.getBitmap();
-        Bitmap homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
-
 
         for (int x = 0; x < 6; x++){
             bitmapReports[x] = (BitmapDrawable)getResources().getDrawable(reportIcons[x]);
             reports[x] = bitmapReports[x].getBitmap();
-            reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
+            if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
+                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
+                userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+                homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
+            }else{
+                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 220, 220, false);
+                userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
+                homeMarker = Bitmap.createScaledBitmap(home, 240, 240, false);
+            }
         }
 
         /*set marker for user's location*/
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }else{
+        }
+        /*else{
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }
+        }*/
 
          /*set marker for home location*/
         //home_location = new LatLng(10.316590, 123.897093);
@@ -436,30 +446,31 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 
-    /*
     @Override
-    public void onResume() {
-        super.onResume();
-        init();
-    }
+    public void onMyLocationChange(Location location) {
+        /*
+        CameraUpdate myLoc = CameraUpdateFactory.newCameraPosition(
+                new CameraPosition.Builder().target(new LatLng(location.getLatitude(),
+                        location.getLongitude())).zoom(17).build());
 
-    public  void init() {
-        gpsTracker = new GPSTracker(getActivity().getApplicationContext());
-        if (gpsTracker.getLocation() != null) {
-            //  gpsTracker.(getActivity(), view);
-            userLatitude = gpsTracker.getLocation().getLatitude();
-            userLongitude = gpsTracker.getLocation().getLongitude();
-        } else {
+        mMap.moveCamera(myLoc);
 
+        */
+
+        userLatitude = location.getLatitude();
+        userLongitude = location.getLongitude();
+
+        userNewmarker = new MarkerOptions().position(
+                new LatLng(location.getLatitude(), location.getLongitude())).title("Current Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker));
+        markers.add(mMap.addMarker(userNewmarker));
+
+        if(markers.size() != 1) {
+            for (int x = 0; x < markers.size()-1; x++) {
+                markers.get(x).setVisible(false);
+            }
         }
+
+        //Toast.makeText(getContext(), "location changed", Toast.LENGTH_LONG).show();
+
     }
-    */
-
-    @Override
-    public void onResume() {
-
-        super.onResume();
-        this.onCreate(null);
-    }
-
 }
