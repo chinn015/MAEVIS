@@ -139,9 +139,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         if(!enabled) {
             showDialogGPS();
         }else{
-            gpsTracker = new GPSTracker(getApplicationContext());
-            mUserLocation = gpsTracker.getLocation();
-            userAddress = getUserLocAddress(mUserLocation.getLatitude(), mUserLocation.getLongitude());
+//            gpsTracker = new GPSTracker(getApplicationContext());
+//            mUserLocation = gpsTracker.getLocation();
+//            userAddress = getUserLocAddress(mUserLocation.getLatitude(), mUserLocation.getLongitude());
             //Toast.makeText(this, "Location: " + userAddress, Toast.LENGTH_LONG).show();
         }
 
