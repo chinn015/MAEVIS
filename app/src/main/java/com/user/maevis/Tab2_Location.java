@@ -65,7 +65,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
     Location mLastLocation;
     Marker mCurrLocationMarker;
     MarkerOptions userNewmarker = null;
-    Bitmap userMarker;
+    Bitmap userMarker, homeMarker;
     ArrayList<Marker> markers = new ArrayList<>();
     LatLng user_location;
 
@@ -134,17 +134,22 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
-        userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
 
         bitmapHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap home = bitmapHome.getBitmap();
-        Bitmap homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
-
 
         for (int x = 0; x < 6; x++){
             bitmapReports[x] = (BitmapDrawable)getResources().getDrawable(reportIcons[x]);
             reports[x] = bitmapReports[x].getBitmap();
-            reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
+            if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
+                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
+                userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+                homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
+            }else{
+                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 220, 220, false);
+                userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
+                homeMarker = Bitmap.createScaledBitmap(home, 240, 240, false);
+            }
         }
 
         /*set marker for user's location*/
