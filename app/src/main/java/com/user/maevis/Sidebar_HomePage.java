@@ -177,10 +177,10 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 switch(position) {
                     case 0:
 
-                        /*Fragment newFragment = new Tab1_Home();
+                        Fragment newFragment = new Tab1_Home();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.homeLayout, newFragment);
-                        transaction.commit();*/
+                        transaction.commit();
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
                      onStart();
