@@ -96,7 +96,7 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
         final LatLng user_location;
         final LatLng home_location;
 
-        BitmapDrawable bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
+        BitmapDrawable bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user1);
         Bitmap user = bitmapUser.getBitmap();
         Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
@@ -106,7 +106,14 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
 
         BitmapDrawable bitmapNewHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap newHome = bitmapNewHome.getBitmap();
-        homeMarkerRed = Bitmap.createScaledBitmap(newHome, 160, 160, false);
+
+        if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
+            userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 170, 170, false);
+        }else{
+            userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 240, 240, false);
+        }
 
          /*set marker for user's location*/
         if(mUserLocation == null){

@@ -1,8 +1,10 @@
 package com.user.maevis;
 
+import android.*;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 //import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +45,8 @@ import java.util.Locale;
 
 public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnMarkerDragListener{
+        GoogleMap.OnMarkerDragListener,
+        GoogleMap.OnMyLocationChangeListener{
 
     static boolean updateHomeAddressStatus = false;
     private GoogleMap mMap;
@@ -57,6 +61,10 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     MarkerOptions homeNewmarker = null;
     ArrayList<Marker> markers = new ArrayList<>();
     static String userName, userPassword, userEmail, userFname, userLname, userConPassword;
+    static String userLocAddress;
+    MarkerOptions userNewmarker = null;
+    Bitmap userMarker;
+    LatLng user_location;
 
 
     @Override
@@ -87,7 +95,8 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
                     Toast.LENGTH_LONG).show();
         }
 
-
+        user_location = new LatLng(userLatitude, userLongitude);
+        userLocAddress = getUserLocAddress(userLatitude, userLongitude);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map1);
         mapFragment.getMapAsync(this);
@@ -96,29 +105,47 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        final LatLng user_location;
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationChangeListener(this);
         final LatLng home_location;
 
         BitmapDrawable bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
         Bitmap user = bitmapUser.getBitmap();
-        Bitmap userMarker = Bitmap.createScaledBitmap(user, 160, 160, false);
 
         BitmapDrawable bitmapOldHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_old_home);
         Bitmap oldHome = bitmapOldHome.getBitmap();
-        Bitmap homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 160, 160, false);
+        Bitmap homeMarkerGray;
 
         BitmapDrawable bitmapNewHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap newHome = bitmapNewHome.getBitmap();
         homeMarkerRed = Bitmap.createScaledBitmap(newHome, 160, 160, false);
 
+
+        if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
+            userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 170, 170, false);
+            homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 170, 170, false);
+
+        }else{
+            userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 240, 240, false);
+            homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 240, 240, false);
+
+        }
+
          /*set marker for user's location*/
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }else{
+        }
+        /*else{
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }
+        }*/
 
         getData();
 
@@ -129,14 +156,6 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
         mMap.setOnMarkerDragListener(this);
         mMap.setOnMapClickListener(this);
-
-        btnUserLoc.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            }
-        });
 
         btnHomeLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -276,4 +295,60 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
     }
 
+    @Override
+    public void onMyLocationChange(Location location) {
+        /*
+        CameraUpdate myLoc = CameraUpdateFactory.newCameraPosition(
+                new CameraPosition.Builder().target(new LatLng(location.getLatitude(),
+                        location.getLongitude())).zoom(17).build());
+
+        mMap.moveCamera(myLoc);
+
+        */
+
+        userLatitude = location.getLatitude();
+        userLongitude = location.getLongitude();
+
+        userNewmarker = new MarkerOptions().position(
+                new LatLng(location.getLatitude(), location.getLongitude())).title("Current Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker));
+        markers.add(mMap.addMarker(userNewmarker));
+
+        if(markers.size() != 1) {
+            for (int x = 0; x < markers.size()-1; x++) {
+                markers.get(x).setVisible(false);
+            }
+        }
+
+        btnUserLoc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "My Location: " + userLocAddress,
+                        Toast.LENGTH_LONG).show();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
+
+
+
+        //Toast.makeText(getContext(), "location changed", Toast.LENGTH_LONG).show();
+
+    }
+
+    public String getUserLocAddress (double userLatitude, double userLongitude){
+        String fullAddress = "No Location Found.";
+        Geocoder geocoder;
+        List<Address> addresses;
+
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(userLatitude, userLongitude, 1);
+            fullAddress = addresses.get(0).getAddressLine(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fullAddress;
+    }
 }

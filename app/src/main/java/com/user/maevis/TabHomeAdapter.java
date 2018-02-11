@@ -128,7 +128,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         holder.star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "You clicked star!!!", Toast.LENGTH_LONG).show();
                 DatabaseReference globalRef = FirebaseDatabaseManager.FirebaseReportsVerified.child(listItemVerified.getReportID());
 
                 onStarClicked(globalRef);
