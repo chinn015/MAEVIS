@@ -183,7 +183,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         transaction.commit();
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
-                     onStart();
                         break;
 
                     case 1:
@@ -194,8 +193,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                         transaction1.commit();
                         btnHomeLoc.show();
                         btnUserLoc.show();
-                        onStart();
-
                         break;
 
                     case 2:
@@ -214,7 +211,6 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                onStart();
 
             }
         });
@@ -647,14 +643,14 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            Intent refresh = new Intent(this, Sidebar_HomePage.class);
-            startActivity(refresh);
-            this.finish();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(resultCode==RESULT_OK){
+//            Intent refresh = new Intent(this, Sidebar_HomePage.class);
+//            startActivity(refresh);
+//            this.finish();
+//        }
+//    }
 
 }

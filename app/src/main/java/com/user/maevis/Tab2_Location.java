@@ -302,15 +302,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
 
-        Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "My Location: " + userLocAddress,
-                        Toast.LENGTH_LONG).show();
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            }
-        });
 
         Sidebar_HomePage.btnHomeLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -469,6 +460,18 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 markers.get(x).setVisible(false);
             }
         }
+
+        Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "My Location: " + userLocAddress,
+                        Toast.LENGTH_LONG).show();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(userLatitude,
+                        userLongitude)).zoom(17).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
+
 
         //Toast.makeText(getContext(), "location changed", Toast.LENGTH_LONG).show();
 
