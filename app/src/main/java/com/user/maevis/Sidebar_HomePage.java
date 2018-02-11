@@ -563,9 +563,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                                     // ...
                                 }
                             });
-                    Toast.makeText(Sidebar_HomePage.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Sidebar_HomePage.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(Sidebar_HomePage.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(Sidebar_HomePage.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
                     //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
                 }
 

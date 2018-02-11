@@ -86,6 +86,11 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
                 case "Pending" :
                     //holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
                     holder.reportStatus.setVisibility(View.GONE);
+
+                case "Resolved" :
+                    holder.reportStatus.setVisibility(View.GONE);
+                    holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.DARKEN);
+                    break;
             }
         }
 
