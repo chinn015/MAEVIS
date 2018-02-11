@@ -2,6 +2,7 @@ package com.user.maevis;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -255,56 +258,60 @@ public class UploadReport extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_upload_report) {
-            String description = txtFldDescription.getText().toString();
 
-            if (TextUtils.isEmpty(description)) {
-                Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
-                return false;
+            if(!isNetworkAvailable(getApplicationContext())) {
+                showNoInternetConnection();
+            }else {
+                String description = txtFldDescription.getText().toString();
+
+                if (TextUtils.isEmpty(description)) {
+                    Toast.makeText(this, "Please enter description.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                if (finalImageURI == null) {
+                    Toast.makeText(this, "Please include a photo.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+                StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("Photos").child(finalImageURI.getLastPathSegment());
+
+                progressDialog.setMessage("Sending report.");
+                progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
+
+                try {
+                    Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
+                    String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
+                    finalImageURI = Uri.parse(path);
+
+                    filePath.putFile(finalImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            setImageURL(downloadUrl.toString());
+
+                            uploadReport();
+
+                            Toast.makeText(UploadReport.this, "Report sent.", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+                        }
+                    });
+                } catch (IOException ie) {
+                    Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                }
+
+                return true;
             }
-
-            if (finalImageURI == null) {
-                Toast.makeText(this, "Please include a photo.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("Photos").child(finalImageURI.getLastPathSegment());
-
-            progressDialog.setMessage("Sending report.");
-            progressDialog.show();
-            progressDialog.setCanceledOnTouchOutside(false);
-
-            try {
-                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
-                String path = MediaStore.Images.Media.insertImage(UploadReport.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
-                finalImageURI = Uri.parse(path);
-
-                filePath.putFile(finalImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        setImageURL(downloadUrl.toString());
-
-                        uploadReport();
-
-                        Toast.makeText(UploadReport.this, "Report sent.", Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadReport.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-                });
-            } catch (IOException ie) {
-                Toast.makeText(UploadReport.this, "Upload error.", Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
-
-            return true;
-
         }else if (id == android.R.id.home) {
             displayDiscardDialog();
         }
@@ -384,4 +391,35 @@ public class UploadReport extends AppCompatActivity {
         //cNotification.vibrateNotification(getApplication());
     }
 
+    public boolean isNetworkAvailable(Context ctx) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if ((connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
+                || (connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .getState() == NetworkInfo.State.CONNECTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void showNoInternetConnection() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Network Connection Problem");
+        builder.setMessage("There seems to be a problem with your network. Please check your network connection and try again.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
 }

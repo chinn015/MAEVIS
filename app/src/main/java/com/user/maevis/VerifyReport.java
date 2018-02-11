@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.NotifModel;
@@ -48,6 +49,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     private Button btnVerifyReport;
     private Button btnDeclineReport;
+    private Button btnResolvedReport;
+
 
     private DatabaseReference FirebaseReports;
     private Iterator<DataSnapshot> items;
@@ -85,9 +88,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         btnVerifyReport = (Button) findViewById(R.id.btnBlockUser);
         btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
+        btnResolvedReport = (Button) findViewById(R.id.btnResolved);
+
 
         btnVerifyReport.setOnClickListener(this);
         btnDeclineReport.setOnClickListener(this);
+        btnResolvedReport.setOnClickListener(this);
 
         FirebaseReports = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Reports");
 
@@ -134,6 +140,15 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             if(PageNavigationManager.getClickedTabNotifListItem().getReportStatus().equals("Verified")) {
                 btnVerifyReport.setVisibility(View.GONE);
                 btnDeclineReport.setVisibility(View.GONE);
+                btnResolvedReport.setVisibility(View.VISIBLE);
+            }else if(PageNavigationManager.getClickedTabNotifListItem().getReportStatus().equals("Resolved")) {
+                btnVerifyReport.setVisibility(View.GONE);
+                btnDeclineReport.setVisibility(View.GONE);
+                btnResolvedReport.setVisibility(View.GONE);
+            }else{
+                btnVerifyReport.setVisibility(View.VISIBLE);
+                btnDeclineReport.setVisibility(View.VISIBLE);
+                btnResolvedReport.setVisibility(View.GONE);
             }
         }
 
@@ -221,6 +236,10 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        if(v==btnResolvedReport) {
+            showDialogResolved();
+            return;
+        }
         if(v==imgViewProfilePic) {
             if(SessionManager.getUserType().equals("Admin")) {
                 if (PageNavigationManager.getClickedTabLocListItemPending() != null) {
@@ -460,5 +479,41 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    private void showDialogResolved() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("RESOLVE REPORT");
+        builder.setMessage("Resolve this report?");
+        builder.setInverseBackgroundForced(true);
+        builder.setPositiveButton("RESOLVE", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                resolveReport();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    public void resolveReport() {
+        if(PageNavigationManager.getClickedTabLocListItemPending()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+        } else if (PageNavigationManager.getClickedTabNotifListItem()!=null) {
+            clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
+        }
+
+        Toast.makeText(VerifyReport.this, "Report resolved.", Toast.LENGTH_SHORT).show();
+        FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Resolved");
+
+        finish();
+        startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
     }
 }

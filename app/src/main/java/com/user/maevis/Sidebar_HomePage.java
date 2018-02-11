@@ -10,6 +10,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -110,11 +112,16 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(SessionManager.getUserStatus().equals("Active")) {
-                    Intent i = new Intent(getApplication(), SelectionPage.class);
-                    startActivity(i);
-                } else if(SessionManager.getUserStatus().equals("Blocked")) {
-                    showDialogBlocked();
+
+                if(!isNetworkAvailable(getApplicationContext())) {
+                    showNoInternetConnection();
+                }else {
+                    if (SessionManager.getUserStatus().equals("Active")) {
+                        Intent i = new Intent(getApplication(), SelectionPage.class);
+                        startActivity(i);
+                    } else if (SessionManager.getUserStatus().equals("Blocked")) {
+                        showDialogBlocked();
+                    }
                 }
             }
         });
@@ -556,9 +563,9 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                                     // ...
                                 }
                             });
-                    Toast.makeText(Sidebar_HomePage.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(Sidebar_HomePage.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(Sidebar_HomePage.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(Sidebar_HomePage.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
                     //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
                 }
 
@@ -642,6 +649,39 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
+
+    public boolean isNetworkAvailable(Context ctx) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if ((connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED)
+                || (connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                .getState() == NetworkInfo.State.CONNECTED)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void showNoInternetConnection() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Network Connection Problem");
+        builder.setMessage("There seems to be a problem with your network. Please check your network connection and try again.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+    }
+
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -111,8 +111,8 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
             userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
             homeMarkerRed = Bitmap.createScaledBitmap(newHome, 170, 170, false);
         }else{
-            userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
-            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 240, 240, false);
+            userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 255, 255, false);
         }
 
          /*set marker for user's location*/

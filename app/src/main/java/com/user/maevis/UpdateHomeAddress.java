@@ -122,7 +122,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
         BitmapDrawable bitmapNewHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap newHome = bitmapNewHome.getBitmap();
-        homeMarkerRed = Bitmap.createScaledBitmap(newHome, 160, 160, false);
+        //homeMarkerRed = Bitmap.createScaledBitmap(newHome, 160, 160, false);
 
 
         if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
@@ -131,9 +131,9 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
             homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 170, 170, false);
 
         }else{
-            userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
-            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 240, 240, false);
-            homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 240, 240, false);
+            userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
+            homeMarkerRed = Bitmap.createScaledBitmap(newHome, 255, 255, false);
+            homeMarkerGray = Bitmap.createScaledBitmap(oldHome, 255, 255, false);
 
         }
 

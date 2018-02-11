@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SidebarHelp extends AppCompatActivity {
 
@@ -197,5 +198,9 @@ public class SidebarHelp extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
+    }
+
+    public void AddReport(){
+        Toast.makeText(this, "you clicked add report", Toast.LENGTH_LONG).show();
     }
 }

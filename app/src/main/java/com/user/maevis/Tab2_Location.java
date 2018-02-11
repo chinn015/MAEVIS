@@ -146,9 +146,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
                 homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
             }else{
-                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 220, 220, false);
-                userMarker = Bitmap.createScaledBitmap(user, 240, 240, false);
-                homeMarker = Bitmap.createScaledBitmap(home, 240, 240, false);
+                reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 230, 230, false);
+                userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
+                homeMarker = Bitmap.createScaledBitmap(home, 255, 255, false);
             }
         }
 
@@ -235,8 +235,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             }
         }
 
-        /*Log.d("username", SessionManager.getUsername());
-        Log.d("address", SessionManager.getAddress());*/
 
         //Display location markers for pendingReports to be validated by the admin
         if(SessionManager.getUserType().equals("Admin")) {
@@ -328,7 +326,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         if( id != -1 && id != -2){
             switch(SessionManager.getUserType()) {
                 case "Regular User":
-                    Toast.makeText(getContext(), "Reg User MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), "Reg User MARKER ID: " + id +" "+ FirebaseDatabaseManager.getPendingReports().size(), Toast.LENGTH_LONG).show();
 
                     PageNavigationManager.clickTabLocListItemVerified(FirebaseDatabaseManager.getActiveVerifiedReport(markerReportIDs.get(id)));
                     i = new Intent(getContext(), ReportPage.class);

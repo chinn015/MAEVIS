@@ -106,6 +106,7 @@
 						android:textSize="16sp"
 						android:text="PHILIPPINE NATIONAL RED CROSS - (63-32) 253-4611"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -116,6 +117,7 @@
 						android:textSize="16sp"
 						android:text="Cebu City Medical Center - (6332) 255-7141"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -126,6 +128,7 @@
 						android:textSize="16sp"
 						android:text="Vicente Sotto Memorial Medical Center - (6332) 255-1591, (6332) 253-9891"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -136,6 +139,7 @@
 						android:textSize="16sp"
 						android:text="Cebu Doctor’s Hospital - (6332) 253-7511 / (6332) 253-7516 / (6332) 255-5555"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -146,6 +150,7 @@
 						android:textSize="16sp"
 						android:text="Cebu City Medical Center - (6332) 255-7141"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -156,6 +161,7 @@
 						android:textSize="16sp"
 						android:text="Cebu Velez General Hospital - (6332) 253-1871 / (6332) 253-1879"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -166,6 +172,7 @@
 						android:textSize="16sp"
 						android:text="Chong Hua Hospital - (6332) 254-1461 / (6332) 254-3228 / (6332) 353-9409 / (6332) 255-8000"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -176,6 +183,7 @@
 						android:textSize="16sp"
 						android:text="North General Hospital Inc. - (6332) 343-7777"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -186,6 +194,7 @@
 						android:textSize="16sp"
 						android:text="Perpetual Soccour Hospital - (6332) 253-1871 / (6332) 253-18796332 232-2411; +6332 232-2418 (6332) 233-8620"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -196,6 +205,7 @@
 						android:textSize="16sp"
 						android:text="CEBU CITY POLICE DEPARTMENT - 166"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -206,6 +216,7 @@
 						android:textSize="16sp"
 						android:text="Mobile Patrol Group - +63.32.233-2178 341-4847"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -216,6 +227,7 @@
 						android:textSize="16sp"
 						android:text="Security &#38; Service Group - +6332-233-0202"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -226,6 +238,7 @@
 						android:textSize="16sp"
 						android:text="SWAT - +63.32.235-9666 / 233-2178"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -236,6 +249,7 @@
 						android:textSize="16sp"
 						android:text="Theft and Robbery Section - +63.32.233-0202 / 234-0361 / 341-1311"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -246,6 +260,7 @@
 						android:textSize="16sp"
 						android:text="CITOM Cebu - +63.32.253-9211"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -256,6 +271,7 @@
 						android:textSize="16sp"
 						android:text="FIRE DEPARTMENT - 160"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
 						/>
 
 					<TextView
@@ -266,169 +282,9 @@
 						android:textSize="16sp"
 						android:text="Talamban Fire Department - +63.32.344-9200"
 						android:textColor="@color/colorPrimaryDark"
+						android:layout_marginTop="25dp"
+						android:layout_marginBottom="100dp"
 						/>
-
-					<!--<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="ERUF - 166"
-						android:textColor="@color/colorPrimaryDark"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="BFP - 160"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="SWAT - 166"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="BFP - 160"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="SWAT - 166"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="BFP - 160"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="SWAT - 166"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="BFP - 160"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="SWAT - 166"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>
-
-					<TextView
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:fontFamily="sans-serif-light"
-						android:lineSpacingExtra="8dp"
-						android:textSize="16sp"
-						android:text="REACT - 5154455"
-						android:textColor="@color/colorPrimaryDark"
-						android:layout_marginTop="20dp"
-						/>-->
 
 				</LinearLayout>
 			</android.support.v7.widget.CardView>
