@@ -26,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -71,7 +72,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     static String userAddress;
     CircleImageView profilePic;
     TextView user_location;
-
+    ViewPagerAdapter adapter;
     private int[] tabIcons = {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_my_location_black_24dp,
@@ -175,10 +176,11 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             public void onPageSelected(int position) {
                 switch(position) {
                     case 0:
-                        Fragment newFragment = new Tab1_Home();
+
+                        /*Fragment newFragment = new Tab1_Home();
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.homeLayout, newFragment);
-                        transaction.commit();
+                        transaction.commit();*/
                         btnHomeLoc.hide();
                         btnUserLoc.hide();
                      onStart();
@@ -216,6 +218,32 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
             }
         });
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition(), true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {//scroll to top
+                try {
+                    Fragment f = adapter.getItem(tab.getPosition());
+                    if (f != null) {
+                        View fragmentView = f.getView();
+                        RecyclerView mRecyclerView = (RecyclerView) fragmentView.findViewById(R.id.recyclerView);//mine one is RecyclerView
+                        if (mRecyclerView != null)
+                            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView,new RecyclerView.State(), mRecyclerView.getAdapter().getItemCount());
+                    }
+                } catch (NullPointerException npe) {
+                }
+            }
+        });
+
 
         //listener to store all users from the Firebase Database to a List
         FirebaseDatabaseManager.FirebaseUsers.addChildEventListener(new ChildEventListener() {
@@ -366,7 +394,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new Tab1_Home(), "ONE");
         adapter.addFragment(new Tab2_Location(), "TWO");
         adapter.addFragment(new Tab3_Notification(), "THREE");
