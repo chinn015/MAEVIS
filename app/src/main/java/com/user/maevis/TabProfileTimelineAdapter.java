@@ -35,7 +35,7 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
 
     @Override
     public TabProfileTimelineAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_home_items, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_timeline, parent, false);
         return new TabProfileTimelineAdapter.ViewHolder(v);
     }
 
@@ -101,6 +101,7 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
             reportLayout = (RelativeLayout) itemView.findViewById(R.id.reportLayout);
             imageReportType = (ImageView) itemView.findViewById(R.id.reportHomeType);
             userPhoto = (CircleImageView) itemView.findViewById(R.id.user_photo);
+
         }
     }
 }

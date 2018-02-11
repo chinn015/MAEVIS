@@ -721,6 +721,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
         return false;
     }
+
     private void showNoInternetConnection() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setCancelable(false);
