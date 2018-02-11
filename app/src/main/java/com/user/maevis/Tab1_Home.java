@@ -1,5 +1,6 @@
 package com.user.maevis;
 
+import android.graphics.Color;
 import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class Tab1_Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab1_home, container, false);
+        rootView.setBackgroundColor(Color.WHITE);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 

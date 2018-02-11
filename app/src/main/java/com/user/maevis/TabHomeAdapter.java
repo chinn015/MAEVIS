@@ -42,7 +42,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     //private static ListItem clickedItem = null;
     private static ListItemVerified clickedItemVerified = null;
     private static UserItem clickedUserItem = null;
-
+    static int stat;
     static boolean clickedStatus = false;
     static boolean clickedUserItemStatus = false;
 
@@ -50,6 +50,12 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
         this.listItems = listItems;
         this.context = context;
     }*/
+
+    private TextView yourClassLevelTextView;
+    public void setTextView(TextView textViewFromActivity)
+    {
+        this.yourClassLevelTextView = textViewFromActivity;
+    }
 
     public TabHomeAdapter(List<ListItemVerified> listItemsVerified, Context context) {
         this.listItemsVerified = listItemsVerified;
@@ -63,7 +69,7 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final ListItemVerified listItemVerified = listItemsVerified.get(position);
 
         holder.textViewHead.setText(listItemVerified.getHead());
@@ -126,8 +132,24 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                 DatabaseReference globalRef = FirebaseDatabaseManager.FirebaseReportsVerified.child(listItemVerified.getReportID());
 
                 onStarClicked(globalRef);
+
+                if (stat == 0) {
+                    // holder.star.setImageResource(R.drawable.ic_toggle_star_24);
+                    Picasso.with(context).load(R.drawable.ic_toggle_star_24).into(holder.star);
+                    holder.numStars.setText(String.valueOf(listItemVerified.getStarCount()+1));
+
+                } else {
+                    //holder.star.setImageResource(R.drawable.ic_toggle_star_outline_24);
+                    Picasso.with(context).load(R.drawable.ic_toggle_star_outline_24).into(holder.star);
+                    holder.numStars.setText(String.valueOf(listItemVerified.getStarCount()));
+
+
+                }
+
             }
         });
+
+
     }
 
 
@@ -202,10 +224,12 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
                     // Unstar the post and remove self from stars
                     report.starCount = report.starCount - 1;
                     report.stars.remove(SessionManager.getUserID());
+                    stat = 0;
                 } else {
                     // Star the post and add self to stars
                     report.starCount = report.starCount + 1;
                     report.stars.put(SessionManager.getUserID(), true);
+                    stat = 1;
                 }
 
                 // Set value and report transaction success
