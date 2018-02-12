@@ -65,9 +65,11 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
     Location mLastLocation;
     Marker mCurrLocationMarker;
     MarkerOptions userNewmarker = null;
-    Bitmap userMarker, homeMarker;
+    Bitmap userMarker, homeMarker, userStaticMarker;
     ArrayList<Marker> markers = new ArrayList<>();
     LatLng user_location;
+    Marker staticMarker;
+    boolean isMove;
 
     static List<String> markerReportIDs;
     static List<String> markerPendingReportIDs;
@@ -119,7 +121,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationChangeListener(this);
         final LatLng home_location;
-        BitmapDrawable bitmapUser, bitmapHome;
+        BitmapDrawable bitmapUser, bitmapHome, bitmapStaticUser;
         BitmapDrawable[] bitmapReports = new BitmapDrawable[6];
         Bitmap[] reports = new Bitmap[6];
         Bitmap[] reportMarker = new Bitmap[6];
@@ -133,7 +135,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         };
 
         bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
+        bitmapStaticUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user1);
         Bitmap user = bitmapUser.getBitmap();
+        Bitmap userStatic  = bitmapStaticUser.getBitmap();
 
         bitmapHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_home);
         Bitmap home = bitmapHome.getBitmap();
@@ -144,10 +148,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
                 reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
                 userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+                userStaticMarker = Bitmap.createScaledBitmap(userStatic, 170, 170, false);
                 homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
             }else{
                 reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 230, 230, false);
                 userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
+                userStaticMarker = Bitmap.createScaledBitmap(userStatic, 255, 255, false);
                 homeMarker = Bitmap.createScaledBitmap(home, 255, 255, false);
             }
         }
@@ -155,12 +161,12 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         /*set marker for user's location*/
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }
-        /*else{
+            staticMarker = mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userStaticMarker)));
+        }else{
+            isMove = false;
             user_location = new LatLng(userLatitude, userLongitude);
-            mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }*/
+            staticMarker = mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userStaticMarker)));
+        }
 
          /*set marker for home location*/
         //home_location = new LatLng(10.316590, 123.897093);
@@ -300,6 +306,19 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_location, 17), 5000, null);
 
+        if(isMove == false){
+            Sidebar_HomePage.btnUserLoc.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "My Location: " + userLocAddress,
+                            Toast.LENGTH_LONG).show();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(userLatitude,
+                            userLongitude)).zoom(17).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                }
+            });
+
+        }
 
         Sidebar_HomePage.btnHomeLoc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -322,7 +341,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
         markerId = marker.getId().replaceAll("[^\\d.]", "");
         id = Integer.parseInt(markerId) - 2;
-
         if( id != -1 && id != -2){
             switch(SessionManager.getUserType()) {
                 case "Regular User":
@@ -445,6 +463,9 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
         mMap.moveCamera(myLoc);
 
         */
+
+        isMove = true;
+        staticMarker.setVisible(false);
 
         userLatitude = location.getLatitude();
         userLongitude = location.getLongitude();
