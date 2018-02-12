@@ -136,7 +136,8 @@ public class Tab1_Home extends Fragment {
                     case "Active": FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
                                    listItemsVerified.add(itemVerified);
                                    break;
-                    case "Done": FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified); break;
+                    case "Resolved": FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
+                        break;
 
                 }
 

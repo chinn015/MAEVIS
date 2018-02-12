@@ -147,15 +147,19 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             reports[x] = bitmapReports[x].getBitmap();
             if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
                 reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 150, 150, false);
-                userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
-                userStaticMarker = Bitmap.createScaledBitmap(userStatic, 170, 170, false);
-                homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
             }else{
                 reportMarker[x] = Bitmap.createScaledBitmap(reports[x], 230, 230, false);
-                userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
-                userStaticMarker = Bitmap.createScaledBitmap(userStatic, 255, 255, false);
-                homeMarker = Bitmap.createScaledBitmap(home, 255, 255, false);
             }
+        }
+
+        if(Integer.valueOf(android.os.Build.VERSION.SDK) < 24) {
+            userMarker = Bitmap.createScaledBitmap(user, 170, 170, false);
+            userStaticMarker = Bitmap.createScaledBitmap(userStatic, 170, 170, false);
+            homeMarker = Bitmap.createScaledBitmap(home, 170, 170, false);
+        }else{
+            userMarker = Bitmap.createScaledBitmap(user, 255, 255, false);
+            userStaticMarker = Bitmap.createScaledBitmap(userStatic, 255, 255, false);
+            homeMarker = Bitmap.createScaledBitmap(home, 255, 255, false);
         }
 
         /*set marker for user's location*/
@@ -189,28 +193,30 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             Location current_location = new Location("2");
             String vTitle = activeVerifiedReport.getReportType() + " " + FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy());
 
-            switch (activeVerifiedReport.getReportType()) {
-                case "Fire":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[3])));
-                    break;
+            //if(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportStatus().equals("Active")) {
+                switch (activeVerifiedReport.getReportType()) {
+                    case "Fire":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[3])));
+                        break;
 
-                case "Flood":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[4])));
-                    break;
+                    case "Flood":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[4])));
+                        break;
 
-                case "Vehicular Accident":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(vLatitude, vLongitude))
-                            .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
-                            .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[5])));
-                    break;
-            }
+                    case "Vehicular Accident":
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(vLatitude, vLongitude))
+                                .visible(true).alpha(1.0f).title(vTitle + ": " + vLatitude + " - " + vLongitude)
+                                .icon(BitmapDescriptorFactory.fromBitmap(reportMarker[5])));
+                        break;
+                }
+            //}
 
             markerReportIDs.add(activeVerifiedReport.getReportID());
 
