@@ -512,6 +512,17 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         Toast.makeText(VerifyReport.this, "Report resolved.", Toast.LENGTH_SHORT).show();
         FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Resolved");
+        for(int x =0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++){
+            Log.d("active", (FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getDescription()));
+            Log.d("verfied", (clickedReportBasis.getDescription()));
+
+
+            if(FirebaseDatabaseManager.isWithinTimeRange(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getDateTime(),clickedReportBasis.getDateTime())){
+               //FirebaseDatabaseManager.FirebaseReportsVerified.child(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID()).child("reportStatus").setValue("Resolved");
+                FirebaseDatabaseManager.FirebaseReportsVerified.child(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID()).removeValue();
+
+            }
+        }
 
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
