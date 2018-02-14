@@ -221,9 +221,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             markerReportIDs.add(activeVerifiedReport.getReportID());
 
             if(!FirebaseDatabaseManager.getActiveVerifiedReports().isEmpty()) {
-                Log.d("REPORTS", FirebaseDatabaseManager.getActiveVerifiedReports().get(0).getDescription());
             } else {
-                Log.d("REPORTS", "WAY SUD!!!");
             }
 
 
@@ -238,12 +236,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
             if (distance <= limit_distance) {
                 //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                Log.d("Inside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
                 //cNotification.showActiveNotification(getContext(), activeVerifiedReport);
                 //cNotification.vibrateNotif(getContext());
             } else {
                // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
-                Log.d("Outside: ", FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy()));
             }
         }
 
@@ -298,12 +294,10 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
 
                 if (distance <= limit_distance) {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Inside: ", FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy()));
                     //cNotification.showPendingNotification(getContext(), pendingReport);
                     //cNotification.vibrateNotif(getContext());
                 } else {
                    // Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy()) + "Outside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Outside: ", FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy()));
                 }
             }
 
@@ -406,7 +400,6 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             }
 
             for(int x = 0; x < address.size(); x++){
-                Log.d("address", address.get(x).toString());
             }
 
         } catch (IOException e) {

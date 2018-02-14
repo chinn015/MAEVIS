@@ -283,7 +283,6 @@ public class FirebaseDatabaseManager {
 
         for(int x=0; x < getActiveVerifiedReports().size(); x++) {
             if(reportID.equals(getActiveVerifiedReports().get(x).getReportID())) {
-                Log.d("match", reportID+" - "+getActiveVerifiedReports().get(x).getReportID());
                 status = true;
             }
         }
@@ -331,7 +330,6 @@ public class FirebaseDatabaseManager {
         UserItem userItem = null;
 
         for (int x = 0; x < FirebaseDatabaseManager.getUserItems().size(); x++) {
-            Log.d("USERZX", FirebaseDatabaseManager.getUserItems().get(x).getEmail());
             if (userID.equals(FirebaseDatabaseManager.getUserItems().get(x).getUserID())) {
                         /*clickedUserItem = FirebaseDatabaseManager.getUserItems().get(x);
                         clickedUserItemStatus = true;*/

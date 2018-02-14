@@ -113,7 +113,6 @@ public class Tab3_Notification extends Fragment {
 
                 if( SessionManager.getUserType().equals("Admin") && distance <= limit_distance) {
                     //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Inside Notif: ", FirebaseDatabaseManager.getFullName(item.getReportedBy()));
                     listItems.add(item);
 
                     adapter = new TabNotifAdapter(listItems, getContext());
@@ -219,7 +218,6 @@ public class Tab3_Notification extends Fragment {
 
                 if( SessionManager.getUserType().equals("Regular User") && distance <= limit_distance) {
                     //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
-                    Log.d("Inside Notif: ", FirebaseDatabaseManager.getFullName(itemVerified.getReportedBy()));
                     listItemsVerified.add(itemVerified);
 
                     adapter = new TabNotifAdapterRegUser(listItemsVerified, getContext());

@@ -410,7 +410,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
                     // A new comment has been added, add it to the displayed list
                     Comment comment = dataSnapshot.getValue(Comment.class);
@@ -425,7 +424,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
 
                     // A comment has changed, use the key to determine if we are displaying this
                     // comment and if so displayed the changed comment.
@@ -448,7 +446,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
                     // A comment has changed, use the key to determine if we are displaying this
                     // comment and if so remove it.
@@ -471,7 +468,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
 
                     // A comment has changed position, use the key to determine if we are
                     // displaying this comment and if so move it.
