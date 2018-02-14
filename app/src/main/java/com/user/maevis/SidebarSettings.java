@@ -366,22 +366,18 @@ public class SidebarSettings extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Log.d(TAG, "User re-authenticated.");
 
                     user.updateEmail(emailAdd)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
-                                        Log.d(TAG, "User email address updated.");
                                     }else{
-                                        Log.d(TAG, "User email address not updated.");
                                     }
                                 }
                             });
 
                 }else{
-                    Log.d(TAG, "User not re-authenticated.");
                 }
             }
         });
@@ -390,20 +386,16 @@ public class SidebarSettings extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Log.d(TAG, "User re-authenticated.");
 
                     user.updatePassword(conPass).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "Password updated");
                             } else {
-                                Log.d(TAG, "Error password not updated");
                             }
                         }
                     });
                 }else{
-                    Log.d(TAG, "User not re-authenticated.");
                 }
             }
         });

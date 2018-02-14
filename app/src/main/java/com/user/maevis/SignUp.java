@@ -276,7 +276,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, V
                             finish();
                             startActivity(new Intent(SignUp.this, EmailVerification.class));
                         } else {
-                            Log.e("REG FAIL", "");
                             Toast.makeText(SignUp.this, "Registration Failed.", Toast.LENGTH_SHORT).show();
                         }
                     }

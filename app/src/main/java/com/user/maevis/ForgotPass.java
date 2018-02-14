@@ -101,7 +101,6 @@ public class ForgotPass extends AppCompatActivity implements View.OnClickListene
                     public void onComplete(@NonNull Task<Void> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
                             showAccountNotFoundDialog(emailAdd);
                         }
                     }
