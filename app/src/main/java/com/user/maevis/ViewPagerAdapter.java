@@ -37,7 +37,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private List<String> images1;
-    private int [] images = {R.drawable.help6, R.drawable.help7, R.drawable.help6};
+    private int [] images = {R.drawable.help2, R.drawable.help1, R.drawable.help3};
 
     static ImageView imageView;
 

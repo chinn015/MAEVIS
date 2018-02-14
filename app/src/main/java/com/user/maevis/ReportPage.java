@@ -1,5 +1,6 @@
 package com.user.maevis;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -109,7 +112,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         viewReportHead = (TextView) findViewById(R.id.viewReportHead);
         viewReportDesc = (TextView) findViewById(R.id.viewReportDesc);
         viewReportDateTime = (TextView) findViewById(R.id.viewReportDateTime);
-        viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
+       // viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
         viewUserImage = (CircleImageView) findViewById(R.id.imgViewProfilePic);
         viewUserPhoto = (CircleImageView) findViewById(R.id.user_photo);
@@ -117,6 +120,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         mCommentField = findViewById(R.id.comment);
         mCommentButton = findViewById(R.id.button_post_comment);
         mCommentsRecycler = findViewById(R.id.recycler_comments);
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
 
         Picasso.with(getApplicationContext())
                 .load(SessionManager.getUserPhoto())
@@ -128,10 +135,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             viewReportHead.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDisplayDateTime());
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getImageThumbnailURL())
-                    .fit()
-                    .into(viewReportImage);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getImageThumbnailURL())
+//                    .fit()
+//                    .into(viewReportImage);
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabHomeListItemVerified().getReportType()))
                     .into(viewReportType);
@@ -144,10 +151,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getImageThumbnailURL())
-                    .fit()
-                    .into(viewReportImage);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getImageThumbnailURL())
+//                    .fit()
+//                    .into(viewReportImage);
             Picasso.with(getApplicationContext())
                     .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
                     .into(viewReportType);
@@ -160,10 +167,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             viewReportHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifListItem().getImageURL())
-                    .fit()
-                    .into(viewReportImage);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabNotifListItem().getImageURL())
+//                    .fit()
+//                    .into(viewReportImage);
             Picasso.with(getApplicationContext())
                     .load(PageNavigationManager.getClickedTabNotifListItem().getReportType())
                     .into(viewReportType);
@@ -176,10 +183,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             viewReportHead.setText(PageNavigationManager.getClickedTabNotifRegListItem().getHead());
             viewReportDesc.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDescription());
             viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDisplayDateTime());
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getImageThumbnailURL())
-                    .fit()
-                    .into(viewReportImage);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getImageThumbnailURL())
+//                    .fit()
+//                    .into(viewReportImage);
             Picasso.with(getApplicationContext())
                     .load(PageNavigationManager.getClickedTabNotifRegListItem().getReportType())
                     .into(viewReportType);
