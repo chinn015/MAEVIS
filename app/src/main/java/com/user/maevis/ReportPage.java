@@ -32,6 +32,15 @@ import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.models.UserModel;
 import com.user.maevis.session.SessionManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.w3c.dom.Text;
 
@@ -48,6 +57,11 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private ImageView viewReportImage;
     private ImageView viewReportType;
     private CircleImageView viewUserImage;
+    ViewPager viewPager;
+    LinearLayout sliderDotspanel;
+    private int dotscount;
+    private ImageView[] dots;
+
 
     private static final String TAG = "ReportPage";
 
@@ -55,6 +69,8 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
+    private DatabaseReference mImageListReference;
+
     private ValueEventListener mPostListener;
     private String mPostKey;
     private CommentAdapter mAdapter;
@@ -66,6 +82,8 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
     private CircleImageView viewUserPhoto;
+
+    private List<String> imageUrl;
 
     /*private static UserItem clickedUserItem = null;
     static boolean clickedUserItemStatus = false;*/
@@ -82,6 +100,10 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
 
         // Initialize Views
         viewReportHead = (TextView) findViewById(R.id.viewReportHead);
@@ -166,6 +188,52 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                     .into(viewUserImage);
         }
 
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
+
+        viewPager.setAdapter(viewPagerAdapter);
+
+        dotscount = viewPagerAdapter.getCount();
+        dots = new ImageView[dotscount];
+
+        for(int i = 0; i < dotscount; i++){
+
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nonactive_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(8, 0, 8, 0);
+
+            sliderDotspanel.addView(dots[i], params);
+
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                for(int i = 0; i< dotscount; i++){
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.nonactive_dot));
+                }
+
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.active_dot));
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
         // Initialize Database
         mPostReference = FirebaseDatabase.getInstance().getReference().child("Reports").child(mPostKey);
         mCommentsReference = FirebaseDatabase.getInstance().getReference().child("Comments").child(mPostKey);
@@ -174,6 +242,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
+
 
     @Override
     protected void onStart() {
