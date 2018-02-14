@@ -186,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:id="@+id/btnResolved"
-                android:text="Resolved"
+                android:text="Resolve"
                 android:gravity="center"
                 android:layout_marginBottom="20dp"
                 android:textSize="20dp"
