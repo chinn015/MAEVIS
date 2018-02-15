@@ -349,6 +349,7 @@ public class UploadReport extends AppCompatActivity {
         String notifTitle = "MAEVIS: Pending "+reportModel.getReportType()+" Report";
         String notifReportID = newReport.getKey();
 
+        //get all nearby admins and store them in the list to be notified later on
         for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
             if(FirebaseDatabaseManager.getUserItems().get(x).getUserType().equals("Admin")) {
                 UserItem nearbyAdmin = FirebaseDatabaseManager.getUserItems().get(x);
@@ -375,6 +376,7 @@ public class UploadReport extends AppCompatActivity {
             }
         }
 
+        //notify all nearby admins
         for(int x=0; x < nearbyAdmins.size(); x++) {
             String messageToAdmin = "["+FirebaseDatabaseManager.getFullName(nearbyAdmins.get(x))+"] "+fullName+" sent a "+reportModel.getReportType()+" Report near you.";
             notifModel = new NotifModel(messageToAdmin, notifReportID, notifTitle, nearbyAdmins.get(x));
@@ -386,6 +388,36 @@ public class UploadReport extends AppCompatActivity {
         Toast.makeText(UploadReport.this, "Report sent!", Toast.LENGTH_LONG).show();
         finish();
         startActivity(new Intent(UploadReport.this, Sidebar_HomePage.class));
+
+        //check if there is an existing verified report nearby
+        for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+            ListItemVerified listItemVerified = FirebaseDatabaseManager.getActiveVerifiedReports().get(x);
+            double nearbyLatitude = listItemVerified.getLocationLatitude();
+            double nearbyLongitude = listItemVerified.getLocationLongitude();
+            float distance, nearby_distance;
+
+            nearby_distance = 1000;
+            Location nearby_verified = new Location("1");
+            Location pendging_report_location = new Location("2");
+
+            nearby_verified.setLatitude(nearbyLatitude);
+            nearby_verified.setLongitude(nearbyLongitude);
+
+            pendging_report_location.setLatitude(reportModel.getLocationLatitude());
+            pendging_report_location.setLongitude(reportModel.getLocationLongitude());
+
+            //Returns the approximate distance in meters between the current location and the given report location.
+            distance = pendging_report_location.distanceTo(nearby_verified);
+
+            if (distance <= nearby_distance) {
+                /*for(int y=0; y < nearbyAdmins.size(); y++) {
+                    String messageToAdmin = "["+FirebaseDatabaseManager.getFullName(nearbyAdmins.get(y))+"] "+fullName+" sent a "+reportModel.getReportType()+" Report near an existing emergency.";
+                    notifModel = new NotifModel(messageToAdmin, notifReportID, notifTitle, nearbyAdmins.get(y));
+                    newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
+                    newNotif.setValue(notifModel);
+                }*/
+            }
+        }
 
         //cNotification.showVerifyReportNotification(getApplication());
         //cNotification.vibrateNotification(getApplication());
