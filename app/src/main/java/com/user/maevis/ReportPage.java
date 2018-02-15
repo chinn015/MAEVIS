@@ -125,43 +125,29 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         }else if (PageNavigationManager.getClickedTabLocListItemVerified() != null){
             clickedReport = PageNavigationManager.getClickedTabLocListItemVerified();
             mPostKey = PageNavigationManager.getClickedTabLocListItemVerified().getReportID();
-//            viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
-//            viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
-//            viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
-//
-//            Picasso.with(getApplicationContext())
-//                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
-//                    .into(viewReportType);
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getUserPhoto())
-//                    .into(viewUserImage);
+
+            viewLocation.setText(PageNavigationManager.getClickedTabLocListItemVerified().getLocation());
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportMarkerImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
+                    .into(viewReportType);
+
 
         }else if(PageNavigationManager.getClickedTabNotifListItem() != null){
-            //clickedReport = PageNavigationManager.getClickedTabNotifListItem();
             mPostKey = PageNavigationManager.getClickedTabNotifListItem().getReportID();
-//            viewReportHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
-//            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
-//            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
-//
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifListItem().getReportType())
-//                    .into(viewReportType);
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
-//                    .into(viewUserImage);
+
+            viewLocation.setText(PageNavigationManager.getClickedTabNotifListItem().getLocation());
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportMarkerImage(PageNavigationManager.getClickedTabNotifListItem().getReportType()))
+                    .into(viewReportType);
 
         }else if(PageNavigationManager.getClickedTabNotifRegListItem() != null){
             mPostKey = PageNavigationManager.getClickedTabNotifRegListItem().getReportID();
-//            viewReportHead.setText(PageNavigationManager.getClickedTabNotifRegListItem().getHead());
-//            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDescription());
-//            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDisplayDateTime());
-//
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getReportType())
-//                    .into(viewReportType);
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getUserPhoto())
-//                    .into(viewUserImage);
+
+            viewLocation.setText(PageNavigationManager.getClickedTabNotifRegListItem().getLocation());
+            Picasso.with(getApplicationContext())
+                    .load(ListItem.getReportMarkerImage(PageNavigationManager.getClickedTabNotifRegListItem().getReportType()))
+                    .into(viewReportType);
+
         }
 
 
