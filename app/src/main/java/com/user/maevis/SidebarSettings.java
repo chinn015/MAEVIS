@@ -286,11 +286,6 @@ public class SidebarSettings extends AppCompatActivity {
         }
 
 
-//        if(!pass.equals(conPass)){
-//            conPassword.setError("Your new password and confirmation password do not match.");
-//            return;
-//        }
-
         if(isEmailValid(emailAdd) != true){
             email.setError("Please enter a valid email address.");
             return;

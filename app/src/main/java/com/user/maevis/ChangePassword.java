@@ -119,7 +119,7 @@ import me.grantland.widget.AutofitTextView;
 
 public class ChangePassword extends AppCompatActivity {
 
-    private EditText username, password, fName, lName, email, conPassword;
+    private EditText username, oldPassword, fName, lName, email, newPassword, conPassword;
 
     private DatabaseReference dbUsername, dbPassword, dbFName, dbLName, dbEmail, dbAddress, dbUserPhoto;
 
@@ -127,7 +127,7 @@ public class ChangePassword extends AppCompatActivity {
 
     private static final String TAG = "SidebarSettings";
 
-    private String oldPass;
+    private String oldPass, newP, oldP, conP;
 
     private static String imageURL = "";
 
@@ -155,27 +155,20 @@ public class ChangePassword extends AppCompatActivity {
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
         //User logged in
-        password = (EditText) findViewById(R.id.txtFldEditPassword);
-
+        oldPassword = (EditText) findViewById(R.id.txtFldEditPassword);
+        newPassword = (EditText) findViewById(R.id.txtFldEditNewPassword);
         conPassword = (EditText) findViewById(R.id.txtFldEditConPassword);
-
 
         dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
         dbFName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("firstName");
 
 
-
-
-
-
-
-
             dbPassword.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    password.setText(dataSnapshot.getValue(String.class));
+                    oldPassword.setText(dataSnapshot.getValue(String.class));
                     oldPass = dataSnapshot.getValue(String.class);
-                    conPassword.setText(dataSnapshot.getValue(String.class));
+                    newPassword.setText(dataSnapshot.getValue(String.class));
                 }
 
                 @Override
@@ -192,8 +185,17 @@ public class ChangePassword extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        oldP = oldPassword.getText().toString();
+        newP = newPassword.getText().toString();
+        conP = conPassword.getText().toString();
+
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            displayDiscardDialog();
+            if(oldP.length() != 0 || newP.length() != 0 || conP.length() != 0 ){
+                displayDiscardDialog();
+            }else{
+                finish();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -211,20 +213,25 @@ public class ChangePassword extends AppCompatActivity {
         //Toast.makeText(this, "Updated Profile", Toast.LENGTH_SHORT).show();
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String pass = password.getText().toString().trim();
-
+        final String oldPass = oldPassword.getText().toString().trim();
+        final String newPass = newPassword.getText().toString().trim();
         final String conPass = conPassword.getText().toString().trim();
 
 
-
         // Password is required
-        if (TextUtils.isEmpty(pass)) {
-            password.setError(REQUIRED);
+        if (TextUtils.isEmpty(oldPass)) {
+            oldPassword.setError(REQUIRED);
+            return;
+        }
+
+        // New Password is required
+        if (TextUtils.isEmpty(newPass)) {
+            newPassword.setError(REQUIRED);
             return;
         }
 
         // Confirm Password is required
-        if (TextUtils.isEmpty(pass)) {
+        if (TextUtils.isEmpty(conPass)) {
             conPassword.setError(REQUIRED);
             return;
         }
@@ -232,35 +239,29 @@ public class ChangePassword extends AppCompatActivity {
 
         String regex = "(.)*(\\d)(.)*";
         Pattern pattern = Pattern.compile(regex);
-        boolean containsNumber = pattern.matcher(pass).matches();
+        boolean containsNumber = pattern.matcher(newPass).matches();
 
-        if(pass.length() < 8 && containsNumber != true){
-            password.setError("Passsword must have at least 8 characters with at least 1 digit");
+        if(newPass.length() < 8 && containsNumber != true){
+            newPassword.setError("Passsword must have at least 8 characters with at least 1 digit");
             return;
         }
 
-//        if(!pass.equals(conPass)){
-//            conPassword.setError("Your new password and confirmation password do not match.");
-//            return;
-//        }
+        if(!newPass.equals(conPass)){
+            conPassword.setError("Your new password and confirmation password do not match.");
+            return;
+        }
 
 
         dbUsername = FirebaseDatabase.getInstance().getReference();
-        //dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
 
-
-
-
-        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), pass);
-
-
+        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), oldPass);
 
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
 
-                    user.updatePassword(conPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -279,69 +280,6 @@ public class ChangePassword extends AppCompatActivity {
         finish();
     }
 
-    private void SelectImage(){
-
-
-        final CharSequence[] items = {"Camera", "Gallery", "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePassword.this);
-        builder.setTitle("Add Image");
-
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (items[i].equals("Camera")) {
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                    File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    String pictureName = getPictureName();
-                    imageFile = new File(pictureDirectory, pictureName);
-                    //Uri pictureUri = Uri.fromFile(imageFile);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    Uri pictureUri = FileProvider.getUriForFile(getApplicationContext(), "com.your.package.fileProvider", imageFile);
-                    photoURI = pictureUri;
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
-
-                    PHOTO_CODE = REQUEST_CAMERA;
-
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[i].equals("Gallery")) {
-
-                    intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-
-                    PHOTO_CODE = SELECT_FILE;
-
-                    startActivityForResult(intent, SELECT_FILE);
-                } else if (items[i].equals("Cancel")) {
-                    dialogInterface.dismiss();
-                }
-            }
-        });
-        builder.show();
-
-    }
-
-    @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode,data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if(requestCode == REQUEST_CAMERA) {;
-
-                ivImage.setImageURI(photoURI);
-                finalImageURI = photoURI;
-
-            } else if (requestCode == SELECT_FILE) {
-
-                Uri selectedImageUri = data.getData();
-                ivImage.setImageURI(selectedImageUri);
-                finalImageURI = selectedImageUri;
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -354,11 +292,19 @@ public class ChangePassword extends AppCompatActivity {
 
         int id = item.getItemId();
 
+        oldP = oldPassword.getText().toString();
+        newP = newPassword.getText().toString();
+        conP = conPassword.getText().toString();
+
         if (id == R.id.action_save_changes) {
             showUpdateConfirmationDialog();
             return true;
         } else if (id == android.R.id.home) {
-            displayDiscardDialog();
+            if(oldP.length() != 0 || newP.length() != 0 || conP.length() != 0 ){
+                displayDiscardDialog();
+            }else{
+                finish();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -367,7 +313,7 @@ public class ChangePassword extends AppCompatActivity {
     private void showUpdateConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Update Profile");
+        builder.setTitle("Update Password");
         builder.setMessage("Are you sure you want to apply these changes?");
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -376,7 +322,7 @@ public class ChangePassword extends AppCompatActivity {
                 if (finalImageURI != null) {
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
-                    progressDialog.setMessage("Updating profile.");
+                    progressDialog.setMessage("Updating Password.");
                     progressDialog.show();
                     progressDialog.setCanceledOnTouchOutside(false);
 
