@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,13 +17,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
+import com.user.maevis.models.DeviceModel;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.NotifModel;
 import com.user.maevis.models.PageNavigationManager;
@@ -57,6 +65,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private List<ListItem> listItems;
     private List<String> imageList;
     private List<String> mergedReportsID;
+    private List<String> existingImageList;
+    private List<String> existingMergedReportsID;
     ListItem clickedReportBasis;
 
     public static ReportVerifiedModel reportVerifiedModel;
@@ -100,6 +110,8 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         listItems = new ArrayList<>();
         imageList = new ArrayList<>();
         mergedReportsID = new ArrayList<>();
+        existingImageList = new ArrayList<>();
+        existingMergedReportsID = new ArrayList<>();
         nearbyUsers = new ArrayList<>();
         nearbyHomes = new ArrayList<>();
 
@@ -274,102 +286,165 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
         }
 
-        newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
+        //if there is a similar existing verified report, add it to the list
+        getExistingImageList().clear();
+        getExistingMergedReportsID().clear();
 
-        for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
-            ListItem pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
-            double vLatitude = pendingReport.getLocationLatitude();
-            double vLongitude = pendingReport.getLocationLongitude();
-            float distance, limit_distance;
+        final ListItemVerified existingVerifiedReport = isExistingVerified(clickedReportBasis);
+        if(existingVerifiedReport != null) {
+            final String existingVerifiedReportID = existingVerifiedReport.getReportID();
 
-            limit_distance = 300;
-            Location report_locations = new Location("1");
-            Location verify_location = new Location("2");
-            String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+            FirebaseDatabaseManager.FirebaseReportsVerified.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if(dataSnapshot.getKey().toString().equals(existingVerifiedReportID)) {
+                        Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
+                        while(images.hasNext()) {
+                            DataSnapshot image = images.next();
+                            getExistingImageList().add(image.getValue().toString());
+                        }
 
-            report_locations.setLatitude(vLatitude);
-            report_locations.setLongitude(vLongitude);
+                        //List<String> mergedReportsID = new ArrayList<>();
+                        Iterator<DataSnapshot> reports = dataSnapshot.child("mergedReportsID").getChildren().iterator();
+                        while(reports.hasNext()) {
+                            DataSnapshot report = reports.next();
+                            getExistingMergedReportsID().add(report.getValue().toString());
+                        }
 
-            verify_location.setLatitude(pendingReport.getLocationLatitude());
-            verify_location.setLongitude(pendingReport.getLocationLongitude());
+                        getExistingImageList().add(clickedReportBasis.getImageURL());
+                        getExistingMergedReportsID().add(clickedReportBasis.getReportID());
 
-            //Returns the approximate distance in meters between the current location and the given report location.
-            distance = verify_location.distanceTo(report_locations);
+                        FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Verified");
+                        FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("mergedTo").setValue(existingVerifiedReportID);
 
-            if(distance <= limit_distance){
-                if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), pendingReport.getDateTime())) {
-                    if (pendingReport.getReportType().equals(clickedReportBasis.getReportType())) {
-                        getImageList().add(pendingReport.getImageURL());
-                        getMergedReportsID().add(pendingReport.getReportID());
-                        FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("reportStatus").setValue("Verified");
-                        FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("mergedTo").setValue(newReportVerified.getKey());
+                        FirebaseDatabaseManager.FirebaseReportsVerified.child(existingVerifiedReportID).child("imageList").setValue(getExistingImageList());
+                        FirebaseDatabaseManager.FirebaseReportsVerified.child(existingVerifiedReportID).child("mergedReportsID").setValue(getExistingMergedReportsID());
+
+                        getExistingImageList().clear();
+                        getExistingMergedReportsID().clear();
+                        startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+                    }
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            //insert new verified report
+            newReportVerified = FirebaseDatabaseManager.FirebaseReportsVerified.push();
+            getImageList().clear();
+            getMergedReportsID().clear();
+
+            for(int x = 0; x < FirebaseDatabaseManager.getPendingReports().size(); x++) {
+                ListItem pendingReport = FirebaseDatabaseManager.getPendingReports().get(x);
+                double vLatitude = pendingReport.getLocationLatitude();
+                double vLongitude = pendingReport.getLocationLongitude();
+                float distance, limit_distance;
+
+                limit_distance = 300;
+                Location report_locations = new Location("1");
+                Location verify_location = new Location("2");
+                String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+
+                report_locations.setLatitude(vLatitude);
+                report_locations.setLongitude(vLongitude);
+
+                verify_location.setLatitude(pendingReport.getLocationLatitude());
+                verify_location.setLongitude(pendingReport.getLocationLongitude());
+
+                //Returns the approximate distance in meters between the current location and the given report location.
+                distance = verify_location.distanceTo(report_locations);
+
+                if(distance <= limit_distance){
+                    if(FirebaseDatabaseManager.isWithinTimeRange(clickedReportBasis.getDateTime(), pendingReport.getDateTime())) {
+                        if (pendingReport.getReportType().equals(clickedReportBasis.getReportType())) {
+                            getImageList().add(pendingReport.getImageURL());
+                            getMergedReportsID().add(pendingReport.getReportID());
+                            FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("reportStatus").setValue("Verified");
+                            FirebaseDatabaseManager.FirebaseReports.child(pendingReport.getReportID()).child("mergedTo").setValue(newReportVerified.getKey());
+                        }
                     }
                 }
             }
-        }
 
-        String dateTime = clickedReportBasis.getDateTime();
-        String description = clickedReportBasis.getDescription();
-        String imageThumbnailURL = clickedReportBasis.getImageURL();
-        List<String> imageList = getImageList();
-        String location = clickedReportBasis.getLocation();
-        double locationLatitude = clickedReportBasis.getLocationLatitude();
-        double locationLongitude = clickedReportBasis.getLocationLongitude();
-        String reportStatus = "Active";
-        String reportType = clickedReportBasis.getReportType();
-        //String reportedBy = SessionManager.getUserID();
-        String reportedBy = clickedReportBasis.getReportedBy();
-        List<String> mergedReportsID = getMergedReportsID();
-        int starCount = 0;
-        Map<String, Boolean> stars = new HashMap<>();
+            String dateTime = clickedReportBasis.getDateTime();
+            String description = clickedReportBasis.getDescription();
+            String imageThumbnailURL = clickedReportBasis.getImageURL();
+            List<String> imageList = getImageList();
+            String location = clickedReportBasis.getLocation();
+            double locationLatitude = clickedReportBasis.getLocationLatitude();
+            double locationLongitude = clickedReportBasis.getLocationLongitude();
+            String reportStatus = "Active";
+            String reportType = clickedReportBasis.getReportType();
+            //String reportedBy = SessionManager.getUserID();
+            String reportedBy = clickedReportBasis.getReportedBy();
+            List<String> mergedReportsID = getMergedReportsID();
+            int starCount = 0;
+            Map<String, Boolean> stars = new HashMap<>();
 
+            reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy, starCount, stars);
+            newReportVerified.setValue(reportVerifiedModel);
 
-        reportVerifiedModel = new ReportVerifiedModel(dateTime, description, imageList, imageThumbnailURL, location, locationLatitude, locationLongitude, mergedReportsID, reportStatus, reportType, reportedBy, starCount, stars);
-        newReportVerified.setValue(reportVerifiedModel);
+            String fullName = FirebaseDatabaseManager.getFullName(reportVerifiedModel.getReportedBy());
+            String notifMessageUser = fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
+            String notifMessageHome = fullName+" reported a "+reportVerifiedModel.getReportType()+" near your home.";
+            String notifTitle = "MAEVIS: "+reportVerifiedModel.getReportType()+" Report";
+            String notifReportID = newReportVerified.getKey();
 
-        String fullName = FirebaseDatabaseManager.getFullName(reportVerifiedModel.getReportedBy());
-        String notifMessageUser = fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
-        String notifMessageHome = fullName+" reported a "+reportVerifiedModel.getReportType()+" near your home.";
-        String notifTitle = "MAEVIS: "+reportVerifiedModel.getReportType()+" Report";
-        String notifReportID = newReportVerified.getKey();
+            for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
+                UserItem nearbyUser = FirebaseDatabaseManager.getUserItems().get(x);
+                double nearbyLatitude = nearbyUser.getCurrentLat();
+                double nearbyLongitude = nearbyUser.getCurrentLong();
+                double nearbyHomeLat = nearbyUser.getHomeLat();
+                double nearbyHomeLong = nearbyUser.getHomeLong();
+                float nearbyUser_distance, nearbyHome_distance, nearby_distance;
 
-        for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
-            UserItem nearbyUser = FirebaseDatabaseManager.getUserItems().get(x);
-            double nearbyLatitude = nearbyUser.getCurrentLat();
-            double nearbyLongitude = nearbyUser.getCurrentLong();
-            double nearbyHomeLat = nearbyUser.getHomeLat();
-            double nearbyHomeLong = nearbyUser.getHomeLong();
-            float nearbyUser_distance, nearbyHome_distance, nearby_distance;
+                nearby_distance = 1000;
+                Location nearby_users = new Location("1");
+                Location verified_report_location = new Location("2");
+                Location nearby_homes = new Location("3");
+                //String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
 
-            nearby_distance = 1000;
-            Location nearby_users = new Location("1");
-            Location verified_report_location = new Location("2");
-            Location nearby_homes = new Location("3");
-            //String vTitle = pendingReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(pendingReport.getReportedBy());
+                nearby_users.setLatitude(nearbyLatitude);
+                nearby_users.setLongitude(nearbyLongitude);
 
-            nearby_users.setLatitude(nearbyLatitude);
-            nearby_users.setLongitude(nearbyLongitude);
+                nearby_homes.setLatitude(nearbyHomeLat);
+                nearby_homes.setLongitude(nearbyHomeLong);
 
-            nearby_homes.setLatitude(nearbyHomeLat);
-            nearby_homes.setLongitude(nearbyHomeLong);
+                verified_report_location.setLatitude(reportVerifiedModel.getLocationLatitude());
+                verified_report_location.setLongitude(reportVerifiedModel.getLocationLongitude());
 
-            verified_report_location.setLatitude(reportVerifiedModel.getLocationLatitude());
-            verified_report_location.setLongitude(reportVerifiedModel.getLocationLongitude());
+                //Returns the approximate distance in meters between the current location and the given report location.
+                nearbyUser_distance = verified_report_location.distanceTo(nearby_users);
+                nearbyHome_distance = verified_report_location.distanceTo(nearby_users);
 
-            //Returns the approximate distance in meters between the current location and the given report location.
-            nearbyUser_distance = verified_report_location.distanceTo(nearby_users);
-            nearbyHome_distance = verified_report_location.distanceTo(nearby_users);
+                if(nearbyUser_distance <= nearby_distance){
+                    nearbyUsers.add(nearbyUser.getUserID());
+                }
 
-            if(nearbyUser_distance <= nearby_distance){
-                nearbyUsers.add(nearbyUser.getUserID());
+                if(nearbyHome_distance <= nearby_distance){
+                    nearbyHomes.add(nearbyUser.getUserID());
+                }
             }
 
-            if(nearbyHome_distance <= nearby_distance){
-                nearbyHomes.add(nearbyUser.getUserID());
-            }
-        }
-
-        for(int x=0; x < nearbyUsers.size(); x++) {
+        /*for(int x=0; x < nearbyUsers.size(); x++) {
             String messageToUser = "["+FirebaseDatabaseManager.getFullName(nearbyUsers.get(x))+"] "+fullName+" reported a "+reportVerifiedModel.getReportType()+" near you.";
             notifModel = new NotifModel(messageToUser, notifReportID, notifTitle, nearbyUsers.get(x));
             //notifModel = new NotifModel(notifMessageUser, notifReportID, notifTitle, nearbyUsers.get(x));
@@ -383,11 +458,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             //notifModel = new NotifModel(notifMessageHome, notifReportID, notifTitle, nearbyHomes.get(x));
             newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
             newNotif.setValue(notifModel);
-        }
+        }*/
 
-        Toast.makeText(VerifyReport.this, "Report verified!.", Toast.LENGTH_LONG).show();
-        finish();
-        startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+            Toast.makeText(VerifyReport.this, "Report verified!.", Toast.LENGTH_LONG).show();
+            finish();
+            startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+        }
     }
 
     public void declineReport() {
@@ -400,8 +476,48 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(VerifyReport.this, "Report declined.", Toast.LENGTH_SHORT).show();
         FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Declined");
 
+        String notifTitle = "MAEVIS: Report Declined";
+        String messageToUser = "["+FirebaseDatabaseManager.getFullName(clickedReportBasis.getReportedBy())+"] Your "+reportVerifiedModel.getReportType()+" report has been declined.";
+        notifModel = new NotifModel(messageToUser, clickedReportBasis.getReportID(), notifTitle, clickedReportBasis.getReportedBy());
+        //notifModel = new NotifModel(notifMessageUser, notifReportID, notifTitle, nearbyUsers.get(x));
+        newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
+        newNotif.setValue(notifModel);
+
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+    }
+
+    public ListItemVerified isExistingVerified(ListItem newReport) {
+        ListItemVerified existingReport = null;
+
+        for(int x = 0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+            ListItemVerified existingVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReports().get(x);
+            double vLatitude = existingVerifiedReport.getLocationLatitude();
+            double vLongitude = existingVerifiedReport.getLocationLongitude();
+            float distance, limit_distance;
+
+            limit_distance = 300;
+            Location existing_verified_locations = new Location("1");
+            Location new_report_location = new Location("2");
+            String vTitle = existingVerifiedReport.getReportType()+" "+FirebaseDatabaseManager.getFullName(existingVerifiedReport.getReportedBy());
+
+            existing_verified_locations.setLatitude(vLatitude);
+            existing_verified_locations.setLongitude(vLongitude);
+
+            new_report_location.setLatitude(newReport.getLocationLatitude());
+            new_report_location.setLongitude(newReport.getLocationLongitude());
+
+            //Returns the approximate distance in meters between the current location and the given report location.
+            distance = new_report_location.distanceTo(existing_verified_locations);
+
+            if(distance <= limit_distance){
+                if(existingVerifiedReport.getReportType().equals(newReport.getReportType())) {
+                    existingReport = existingVerifiedReport;
+                }
+            }
+        }
+
+        return existingReport;
     }
 
     public List<String> getImageList() {
@@ -418,6 +534,22 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
     public void setMergedReportsID(List<String> mergedReportsID) {
         this.mergedReportsID = mergedReportsID;
+    }
+
+    public List<String> getExistingImageList() {
+        return existingImageList;
+    }
+
+    public void setExistingImageList(List<String> existingImageList) {
+        this.existingImageList = existingImageList;
+    }
+
+    public List<String> getExistingMergedReportsID() {
+        return existingMergedReportsID;
+    }
+
+    public void setExistingMergedReportsID(List<String> existingMergedReportsID) {
+        this.existingMergedReportsID = existingMergedReportsID;
     }
 
     private void showDialogVerify() {

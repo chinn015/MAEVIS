@@ -170,10 +170,10 @@ public class Tab3_Notification extends Fragment {
                 }
 
                 List<String> mergedReportsID = new ArrayList<>();
-                Iterator<DataSnapshot> reports = dataSnapshot.child("imageList").getChildren().iterator();
+                Iterator<DataSnapshot> reports = dataSnapshot.child("mergedReportsID").getChildren().iterator();
                 while(reports.hasNext()) {
                     DataSnapshot report = reports.next();
-                    imageList.add(report.getValue().toString());
+                    mergedReportsID.add(report.getValue().toString());
                 }
 
                 Map<String, Boolean> stars = new HashMap<>();

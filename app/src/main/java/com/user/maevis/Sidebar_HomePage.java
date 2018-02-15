@@ -112,14 +112,16 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
 
         btnAddReport.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                LocationManager locMmngr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                boolean locStat = locMmngr.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-                if(!isNetworkAvailable(getApplicationContext())) {
-                    showNoInternetConnection();
-                }else {
-                    if (SessionManager.getUserStatus().equals("Active")) {
+                if(!locStat) {
+                    showDialogGPS();
+                } else {
+                    if(SessionManager.getUserStatus().equals("Active")) {
                         Intent i = new Intent(getApplication(), SelectionPage.class);
                         startActivity(i);
-                    } else if (SessionManager.getUserStatus().equals("Blocked")) {
+                    } else if(SessionManager.getUserStatus().equals("Blocked")) {
                         showDialogBlocked();
                     }
                 }
