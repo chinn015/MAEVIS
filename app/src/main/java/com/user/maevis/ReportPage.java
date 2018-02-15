@@ -54,11 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReportPage extends AppCompatActivity  implements View.OnClickListener  {
 
-    private TextView viewReportHead;
-    private TextView viewReportDesc;
-    private TextView viewReportDateTime;
-    private ImageView viewReportImage;
-    private ImageView viewReportType;
+
     private CircleImageView viewUserImage;
     ViewPager viewPager;
     LinearLayout sliderDotspanel;
@@ -85,15 +81,12 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
     private Button mCommentButton;
     private RecyclerView mCommentsRecycler;
     private CircleImageView viewUserPhoto;
+    private ListItemVerified clickedReport;
 
     private List<String> imageUrl;
 
-    /*private static UserItem clickedUserItem = null;
-    static boolean clickedUserItemStatus = false;*/
-
-    /*private String clickedUserID = "";
-    private ListItem listItemTemp = null;
-    private String tab = "";*/
+    private ImageView viewReportType;
+    private TextView viewLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +101,8 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
         sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);
 
-        // Initialize Views
-        viewReportHead = (TextView) findViewById(R.id.viewReportHead);
-        viewReportDesc = (TextView) findViewById(R.id.viewReportDesc);
-        viewReportDateTime = (TextView) findViewById(R.id.viewReportDateTime);
-       // viewReportImage = (ImageView) findViewById(R.id.viewReportImage);
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
-        viewUserImage = (CircleImageView) findViewById(R.id.imgViewProfilePic);
-        viewUserPhoto = (CircleImageView) findViewById(R.id.user_photo);
+        viewLocation = (TextView) findViewById(R.id.viewLocation);
 
         mCommentField = findViewById(R.id.comment);
         mCommentButton = findViewById(R.id.button_post_comment);
@@ -125,77 +112,62 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
 
-        Picasso.with(getApplicationContext())
-                .load(SessionManager.getUserPhoto())
-                .fit()
-                .into(viewUserPhoto);
-
         if(PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
+            clickedReport = PageNavigationManager.getClickedTabHomeListItemVerified();
             mPostKey = PageNavigationManager.getClickedTabHomeListItemVerified().getReportID();
-            viewReportHead.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getHead());
-            viewReportDesc.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDescription());
-            viewReportDateTime.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getDisplayDateTime());
-//            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getImageThumbnailURL())
-//                    .fit()
-//                    .into(viewReportImage);
+
+            viewLocation.setText(PageNavigationManager.getClickedTabHomeListItemVerified().getLocation());
             Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabHomeListItemVerified().getReportType()))
+                    .load(ListItem.getReportMarkerImage(PageNavigationManager.getClickedTabHomeListItemVerified().getReportType()))
                     .into(viewReportType);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabHomeListItemVerified().getUserPhoto())
-                    .into(viewUserImage);
+
 
         }else if (PageNavigationManager.getClickedTabLocListItemVerified() != null){
+            clickedReport = PageNavigationManager.getClickedTabLocListItemVerified();
             mPostKey = PageNavigationManager.getClickedTabLocListItemVerified().getReportID();
-            viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
-            viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
-            viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
+//            viewReportHead.setText(PageNavigationManager.getClickedTabLocListItemVerified().getHead());
+//            viewReportDesc.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDescription());
+//            viewReportDateTime.setText(PageNavigationManager.getClickedTabLocListItemVerified().getDisplayDateTime());
+//
 //            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getImageThumbnailURL())
-//                    .fit()
-//                    .into(viewReportImage);
-            Picasso.with(getApplicationContext())
-                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
-                    .into(viewReportType);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getUserPhoto())
-                    .into(viewUserImage);
+//                    .load(ListItem.getReportTypeImage(PageNavigationManager.getClickedTabLocListItemVerified().getReportType()))
+//                    .into(viewReportType);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabLocListItemVerified().getUserPhoto())
+//                    .into(viewUserImage);
 
         }else if(PageNavigationManager.getClickedTabNotifListItem() != null){
+            //clickedReport = PageNavigationManager.getClickedTabNotifListItem();
             mPostKey = PageNavigationManager.getClickedTabNotifListItem().getReportID();
-            viewReportHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
-            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
-            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
+//            viewReportHead.setText(PageNavigationManager.getClickedTabNotifListItem().getHead());
+//            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifListItem().getDescription());
+//            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifListItem().getDisplayDateTime());
+//
 //            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifListItem().getImageURL())
-//                    .fit()
-//                    .into(viewReportImage);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifListItem().getReportType())
-                    .into(viewReportType);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
-                    .into(viewUserImage);
+//                    .load(PageNavigationManager.getClickedTabNotifListItem().getReportType())
+//                    .into(viewReportType);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabNotifListItem().getUserPhoto())
+//                    .into(viewUserImage);
 
         }else if(PageNavigationManager.getClickedTabNotifRegListItem() != null){
             mPostKey = PageNavigationManager.getClickedTabNotifRegListItem().getReportID();
-            viewReportHead.setText(PageNavigationManager.getClickedTabNotifRegListItem().getHead());
-            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDescription());
-            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDisplayDateTime());
+//            viewReportHead.setText(PageNavigationManager.getClickedTabNotifRegListItem().getHead());
+//            viewReportDesc.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDescription());
+//            viewReportDateTime.setText(PageNavigationManager.getClickedTabNotifRegListItem().getDisplayDateTime());
+//
 //            Picasso.with(getApplicationContext())
-//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getImageThumbnailURL())
-//                    .fit()
-//                    .into(viewReportImage);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getReportType())
-                    .into(viewReportType);
-            Picasso.with(getApplicationContext())
-                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getUserPhoto())
-                    .into(viewUserImage);
+//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getReportType())
+//                    .into(viewReportType);
+//            Picasso.with(getApplicationContext())
+//                    .load(PageNavigationManager.getClickedTabNotifRegListItem().getUserPhoto())
+//                    .into(viewUserImage);
         }
 
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this);
+        //viewPagerAdapter.initializeImages(clickedReport.getImageList());
+        viewPagerAdapter.initializeMergedReports(clickedReport.getMergedReportsID());
 
         viewPager.setAdapter(viewPagerAdapter);
 
@@ -245,7 +217,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
         mPostReference = FirebaseDatabase.getInstance().getReference().child("Reports").child(mPostKey);
         mCommentsReference = FirebaseDatabase.getInstance().getReference().child("Comments").child(mPostKey);
 
-        viewUserImage.setOnClickListener(this);
+//        viewUserImage.setOnClickListener(this);
         mCommentButton.setOnClickListener(this);
         mCommentsRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
