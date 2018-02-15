@@ -136,7 +136,7 @@
         </activity>
         <activity
             android:name=".SidebarSettings"
-            android:label="Settings"
+            android:label="Account Settings"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -218,6 +218,14 @@
 
         <activity android:name="com.user.maevis.ForgotPass"
             android:screenOrientation="portrait"/>
+
+        <activity android:name="com.user.maevis.Settings"
+            android:screenOrientation="portrait"
+            android:label="Settings"/>
+
+        <activity android:name="com.user.maevis.ChangePassword"
+            android:screenOrientation="portrait"
+            android:label="Change Password"/>
 
         <!--<activity android:name=".item_comments"></activity>-->
     </application>

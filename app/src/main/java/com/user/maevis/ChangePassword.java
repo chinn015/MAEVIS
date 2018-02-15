@@ -11,6 +11,60 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.VideoView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.user.maevis.models.FirebaseDatabaseManager;
+import com.user.maevis.session.SessionManager;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.grantland.widget.AutofitTextView;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -63,7 +117,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import me.grantland.widget.AutofitTextView;
 
 
-public class SidebarSettings extends AppCompatActivity {
+public class ChangePassword extends AppCompatActivity {
 
     private EditText username, password, fName, lName, email, conPassword;
 
@@ -93,7 +147,7 @@ public class SidebarSettings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sidebar_settings);
+        setContentView(R.layout.activity_change_password);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,76 +155,27 @@ public class SidebarSettings extends AppCompatActivity {
         progressDialog = new ProgressDialog(this, R.style.AlertDialogStyle);
 
         //User logged in
-        username = (EditText) findViewById(R.id.txtFldEditUsername);
-        fName = (EditText) findViewById(R.id.txtFldEditFirstname);
-        lName = (EditText) findViewById(R.id.txtFldEditLastname);
-        email = (EditText) findViewById(R.id.txtFldEditEmail);
-        txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
-        ivImage = (CircleImageView) findViewById(R.id.imgChangePhoto);
+        password = (EditText) findViewById(R.id.txtFldEditPassword);
 
-        Picasso.with(this).load(SessionManager.getUserPhoto()).into(ivImage);
+        conPassword = (EditText) findViewById(R.id.txtFldEditConPassword);
 
-        dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
+
+        dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
         dbFName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("firstName");
-        dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
-        dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
-        dbAddress = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("address");
-        dbUserPhoto = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("userPhoto");
-
-        ivImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                SelectImage();
-            }
-        });
-
-        txtFldAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), UpdateHomeAddress.class);
-                final String userName = username.getText().toString();
-                final String userEmail = email.getText().toString();
-                final String userFname = fName.getText().toString();
-                final String userLname = lName.getText().toString();
-
-                i.putExtra("userName", userName);
-                i.putExtra("userEmail", userEmail);
-                i.putExtra("userFname", userFname);
-                i.putExtra("userLname", userLname);
-
-                startActivity(i);
-                //finish();
-            }
-        });
 
 
-        if(UpdateHomeAddress.userHomeAddress != null){
-            Intent i = getIntent();
-            username.setText(UpdateHomeAddress.userName);
-            fName.setText(UpdateHomeAddress.userFname);
-            lName.setText(UpdateHomeAddress.userLname);
-            email.setText(UpdateHomeAddress.userEmail);
-            txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
 
-            //Toast.makeText(this, "get1 : " + UpdateHomeAddress.userName, Toast.LENGTH_LONG).show();
-        }else{
-            dbAddress.addValueEventListener(new ValueEventListener() {
+
+
+
+
+
+            dbPassword.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    txtFldAddress.setText(dataSnapshot.getValue(String.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            dbUsername.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    username.setText(dataSnapshot.getValue(String.class));
+                    password.setText(dataSnapshot.getValue(String.class));
+                    oldPass = dataSnapshot.getValue(String.class);
+                    conPassword.setText(dataSnapshot.getValue(String.class));
                 }
 
                 @Override
@@ -180,42 +185,8 @@ public class SidebarSettings extends AppCompatActivity {
             });
 
 
-            dbFName.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    fName.setText(dataSnapshot.getValue(String.class));
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-
-            dbLName.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    lName.setText(dataSnapshot.getValue(String.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            dbEmail.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    email.setText(dataSnapshot.getValue(String.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
 
     }
 
@@ -240,94 +211,68 @@ public class SidebarSettings extends AppCompatActivity {
         //Toast.makeText(this, "Updated Profile", Toast.LENGTH_SHORT).show();
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String userName = username.getText().toString().trim();
-        final String first = fName.getText().toString().trim();
-        final String last = lName.getText().toString().trim();
-        final String emailAdd = email.getText().toString().trim();
-        final String add = txtFldAddress.getText().toString().trim();
-        final Double homeLat = UpdateHomeAddress.userHomeLat;
-        final Double homeLong = UpdateHomeAddress.userHomeLong;
+        final String pass = password.getText().toString().trim();
 
-        // Username is required
-        if (TextUtils.isEmpty(userName)) {
-            username.setError(REQUIRED);
+        final String conPass = conPassword.getText().toString().trim();
+
+
+
+        // Password is required
+        if (TextUtils.isEmpty(pass)) {
+            password.setError(REQUIRED);
+            return;
+        }
+
+        // Confirm Password is required
+        if (TextUtils.isEmpty(pass)) {
+            conPassword.setError(REQUIRED);
             return;
         }
 
 
+        String regex = "(.)*(\\d)(.)*";
+        Pattern pattern = Pattern.compile(regex);
+        boolean containsNumber = pattern.matcher(pass).matches();
 
-        // First Name is required
-        if (TextUtils.isEmpty(first)) {
-            fName.setError(REQUIRED);
+        if(pass.length() < 8 && containsNumber != true){
+            password.setError("Passsword must have at least 8 characters with at least 1 digit");
             return;
         }
-
-        // Last Name is required
-        if (TextUtils.isEmpty(last)) {
-            lName.setError(REQUIRED);
-            return;
-        }
-
-        // Email Address is required
-        if (TextUtils.isEmpty(emailAdd)) {
-            email.setError(REQUIRED);
-            return;
-        }
-
-        // Address is required
-        if (TextUtils.isEmpty(add)) {
-            txtFldAddress.setError(REQUIRED);
-            return;
-        }
-
-        if(userName.length() < 8){
-            username.setError("Username must have at least 8 characters");
-            return;
-        }
-
 
 //        if(!pass.equals(conPass)){
 //            conPassword.setError("Your new password and confirmation password do not match.");
 //            return;
 //        }
 
-        if(isEmailValid(emailAdd) != true){
-            email.setError("Please enter a valid email address.");
-            return;
-        }
 
         dbUsername = FirebaseDatabase.getInstance().getReference();
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("username").setValue(userName);
         //dbUsername.child("Users").child(SessionManager.getUserID()).child("password").setValue(pass);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("firstName").setValue(first);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("lastName").setValue(last);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("email").setValue(emailAdd);
-        dbUsername.child("Users").child(SessionManager.getUserID()).child("address").setValue(add);
-
-        if(homeLat == 0 && homeLong == null){
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(SessionManager.getHomeLat());
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(SessionManager.getHomeLong());
-        }else{
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLat").setValue(homeLat);
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("homeLong").setValue(homeLong);
-        }
-
-        if(finalImageURI != null) {
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(getImageURL());
-        }else{
-            dbUsername.child("Users").child(SessionManager.getUserID()).child("userPhoto").setValue(SessionManager.getUserPhoto());
-        }
 
 
 
 
+        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), pass);
 
 
-        if(finalImageURI != null) {
-            SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), getImageURL());
-        }else{
-            SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), SessionManager.getUserPhoto());
-        }
+
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+
+                    user.updatePassword(conPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                            } else {
+                            }
+                        }
+                    });
+                }else{
+                }
+            }
+        });
+
 
         Intent i = new Intent(this, Sidebar_HomePage.class);
         startActivity(i);
@@ -339,7 +284,7 @@ public class SidebarSettings extends AppCompatActivity {
 
         final CharSequence[] items = {"Camera", "Gallery", "Cancel"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(SidebarSettings.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ChangePassword.this);
         builder.setTitle("Add Image");
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -427,7 +372,7 @@ public class SidebarSettings extends AppCompatActivity {
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-               //saveData();
+                //saveData();
                 if (finalImageURI != null) {
                     StorageReference filePath = FirebaseDatabaseManager.FirebasePhotoStorage.child("UserPhotos").child(finalImageURI.getLastPathSegment());
 
@@ -440,7 +385,7 @@ public class SidebarSettings extends AppCompatActivity {
                         Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), finalImageURI);
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                         bmp.compress(Bitmap.CompressFormat.JPEG, 20, bytes);
-                        String path = MediaStore.Images.Media.insertImage(SidebarSettings.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
+                        String path = MediaStore.Images.Media.insertImage(ChangePassword.this.getContentResolver(), bmp, finalImageURI.getLastPathSegment(), null);
                         finalImageURI = Uri.parse(path);
 
                         filePath.putFile(finalImageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -451,18 +396,18 @@ public class SidebarSettings extends AppCompatActivity {
 
                                 saveData();
 
-                                Toast.makeText(SidebarSettings.this, "Update Successful!.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ChangePassword.this, "Update Successful!.", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(SidebarSettings.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ChangePassword.this, "Photo upload failed!", Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
                         });
                     } catch (IOException ie) {
-                        Toast.makeText(SidebarSettings.this, "Update error.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ChangePassword.this, "Update error.", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                     }
 

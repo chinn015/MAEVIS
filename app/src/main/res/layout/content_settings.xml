@@ -58,60 +58,6 @@
         android:layout_marginStart="35dp"
         android:background="@drawable/txtfld_rounded"/>
 
-    <TextView
-        android:id="@+id/txtViewPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="OLD PASSWORD"
-        android:textSize="15dp"
-        android:textColor="@color/colorAccent"
-        android:layout_below="@+id/txtFldEditUsername"
-        android:layout_alignStart="@+id/txtFldEditPassword" />
-
-    <EditText
-        android:id="@+id/txtFldEditPassword"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/colorAccent"
-        android:paddingLeft="15dp"
-        android:textSize="15dp"
-        android:textCursorDrawable="@drawable/cursor_text_white"
-        android:backgroundTint="@color/colorAccent"
-        android:inputType="textPassword"
-        android:background="@drawable/txtfld_rounded"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/txtViewPassword"
-        android:layout_marginStart="35dp" />
-
-    <TextView
-        android:id="@+id/txtViewConPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="NEW PASSWORD"
-        android:textSize="15dp"
-        android:textColor="@color/colorAccent"
-        android:layout_below="@+id/txtFldEditPassword"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="40dp"/>
-
-    <EditText
-        android:id="@+id/txtFldEditConPassword"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="0dp"
-        android:textColor="@color/colorAccent"
-        android:paddingLeft="15dp"
-        android:textSize="15dp"
-        android:textCursorDrawable="@drawable/cursor_text_white"
-        android:backgroundTint="@color/colorAccent"
-        android:inputType="textPassword"
-        android:background="@drawable/txtfld_rounded"
-        android:layout_below="@+id/txtViewConPassword"
-        android:layout_alignStart="@+id/txtViewFirstname"
-        android:layout_marginTop="15dp"/>
-
 
     <TextView
         android:id="@+id/txtViewFirstname"
@@ -120,9 +66,9 @@
         android:text="FIRST NAME"
         android:textSize="15dp"
         android:textColor="@color/colorAccent"
-        android:layout_below="@+id/txtFldEditPassword"
-        android:layout_alignStart="@+id/txtViewPassword"
-        android:layout_marginTop="95dp" />
+        android:layout_below="@+id/txtFldEditUsername"
+        android:layout_alignStart="@+id/txtFldEditUsername"
+        android:layout_marginTop="25dp" />
 
     <EditText
         android:id="@+id/txtFldEditFirstname"
