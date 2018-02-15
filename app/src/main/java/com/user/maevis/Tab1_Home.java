@@ -70,7 +70,7 @@ public class Tab1_Home extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseDatabaseManager.FirebaseReportsVerified.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.FirebaseReportsVerified.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();

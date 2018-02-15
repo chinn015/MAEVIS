@@ -62,7 +62,7 @@ public class Tab3_Notification extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseDatabaseManager.FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
