@@ -46,6 +46,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.user.maevis.models.FirebaseDatabaseManager;
 import com.user.maevis.models.PageNavigationManager;
@@ -360,6 +361,17 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
             }
         });
 
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        double currentLat = Tab2_Location.getUserLatitude();
+        double currentLong = Tab2_Location.getUserLongitude();
+
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("deviceToken").setValue(deviceToken);
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLat").setValue(currentLat);
+        FirebaseDatabaseManager.FirebaseUsers.child(SessionManager.getUserID()).child("currentLong").setValue(currentLong);
+
+        //ListItemVerified liv = FirebaseDatabaseManager.getActiveVerifiedReport("-L5PB6f52e4nk7FtYjzb");
+
+        //Log.d("SIDEBAR HOMEPAGE", ""+liv.getReportID());
     }
 
     private void showDialogBlocked() {

@@ -36,9 +36,12 @@ import com.user.maevis.models.PageNavigationManager;
 import com.user.maevis.models.ReportVerifiedModel;
 import com.user.maevis.session.SessionManager;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -100,7 +103,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         btnDeclineReport = (Button) findViewById(R.id.btnProfileUM);
         btnResolvedReport = (Button) findViewById(R.id.btnResolved);
 
-
         btnVerifyReport.setOnClickListener(this);
         btnDeclineReport.setOnClickListener(this);
         btnResolvedReport.setOnClickListener(this);
@@ -114,6 +116,7 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         existingMergedReportsID = new ArrayList<>();
         nearbyUsers = new ArrayList<>();
         nearbyHomes = new ArrayList<>();
+        clickedReportBasis = new ListItem();
 
         //display details of clicked item
         if(PageNavigationManager.getClickedTabLocListItemPending() != null) {
@@ -249,7 +252,43 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         }
 
         if(v==btnResolvedReport) {
-            showDialogResolved();
+            /*Log.d("SIDEBAR SIZE", "RESOLVE");
+            Log.d("SIDEBAR SIZE", ""+FirebaseDatabaseManager.getActiveVerifiedReports().size());
+
+            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+                Log.d("SIDEBAR HOMEPAGE RID", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID());
+            }
+
+            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().size(); x++) {
+                Log.d("SIDEBAR HOMEPAGE RIDI", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().get(x));
+            }
+
+            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().size(); x++) {
+                Log.d("SIDEBAR HOMEPAGE RIDM", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().get(x));
+            }*/
+
+            //Log.d("SIDEBAR 4", FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getReportID());
+            //Log.d("SIDEBAR 4-0", FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().get(0));
+
+            /*ListItemVerified vee = FirebaseDatabaseManager.getActiveVerifiedReport("-L5PB6f52e4nk7FtYjzb");
+            for(int x=0; x < vee.getMergedReportsID().size(); x++) {
+                Log.d("RID MERGED REP ID", vee.getMergedReportsID().get(x));
+            }*/
+
+            if(PageNavigationManager.getClickedTabLocListItemPending()!=null) {
+                clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
+            } else if (PageNavigationManager.getClickedTabNotifListItem()!=null) {
+                clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
+            }
+
+            ListItemVerified listItemVerified = FirebaseDatabaseManager.getActiveVerifiedReport(clickedReportBasis.getMergedTo());
+
+            if(listItemVerified.getReportedBy().equals(SessionManager.getUserID())) {
+                showDialogResolved();
+            } else {
+                showNotVerifiedByYouDialog();
+            }
+
             return;
         }
         if(v==imgViewProfilePic) {
@@ -286,6 +325,9 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
             clickedReportBasis = PageNavigationManager.getClickedTabNotifListItem();
         }
 
+        nearbyHomes.clear();
+        nearbyUsers.clear();
+
         //if there is a similar existing verified report, add it to the list
         getExistingImageList().clear();
         getExistingMergedReportsID().clear();
@@ -319,6 +361,12 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
                         FirebaseDatabaseManager.FirebaseReportsVerified.child(existingVerifiedReportID).child("imageList").setValue(getExistingImageList());
                         FirebaseDatabaseManager.FirebaseReportsVerified.child(existingVerifiedReportID).child("mergedReportsID").setValue(getExistingMergedReportsID());
+
+                        Date today = Calendar.getInstance().getTime();
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+                        String dateTime = formatter.format(today);
+
+                        FirebaseDatabaseManager.FirebaseReportsVerified.child(existingVerifiedReportID).child("dateTime").setValue(dateTime);
 
                         getExistingImageList().clear();
                         getExistingMergedReportsID().clear();
@@ -574,9 +622,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         builder.setInverseBackgroundForced(true);
         builder.setPositiveButton("VERIFY", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
-
-
                 verifyReport();
             }
         });
@@ -643,20 +688,32 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         }
 
         Toast.makeText(VerifyReport.this, "Report resolved.", Toast.LENGTH_SHORT).show();
-        FirebaseDatabaseManager.FirebaseReports.child(clickedReportBasis.getReportID()).child("reportStatus").setValue("Resolved");
-        for(int x =0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++){
-            Log.d("active", (FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getDescription()));
-            Log.d("verfied", (clickedReportBasis.getDescription()));
+        ListItemVerified listItemVerified = FirebaseDatabaseManager.getActiveVerifiedReport(clickedReportBasis.getMergedTo());
 
+        FirebaseDatabaseManager.FirebaseReportsVerified.child(listItemVerified.getReportID()).child("reportStatus").setValue("Resolved");
 
-            if(FirebaseDatabaseManager.isWithinTimeRange(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getDateTime(),clickedReportBasis.getDateTime())){
-               //FirebaseDatabaseManager.FirebaseReportsVerified.child(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID()).child("reportStatus").setValue("Resolved");
-                FirebaseDatabaseManager.FirebaseReportsVerified.child(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID()).removeValue();
-
-            }
+        for(int x=0; x < listItemVerified.getMergedReportsID().size(); x++) {
+            FirebaseDatabaseManager.FirebaseReports.child(listItemVerified.getMergedReportsID().get(x)).child("reportStatus").setValue("Resolved");
         }
 
         finish();
         startActivity(new Intent(VerifyReport.this, Sidebar_HomePage.class));
+    }
+
+    private void showNotVerifiedByYouDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("AUTHORITY RESTRICTION");
+        builder.setMessage("You cannot resolve a report that you did not verify.");
+        builder.setInverseBackgroundForced(true);
+        builder.setNegativeButton("RETURN", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+        alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
     }
 }

@@ -293,10 +293,14 @@ public class FirebaseDatabaseManager {
     public static ListItemVerified getActiveVerifiedReport(String reportID) {
         ListItemVerified activeVerifiedReport =  null;
 
-        for(int x=0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
-            if(reportID.equals(FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID())) {
-                activeVerifiedReport = FirebaseDatabaseManager.getActiveVerifiedReports().get(x);
-            }
+        for(int x=0; x < getActiveVerifiedReports().size(); x++) {
+            if(reportID.equals(getActiveVerifiedReports().get(x).getReportID())) {
+                //FirebaseDatabaseManager.getActiveVerifiedReports().get(size-1).getMergedReportsID().get(x)
+                activeVerifiedReport = getActiveVerifiedReports().get(x);
+                Log.d("MATCHID!", ""+activeVerifiedReport.getReportID());
+            }/* else {
+                Log.d("MATCHNOID!", "your id: "+reportID);
+            }*/
         }
 
         return activeVerifiedReport;
