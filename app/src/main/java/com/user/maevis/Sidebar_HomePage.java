@@ -551,7 +551,7 @@ public class Sidebar_HomePage extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_settings :
-                i = new Intent(Sidebar_HomePage.this, SidebarSettings.class);
+                i = new Intent(Sidebar_HomePage.this, Settings.class);
                 startActivity(i);
                 break;
 

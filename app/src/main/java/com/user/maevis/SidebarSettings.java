@@ -102,18 +102,15 @@ public class SidebarSettings extends AppCompatActivity {
 
         //User logged in
         username = (EditText) findViewById(R.id.txtFldEditUsername);
-        password = (EditText) findViewById(R.id.txtFldEditPassword);
         fName = (EditText) findViewById(R.id.txtFldEditFirstname);
         lName = (EditText) findViewById(R.id.txtFldEditLastname);
         email = (EditText) findViewById(R.id.txtFldEditEmail);
         txtFldAddress = (AutofitTextView) findViewById(R.id.txtFldEditAddress);
         ivImage = (CircleImageView) findViewById(R.id.imgChangePhoto);
-        conPassword = (EditText) findViewById(R.id.txtFldEditConPassword);
 
         Picasso.with(this).load(SessionManager.getUserPhoto()).into(ivImage);
 
         dbUsername = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("username");
-        dbPassword = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("password");
         dbFName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("firstName");
         dbLName = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("lastName");
         dbEmail = FirebaseDatabase.getInstance().getReference().child("Users").child(SessionManager.getUserID()).child("email");
@@ -133,18 +130,14 @@ public class SidebarSettings extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), UpdateHomeAddress.class);
                 final String userName = username.getText().toString();
-                final String userPassword = password.getText().toString();
                 final String userEmail = email.getText().toString();
                 final String userFname = fName.getText().toString();
                 final String userLname = lName.getText().toString();
-                final String userConPassword = conPassword.getText().toString();
 
                 i.putExtra("userName", userName);
-                i.putExtra("userPassword", userPassword);
                 i.putExtra("userEmail", userEmail);
                 i.putExtra("userFname", userFname);
                 i.putExtra("userLname", userLname);
-                i.putExtra("userConPassword", userConPassword);
 
                 startActivity(i);
                 //finish();
@@ -155,13 +148,11 @@ public class SidebarSettings extends AppCompatActivity {
         if(UpdateHomeAddress.userHomeAddress != null){
             Intent i = getIntent();
             username.setText(UpdateHomeAddress.userName);
-            password.setText(UpdateHomeAddress.userPassword);
             fName.setText(UpdateHomeAddress.userFname);
             lName.setText(UpdateHomeAddress.userLname);
             email.setText(UpdateHomeAddress.userEmail);
             txtFldAddress.setText(UpdateHomeAddress.userHomeAddress);
-            oldPass = UpdateHomeAddress.userPassword;
-            conPassword.setText(UpdateHomeAddress.userConPassword);
+
             //Toast.makeText(this, "get1 : " + UpdateHomeAddress.userName, Toast.LENGTH_LONG).show();
         }else{
             dbAddress.addValueEventListener(new ValueEventListener() {
@@ -188,19 +179,6 @@ public class SidebarSettings extends AppCompatActivity {
                 }
             });
 
-            dbPassword.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    password.setText(dataSnapshot.getValue(String.class));
-                    oldPass = dataSnapshot.getValue(String.class);
-                    conPassword.setText(dataSnapshot.getValue(String.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
 
             dbFName.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -263,14 +241,12 @@ public class SidebarSettings extends AppCompatActivity {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String userName = username.getText().toString().trim();
-        final String pass = password.getText().toString().trim();
         final String first = fName.getText().toString().trim();
         final String last = lName.getText().toString().trim();
         final String emailAdd = email.getText().toString().trim();
         final String add = txtFldAddress.getText().toString().trim();
         final Double homeLat = UpdateHomeAddress.userHomeLat;
         final Double homeLong = UpdateHomeAddress.userHomeLong;
-        final String conPass = conPassword.getText().toString().trim();
 
         // Username is required
         if (TextUtils.isEmpty(userName)) {
@@ -278,17 +254,7 @@ public class SidebarSettings extends AppCompatActivity {
             return;
         }
 
-        // Password is required
-        if (TextUtils.isEmpty(pass)) {
-            password.setError(REQUIRED);
-            return;
-        }
 
-        // Confirm Password is required
-        if (TextUtils.isEmpty(pass)) {
-            conPassword.setError(REQUIRED);
-            return;
-        }
 
         // First Name is required
         if (TextUtils.isEmpty(first)) {
@@ -318,19 +284,7 @@ public class SidebarSettings extends AppCompatActivity {
             username.setError("Username must have at least 8 characters");
             return;
         }
-        String regex = "(.)*(\\d)(.)*";
-        Pattern pattern = Pattern.compile(regex);
-        boolean containsNumber = pattern.matcher(pass).matches();
 
-        if(pass.length() < 8 && containsNumber != true){
-            password.setError("Passsword must have at least 8 characters with at least 1 digit");
-            return;
-        }
-
-//        if(!pass.equals(conPass)){
-//            conPassword.setError("Your new password and confirmation password do not match.");
-//            return;
-//        }
 
         if(isEmailValid(emailAdd) != true){
             email.setError("Please enter a valid email address.");
@@ -360,45 +314,9 @@ public class SidebarSettings extends AppCompatActivity {
         }
 
 
-        AuthCredential credential = EmailAuthProvider.getCredential(SessionManager.getEmail(), pass);
 
-        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
 
-                    user.updateEmail(emailAdd)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                    }else{
-                                    }
-                                }
-                            });
 
-                }else{
-                }
-            }
-        });
-
-        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-
-                    user.updatePassword(conPass).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                            } else {
-                            }
-                        }
-                    });
-                }else{
-                }
-            }
-        });
 
         if(finalImageURI != null) {
             SessionManager.updateSession(SessionManager.getUserID(), userName, emailAdd, first, last, SessionManager.getBirthdate(), add, SessionManager.getUserStatus(), SessionManager.getUserType(), SessionManager.getDeviceToken(), SessionManager.getCurrentLat(), SessionManager.getCurrentLong(), FirebaseDatabaseManager.parseObjectToFloat(homeLat), FirebaseDatabaseManager.parseObjectToFloat(homeLong), getImageURL());

@@ -37,26 +37,30 @@
             android:padding="7dp"
             android:layout_toEndOf="@+id/imgViewProfilePic">
 
+            <TextView
+                android:id="@+id/viewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="location location"
+                android:textSize="15dp"
+                android:gravity="left"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="50dp"
+
+                />
+
             <ImageView
                 android:id="@+id/viewReportType"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/ic_marker_fire"
                 android:layout_below="@+id/viewReportHead"
-                android:layout_marginStart="0dp"
+
                 />
 
-            <TextView
-                android:id="@+id/viewLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:text="location"
-                android:textSize="15dp"
-                android:gravity="left"
-                android:layout_alignBottom="@+id/viewReportType"
-                android:layout_toEndOf="@+id/viewReportType"
-                android:textColor="@color/colorPrimary"/>
+
 
         </RelativeLayout>
 
@@ -69,7 +73,7 @@
         android:layout_below="@id/appBarLayout">
 
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
@@ -114,7 +118,7 @@
             </android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
     </RelativeLayout>
 </RelativeLayout>
