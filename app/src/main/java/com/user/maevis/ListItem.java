@@ -19,6 +19,9 @@ public class ListItem implements Comparable<ListItem> {
     private String displayDateTime; //date sorting shit
     private String userPhoto;
 
+    public ListItem() {
+
+    }
 
     //CONSTRUCTORS
     public ListItem(String reportID, String head, String dateTime, String description, String imageURL, String location, double locationLatitude, double locationLongitude, String mergedTo, String reportStatus, String reportType, String reportedBy, String displayDateTime, String userPhoto) {

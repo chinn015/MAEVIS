@@ -141,7 +141,8 @@ public class Tab3_Notification extends Fragment {
             }
         });
 
-        FirebaseDatabaseManager.FirebaseReportsVerified.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.getActiveVerifiedReports().clear();
+        FirebaseDatabaseManager.FirebaseReportsVerified.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
@@ -215,6 +216,15 @@ public class Tab3_Notification extends Fragment {
                 current_location.setLongitude(Tab2_Location.userLongitude);
 
                 distance = current_location.distanceTo(report_locations);
+
+                //add all Active reports to a List to be displayed
+                switch(itemVerified.getReportStatus()) {
+                    case "Active": FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
+                        break;
+                    case "Resolved": FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
+                        break;
+
+                }
 
                 if( SessionManager.getUserType().equals("Regular User") && distance <= limit_distance) {
                     //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();

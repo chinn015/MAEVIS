@@ -323,6 +323,7 @@ public class UploadReport extends AppCompatActivity {
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
         String dateTime = formatter.format(today);
+        nearbyAdmins.clear();
 
         String description = txtFldDescription.getText().toString();
         String location = txtFldLocation.getText().toString();
@@ -377,13 +378,13 @@ public class UploadReport extends AppCompatActivity {
         }
 
         //notify all nearby admins
-        for(int x=0; x < nearbyAdmins.size(); x++) {
+        /*for(int x=0; x < nearbyAdmins.size(); x++) {
             String messageToAdmin = "["+FirebaseDatabaseManager.getFullName(nearbyAdmins.get(x))+"] "+fullName+" sent a "+reportModel.getReportType()+" Report near you.";
             notifModel = new NotifModel(messageToAdmin, notifReportID, notifTitle, nearbyAdmins.get(x));
             //notifModel = new NotifModel(notifMessage, notifReportID, notifTitle, nearbyAdmins.get(x));
             newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
             newNotif.setValue(notifModel);
-        }
+        }*/
 
         Toast.makeText(UploadReport.this, "Report sent!", Toast.LENGTH_LONG).show();
         finish();
@@ -410,12 +411,12 @@ public class UploadReport extends AppCompatActivity {
             distance = pendging_report_location.distanceTo(nearby_verified);
 
             if (distance <= nearby_distance) {
-                /*for(int y=0; y < nearbyAdmins.size(); y++) {
+                for(int y=0; y < nearbyAdmins.size(); y++) {
                     String messageToAdmin = "["+FirebaseDatabaseManager.getFullName(nearbyAdmins.get(y))+"] "+fullName+" sent a "+reportModel.getReportType()+" Report near an existing emergency.";
                     notifModel = new NotifModel(messageToAdmin, notifReportID, notifTitle, nearbyAdmins.get(y));
                     newNotif = FirebaseDatabaseManager.FirebaseNotifications.push();
                     newNotif.setValue(notifModel);
-                }*/
+                }
             }
         }
 
