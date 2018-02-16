@@ -141,6 +141,7 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                     .into(viewReportType);
 
         }else if(PageNavigationManager.getClickedTabNotifRegListItem() != null){
+            clickedReport = PageNavigationManager.getClickedTabNotifRegListItem();
             mPostKey = PageNavigationManager.getClickedTabNotifRegListItem().getReportID();
 
             viewLocation.setText(PageNavigationManager.getClickedTabNotifRegListItem().getLocation());

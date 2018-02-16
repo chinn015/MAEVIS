@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class Tab1_Home extends Fragment {
     }
 
     private void loadRecyclerViewData() {
+        FirebaseDatabaseManager.getActiveVerifiedReports().clear();
         FirebaseDatabaseManager.FirebaseReportsVerified.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -95,6 +97,7 @@ public class Tab1_Home extends Fragment {
                 while(images.hasNext()) {
                     DataSnapshot image = images.next();
                     imageList.add(image.getValue().toString());
+                    //Log.d("SIDEBAR IMAGE", ""+image.getValue().toString());
                 }
 
                 List<String> mergedReportsID = new ArrayList<>();
@@ -102,6 +105,7 @@ public class Tab1_Home extends Fragment {
                 while(reports.hasNext()) {
                     DataSnapshot report = reports.next();
                     mergedReportsID.add(report.getValue().toString());
+                    //Log.d("SIDEBAR MERGEDX", ""+mergedReportsID.get(mergedReportsID.size()-1));
                 }
 
                 Map<String, Boolean> stars = new HashMap<>();
@@ -178,7 +182,7 @@ public class Tab1_Home extends Fragment {
 
 
 
-        FirebaseDatabaseManager.FirebaseReports.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.FirebaseReports.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
@@ -218,7 +222,7 @@ public class Tab1_Home extends Fragment {
                     listItems.add(item);
                 }
 
-                Collections.sort(listItems, new Comparator<ListItem>() {
+                /*Collections.sort(listItems, new Comparator<ListItem>() {
                     @Override
                     public int compare(ListItem o1, ListItem o2) {
                         if (o1.getDateTime() == null || o2.getDateTime() == null) {
@@ -226,7 +230,7 @@ public class Tab1_Home extends Fragment {
                         }
                         return o1.getDateTime().compareTo(o2.getDateTime());
                     }
-                });
+                });*/
 
                 /*adapter = new TabHomeAdapter(listItems, getContext());
                 recyclerView.setAdapter(adapter);*/
@@ -252,129 +256,8 @@ public class Tab1_Home extends Fragment {
             }
         });
 
-        /*FirebaseReports.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Iterator<DataSnapshot> reports = dataSnapshot.getChildren().iterator();
-                //while(reports.hasNext()) {
-                    //DataSnapshot report = reports.next();
-
-                    ListItem item = new ListItem(dataSnapshot.child("ReportedBy").getValue().toString() +
-                            " reported a " + dataSnapshot.child("ReportType").getValue().toString() ,
-                            dataSnapshot.child("Description").getValue().toString(),
-                            dataSnapshot.child("DateTime").getValue().toString(),
-                            dataSnapshot.child("ImageURL").getValue().toString());
-                    listItems.add(item);
-
-
-                //}
-
-                adapter = new TabHomeAdapter(listItems, getContext());
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-
-        /*final ProgressDialog progressDialog = new ProgressDialog(this.getActivity());
-        progressDialog.setMessage("Timeline is loading.");
-        progressDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        try {
-                            //JSONObject jsonObject = new JSONObject(response);
-                            //JSONArray array = jsonObject.getJSONArray("");
-                            JSONArray array = new JSONArray(response);
-
-                            for(int i=0; i < array.length(); i++) {
-                                JSONObject o = array.getJSONObject(i);
-                                ListItem item = new ListItem(
-                                        o.getString("ReportedBy"),
-                                        o.getString("Description")
-                                        //o.getString("imageurl")
-                                );
-                                listItems.add(item);
-                            }
-
-                            adapter = new TabHomeAdapter(listItems, getContext());
-                            recyclerView.setAdapter(adapter);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
-        requestQueue.add(stringRequest);*/
+        for(int x=0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
+            Log.d("SIDEBAR ASD-3", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().get(x));
+        }
     }
 }
-
-
-
-
-
-//UPDATE DATA CODE
-/*
-    if(dataSnapshot.hasChild("reportDescription")) {
-        String dateTime = dataSnapshot.child("dateTime").getValue().toString();
-        String description = dataSnapshot.child("reportDescription").getValue().toString();
-        String imageURL = dataSnapshot.child("imageURL").getValue().toString();
-        String location = dataSnapshot.child("location").getValue().toString();
-
-        double locationLatitude = 10.0000;
-        Object locLat = dataSnapshot.child("locationLatitude").getValue();
-        if (locLat instanceof Long) {
-            locationLatitude = ((Long) locLat).doubleValue();
-        } else {
-            locationLatitude = (double) dataSnapshot.child("locationLatitude").getValue();
-        }
-
-        double locationLongitude = 120.0000;
-        Object locLong = dataSnapshot.child("locationLongitude").getValue();
-        if (locLong instanceof Long) {
-            locationLongitude = ((Long) locLong).doubleValue();
-        } else {
-            locationLongitude = (double) dataSnapshot.child("locationLongitude").getValue();
-        }
-
-        String reportType = dataSnapshot.child("reportType").getValue().toString();
-        String reportedBy = dataSnapshot.child("reportedBy").getValue().toString();
-
-        ReportModel reportModel = new ReportModel(dateTime, description, imageURL, location, locationLatitude, locationLongitude, reportType, reportedBy);
-
-        DatabaseReference newReport = FirebaseReports.push();
-        newReport.setValue(reportModel);
-
-        FirebaseReports.child(dataSnapshot.getKey()).removeValue();
-    }
-*/

@@ -71,7 +71,8 @@ public class Tab4_Search extends Fragment {
     }
 
     private void loadRecyclerViewData() {
-        FirebaseDatabaseManager.FirebaseReportsVerified.orderByChild("dateTime").addChildEventListener(new ChildEventListener() {
+        FirebaseDatabaseManager.getActiveVerifiedReports().clear();
+        FirebaseDatabaseManager.FirebaseReportsVerified.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String reportDateTime = dataSnapshot.child("dateTime").getValue().toString();
@@ -135,11 +136,11 @@ public class Tab4_Search extends Fragment {
                 //add all Active reports to a List to be displayed
                 switch (itemVerified.getReportStatus()) {
                     case "Active":
-                        FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
+                        //FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
                         listItemsVerified.add(itemVerified);
                         break;
                     case "Done":
-                        FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
+                        //FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
                         break;
 
                 }
