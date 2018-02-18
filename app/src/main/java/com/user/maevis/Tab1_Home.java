@@ -97,7 +97,6 @@ public class Tab1_Home extends Fragment {
                 while(images.hasNext()) {
                     DataSnapshot image = images.next();
                     imageList.add(image.getValue().toString());
-                    //Log.d("SIDEBAR IMAGE", ""+image.getValue().toString());
                 }
 
                 List<String> mergedReportsID = new ArrayList<>();
@@ -105,7 +104,6 @@ public class Tab1_Home extends Fragment {
                 while(reports.hasNext()) {
                     DataSnapshot report = reports.next();
                     mergedReportsID.add(report.getValue().toString());
-                    //Log.d("SIDEBAR MERGEDX", ""+mergedReportsID.get(mergedReportsID.size()-1));
                 }
 
                 Map<String, Boolean> stars = new HashMap<>();
@@ -257,7 +255,6 @@ public class Tab1_Home extends Fragment {
         });
 
         for(int x=0; x < FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
-            Log.d("SIDEBAR ASD-3", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().get(x));
         }
     }
 }

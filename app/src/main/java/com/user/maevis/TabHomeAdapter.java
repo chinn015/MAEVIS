@@ -240,7 +240,6 @@ public class TabHomeAdapter extends RecyclerView.Adapter<TabHomeAdapter.ViewHold
             public void onComplete(DatabaseError databaseError, boolean b,
                                    DataSnapshot dataSnapshot) {
                 // Transaction completed
-                //Log.d(TAG, "postTransaction:onComplete:" + databaseError);
             }
         });
     }

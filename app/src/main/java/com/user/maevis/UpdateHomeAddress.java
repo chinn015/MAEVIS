@@ -168,13 +168,11 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onMarkerDragStart(Marker arg0) {
-        Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void onMarkerDragEnd(Marker arg0) {
-        Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
         mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
         userHomeAddress = getUserHomeLocAddress(arg0.getPosition().latitude, arg0.getPosition().longitude);
         userHomeLat = arg0.getPosition().latitude;
@@ -185,7 +183,6 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onMarkerDrag(Marker arg0) {
-        Log.i("System out", "onMarkerDrag...");
     }
 
     @Override

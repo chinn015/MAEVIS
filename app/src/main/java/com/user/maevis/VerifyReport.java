@@ -252,28 +252,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         }
 
         if(v==btnResolvedReport) {
-            /*Log.d("SIDEBAR SIZE", "RESOLVE");
-            Log.d("SIDEBAR SIZE", ""+FirebaseDatabaseManager.getActiveVerifiedReports().size());
-
-            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().size(); x++) {
-                Log.d("SIDEBAR HOMEPAGE RID", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(x).getReportID());
-            }
-
-            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().size(); x++) {
-                Log.d("SIDEBAR HOMEPAGE RIDI", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().get(x));
-            }
-
-            for(int x=0; x<FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().size(); x++) {
-                Log.d("SIDEBAR HOMEPAGE RIDM", ""+FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getMergedReportsID().get(x));
-            }*/
-
-            //Log.d("SIDEBAR 4", FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getReportID());
-            //Log.d("SIDEBAR 4-0", FirebaseDatabaseManager.getActiveVerifiedReports().get(3).getImageList().get(0));
-
-            /*ListItemVerified vee = FirebaseDatabaseManager.getActiveVerifiedReport("-L5PB6f52e4nk7FtYjzb");
-            for(int x=0; x < vee.getMergedReportsID().size(); x++) {
-                Log.d("RID MERGED REP ID", vee.getMergedReportsID().get(x));
-            }*/
 
             if(PageNavigationManager.getClickedTabLocListItemPending()!=null) {
                 clickedReportBasis = PageNavigationManager.getClickedTabLocListItemPending();
@@ -601,19 +579,6 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showDialogVerify() {
-        Log.d("V0 Session First Name: ", SessionManager.getFirstName());
-        Log.d("V0 Session Last Name: ", SessionManager.getLastName());
-        Log.d("V0 Session User Type: ", SessionManager.getUserType());
-
-        for(int x=0; x<FirebaseDatabaseManager.getUserItems().size(); x++) {
-            Log.d("User Item ["+x+"] First Name: ", FirebaseDatabaseManager.getUserItems().get(x).getFirstName());
-            Log.d("User Item ["+x+"] Last Name: ", FirebaseDatabaseManager.getUserItems().get(x).getLastName());
-        }
-
-        for(int x=0; x<FirebaseDatabaseManager.getPendingReports().size(); x++) {
-            Log.d("Pending Report Item ["+x+"] Desc: ", FirebaseDatabaseManager.getPendingReports().get(x).getDescription());
-            Log.d("Pending Report Item ["+x+"] Type: ", FirebaseDatabaseManager.getPendingReports().get(x).getReportType());
-        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);

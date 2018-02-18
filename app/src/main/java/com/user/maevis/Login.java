@@ -135,7 +135,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
 
@@ -232,7 +231,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
 
                 final String userID = loginResult.getAccessToken().getUserId();
                 final LoginResult loginRes = loginResult;
@@ -243,7 +241,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                         String profileImg = "https://graph.facebook.com/" +userID+ "/picture?type=normal";
                         //displayUserInfo(jsonObject, profileImg);
                         handleFacebookAccessToken(loginRes.getAccessToken(), jsonObject, profileImg);
-                        Log.d("Graph Request", "GRAPH REQUEST!!!");
                     }
                 });
 
@@ -259,21 +256,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             @Override
             public void onCancel() {
                 Toast.makeText(Login.this, "FB ON CANCEL", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "facebook:onCancel");
                 // ...
             }
 
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(Login.this, "FB ON ERROR", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "facebook:onError", error);
                 // ...
             }
         });
     }
 
     private void handleFacebookAccessToken(AccessToken token, JSONObject obj, String profImg) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         final JSONObject object = obj;
         final String profileImage = profImg;
@@ -285,7 +279,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            /*Log.d(TAG, "signInWithCredential:success");
+                            /*
                             FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
 
                             updateUI();*/
@@ -327,12 +321,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                     SessionManager.createLoginSession(userItem);
                                     Toast.makeText(Login.this, "Existing user with FB. Logging in.", Toast.LENGTH_SHORT).show();
 
-                                    if(userItem == null) {
-                                        Log.d("USERITEM NULL", "User Item Null");
-                                    } else {
-                                        Log.d("USERITEM NOT NULL", "User Item Not Null");
-                                    }
-
                                     //showFBDetailsDialog(userItem);
                                 }
 
@@ -346,7 +334,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                             }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
 
                             if(task.getException() instanceof FirebaseAuthUserCollisionException) {
                                 showFacebookEmailUsed();
@@ -438,7 +425,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(this, "Google Sign In Failed.", Toast.LENGTH_LONG).show();
                 // ...
             }
@@ -450,7 +436,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
         final String email = acct.getEmail();
@@ -487,8 +472,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 return;
                             }
 
-                            Log.d(TAG, "signInWithCredential:success");
-
                             if(!FirebaseDatabaseManager.isEmailUsed(email)) {
                                 FirebaseUser user = SessionManager.getFirebaseAuth().getCurrentUser();
                                 DatabaseReference newUser = FirebaseDatabaseManager.FirebaseUsers.child(user.getUid());
@@ -512,7 +495,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 showFacebookEmailUsed();
                             }
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
@@ -530,8 +512,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     public void loginUser() {
         final String username = txtFldLoginUsername.getText().toString().trim();
         final String password = txtFldLoginPassword.getText().toString().trim();
-
-        Log.v("E_VALUE", "Username: " + username + "  ||  Password: " + password);
 
         //validations
         if (TextUtils.isEmpty(username)) {
@@ -607,7 +587,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 }
                             });
 
-                            Log.d("token", sDeviceToken);
                             /*
                             deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
                             newDevice = firebaseDevice.push();
@@ -664,8 +643,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 //                       );
 //
 //                if(device.getDeviceToken().equals(SessionManager.getKeyDeviceToken())){
-//                    Log.d("token-session", SessionManager.getKeyDeviceToken());
-//                    Log.d("token-db", device.getDeviceToken());
+
 //                } else {
 //                    deviceModel = new DeviceModel(SessionManager.getKeyDeviceToken(), SessionManager.getUserID());
 //                    newDevice = firebaseDevice.push();
@@ -893,18 +871,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     }
 
     public void showFBDetailsDialog(UserItem userItem) {
-        Log.d("FB LOGIN DETAILS", userItem.getAddress());
-        Log.d("FB LOGIN DETAILS", userItem.getUserType());
-        Log.d("FB LOGIN DETAILS", userItem.getUsername());
-        Log.d("FB LOGIN DETAILS", userItem.getBirthdate());
-        Log.d("FB LOGIN DETAILS", userItem.getDeviceToken());
-        Log.d("FB LOGIN DETAILS", userItem.getEmail());
-        Log.d("FB LOGIN DETAILS", userItem.getFirstName());
-        Log.d("FB LOGIN DETAILS", userItem.getLastName());
-        Log.d("FB LOGIN DETAILS", userItem.getUserID());
-        Log.d("FB LOGIN DETAILS", userItem.getUserPhoto());
-        Log.d("FB LOGIN DETAILS", userItem.getUserStatus());
-
     }
 
     @Override
