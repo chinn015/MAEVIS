@@ -89,7 +89,7 @@ public class TabSearchAdapter extends RecyclerView.Adapter<TabSearchAdapter.View
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(context, "You clicked : " + listItemVerified.getHead(), Toast.LENGTH_LONG).show();
 
                 PageNavigationManager.clickTabHomeListItemVerified(listItemVerified);
 
