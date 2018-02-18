@@ -201,6 +201,6 @@ public class SidebarHelp extends AppCompatActivity {
     }
 
     public void AddReport(){
-        Toast.makeText(this, "you clicked add report", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "you clicked add report", Toast.LENGTH_LONG).show();
     }
 }

@@ -298,6 +298,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
             finish();
 
+        }else{
+            finish();
+
         }
 
         TabProfileTimelineAdapter.setClickedItem(null);
@@ -398,7 +401,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                         // Update the RecyclerView
                         notifyItemChanged(commentIndex);
                     } else {
-                        Log.w(TAG, "onChildChanged:unknown_child:" + commentKey);
                     }
                     // [END_EXCLUDE]
                 }
@@ -420,7 +422,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
                         // Update the RecyclerView
                         notifyItemRemoved(commentIndex);
                     } else {
-                        Log.w(TAG, "onChildRemoved:unknown_child:" + commentKey);
                     }
                     // [END_EXCLUDE]
                 }
@@ -438,7 +439,6 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
                     Toast.makeText(mContext, "Failed to load comments.",
                             Toast.LENGTH_SHORT).show();
                 }

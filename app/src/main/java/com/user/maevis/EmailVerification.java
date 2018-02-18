@@ -124,9 +124,9 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                                 // ...
                             }
                         });
-                Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+               // Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
                 //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
             }
 
@@ -186,10 +186,9 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                                 // ...
                             }
                         });
-                Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(EmailVerification.this, "[Google Connected] Logged out.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
-                //Log.v("GOOGLE", "GOOGLE API CLIENT NOT CONNECTED.");
+                //Toast.makeText(EmailVerification.this, "[Google not connected] Logged out.", Toast.LENGTH_LONG).show();
             }
 
             finish();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.view.Window;
@@ -100,5 +101,17 @@ public class UserManagement extends AppCompatActivity implements View.OnClickLis
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

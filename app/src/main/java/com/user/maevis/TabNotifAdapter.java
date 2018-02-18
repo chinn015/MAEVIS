@@ -98,7 +98,7 @@ public class TabNotifAdapter extends RecyclerView.Adapter<TabNotifAdapter.ViewHo
             @Override
             public void onClick(View view){
                 PageNavigationManager.clickTabNotifListItem(listItem);
-                Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
 
                 Intent i;
                 i = new Intent(context, VerifyReport.class);

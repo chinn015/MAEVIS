@@ -57,13 +57,15 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
         holder.reportLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You clicked : " + listItem.getHead(), Toast.LENGTH_LONG).show();
                 //setClickedItem(listItem);
                 PageNavigationManager.clickTabNotifListItem(listItem);
 
+                /*
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);
+                */
             }
         });
     }

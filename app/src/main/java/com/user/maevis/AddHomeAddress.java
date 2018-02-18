@@ -161,7 +161,6 @@ public class AddHomeAddress extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMarkerDrag(Marker arg0) {
-        Log.i("System out", "onMarkerDrag...");
     }
 
     @Override

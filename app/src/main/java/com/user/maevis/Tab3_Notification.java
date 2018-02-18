@@ -99,7 +99,7 @@ public class Tab3_Notification extends Fragment {
 
                 float distance, limit_distance;
 
-                limit_distance = 1000;
+                limit_distance = 500;
                 Location report_locations = new Location("1");
                 Location current_location = new Location("2");
 
@@ -205,7 +205,7 @@ public class Tab3_Notification extends Fragment {
 
                 float distance, limit_distance;
 
-                limit_distance = 1000;
+                limit_distance = 500;
                 Location report_locations = new Location("1");
                 Location current_location = new Location("2");
 
