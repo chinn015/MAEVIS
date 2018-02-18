@@ -61,9 +61,11 @@ public class TabProfileTimelineAdapter extends RecyclerView.Adapter<TabProfileTi
                 //setClickedItem(listItem);
                 PageNavigationManager.clickTabNotifListItem(listItem);
 
+                /*
                 Intent i;
                 i = new Intent(context, ReportPage.class);
                 context.startActivity(i);
+                */
             }
         });
     }

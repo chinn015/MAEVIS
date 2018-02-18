@@ -94,16 +94,16 @@ public class Tab4_Search extends Fragment {
 
                 List<String> imageList = new ArrayList<>();
                 Iterator<DataSnapshot> images = dataSnapshot.child("imageList").getChildren().iterator();
-                while (images.hasNext()) {
+                while(images.hasNext()) {
                     DataSnapshot image = images.next();
                     imageList.add(image.getValue().toString());
                 }
 
                 List<String> mergedReportsID = new ArrayList<>();
-                Iterator<DataSnapshot> reports = dataSnapshot.child("imageList").getChildren().iterator();
-                while (reports.hasNext()) {
+                Iterator<DataSnapshot> reports = dataSnapshot.child("mergedReportsID").getChildren().iterator();
+                while(reports.hasNext()) {
                     DataSnapshot report = reports.next();
-                    imageList.add(report.getValue().toString());
+                    mergedReportsID.add(report.getValue().toString());
                 }
 
                 Map<String, Boolean> stars = new HashMap<>();
@@ -114,7 +114,7 @@ public class Tab4_Search extends Fragment {
                 }
 
                 ListItemVerified itemVerified = new ListItemVerified(dataSnapshot.getKey().toString(),
-                        fullName + " reported a " +
+                        fullName+" reported a " +
                                 dataSnapshot.child("reportType").getValue().toString() + " at " +
                                 dataSnapshot.child("location").getValue().toString(),
                         dataSnapshot.child("dateTime").getValue().toString(),
@@ -134,13 +134,11 @@ public class Tab4_Search extends Fragment {
                         stars);
 
                 //add all Active reports to a List to be displayed
-                switch (itemVerified.getReportStatus()) {
-                    case "Active":
-                        //FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
+                switch(itemVerified.getReportStatus()) {
+                    case "Active": FirebaseDatabaseManager.getActiveVerifiedReports().add(itemVerified);
                         listItemsVerified.add(itemVerified);
                         break;
-                    case "Done":
-                        //FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
+                    case "Resolved": FirebaseDatabaseManager.getDoneVerifiedReports().add(itemVerified);
                         break;
 
                 }
@@ -179,7 +177,6 @@ public class Tab4_Search extends Fragment {
 
             }
         });
-
 
     }
 

@@ -298,6 +298,9 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
             startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
             finish();
 
+        }else{
+            finish();
+
         }
 
         TabProfileTimelineAdapter.setClickedItem(null);
