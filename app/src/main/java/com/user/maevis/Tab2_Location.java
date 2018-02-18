@@ -188,7 +188,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
             double vLongitude = activeVerifiedReport.getLocationLongitude();
             float distance, limit_distance;
 
-            limit_distance = 1000;
+            limit_distance = 500;
             Location report_locations = new Location("1");
             Location current_location = new Location("2");
             String vTitle = activeVerifiedReport.getReportType() + " " + FirebaseDatabaseManager.getFullName(activeVerifiedReport.getReportedBy());
@@ -253,7 +253,7 @@ public class Tab2_Location extends Fragment implements OnMapReadyCallback,
                 double vLongitude = PageNavigationManager.getClickedTabLocListItemPending().getLocationLongitude();
                 float distance, limit_distance;
 
-                limit_distance = 1000;
+                limit_distance = 500;
                 Location report_locations = new Location("1");
                 Location current_location = new Location("2");
                 String vTitle = PageNavigationManager.getClickedTabLocListItemPending().getReportType() + " " + FirebaseDatabaseManager.getFullName(PageNavigationManager.getClickedTabLocListItemPending().getReportedBy());
