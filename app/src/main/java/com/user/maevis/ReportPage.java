@@ -278,29 +278,8 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
         int id = item.getItemId();
 
-        if (id == android.R.id.home  && TabProfileTimelineAdapter.getClickedItem() != null) {
-
-            startActivity(new Intent(ReportPage.this, SidebarProfile.class));
+        if (id == android.R.id.home) {
             finish();
-
-        }else if (id == android.R.id.home  && PageNavigationManager.getClickedTabHomeListItemVerified() != null) {
-
-            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
-            finish();
-
-        }else if (id == android.R.id.home  && PageNavigationManager.getClickedTabLocListItemVerified() != null){
-
-            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
-            finish();
-
-        }else if (id == android.R.id.home  && TabNotifAdapterRegUser.getClickedItem() != null){
-
-            startActivity(new Intent(ReportPage.this, Sidebar_HomePage.class));
-            finish();
-
-        }else{
-            finish();
-
         }
 
         TabProfileTimelineAdapter.setClickedItem(null);
