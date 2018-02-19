@@ -56,7 +56,26 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
         holder.textViewHead.setText(listItemVerified.getHead());
         holder.textViewDateTime.setText(listItemVerified.getDisplayDateTime());
         Picasso.with(context).load(listItemVerified.getUserPhoto()).into(holder.userPhoto);
-        holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#f2cfcc"), PorterDuff.Mode.DARKEN);
+        holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.DARKEN);
+
+        //cbeaf1 - blue
+        //f1d9cb - v light orange
+
+        switch(listItemVerified.getReportStatus()) {
+            case "Verified":
+                holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#caf0d8"), PorterDuff.Mode.DARKEN);
+                Picasso.with(context).load(listItemVerified.getImageThumbnailURL()).into(holder.userPhoto);
+                break;
+            case "Declined":
+                holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#f2cfcc"), PorterDuff.Mode.DARKEN);
+                Picasso.with(context).load(listItemVerified.getImageThumbnailURL()).into(holder.userPhoto);
+                break;
+            case "Resolved":
+                holder.notifReportLayout.getBackground().setColorFilter(Color.parseColor("#cbeaf1"), PorterDuff.Mode.DARKEN);
+                Picasso.with(context).load(listItemVerified.getImageThumbnailURL()).into(holder.userPhoto);
+                break;
+        }
+
 
         switch(listItemVerified.getReportType()){
             case "Fire":
@@ -81,9 +100,11 @@ public class TabNotifAdapterRegUser extends RecyclerView.Adapter<TabNotifAdapter
             public void onClick(View view){
                 PageNavigationManager.clickTabNotifRegListItem(listItemVerified);
 
-                Intent i;
-                i = new Intent(context, ReportPage.class);
-                context.startActivity(i);
+                if(listItemVerified.getReportStatus().equals("Active")) {
+                    Intent i;
+                    i = new Intent(context, ReportPage.class);
+                    context.startActivity(i);
+                }
             }
         });
     }
