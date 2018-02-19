@@ -118,6 +118,44 @@ public class Tab3_Notification extends Fragment {
                     adapter = new TabNotifAdapter(listItems, getContext());
                     recyclerView.setAdapter(adapter);
                 }
+
+                if(SessionManager.getUserType().equals("Regular User") && SessionManager.getUserID().equals(dataSnapshot.child("reportedBy").getValue().toString())) {
+                    String status = "[status]";
+
+                    switch(item.getReportStatus()) {
+                        case "Verified": status = "has been verified.";
+                            break;
+                        case "Declined": status = "has been declined.";
+                            break;
+                        case "Resolved": status = "has already been resolved.";
+                            break;
+                    }
+
+                    String title = "Your "+dataSnapshot.child("reportType").getValue().toString()+" Report "+status;
+                    List<String> imageList = new ArrayList<>();
+                    List<String> mergedReportsID = new ArrayList<>();
+                    Map<String, Boolean> stars = new HashMap<>();
+
+                    ListItemVerified liv = new ListItemVerified(dataSnapshot.getKey().toString(),
+                            title,
+                            dataSnapshot.child("dateTime").getValue().toString(),
+                            dataSnapshot.child("description").getValue().toString(),
+                            imageList,
+                            dataSnapshot.child("imageURL").getValue().toString(),
+                            dataSnapshot.child("location").getValue().toString(),
+                            locationLatitude,
+                            locationLongitude,
+                            mergedReportsID,
+                            dataSnapshot.child("reportStatus").getValue().toString(),
+                            dataSnapshot.child("reportType").getValue().toString(),
+                            dataSnapshot.child("reportedBy").getValue().toString(),
+                            formatDateTime,
+                            userPhotoImgUrl,
+                            0,
+                            stars);
+
+                    listItemsVerified.add(liv);
+                }
             }
 
             @Override
@@ -226,7 +264,9 @@ public class Tab3_Notification extends Fragment {
 
                 }
 
-                if( SessionManager.getUserType().equals("Regular User") && distance <= limit_distance) {
+                if(SessionManager.getUserType().equals("Regular User")
+                        && dataSnapshot.child("reportStatus").getValue().toString().equals("Active")
+                        && distance <= limit_distance) {
                     //Toast.makeText(getContext(), FirebaseDatabaseManager.getFullName(item.getReportedBy()) + "Inside: " + distance, Toast.LENGTH_LONG).show();
                     listItemsVerified.add(itemVerified);
 
