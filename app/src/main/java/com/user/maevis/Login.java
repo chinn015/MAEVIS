@@ -154,6 +154,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         btnSignInFb = (Button) findViewById(R.id.btnSignFb);
         btnSignInGoogle = (Button) findViewById(R.id.btnSignInGoogle);
 
+        btnSignInFb.setVisibility(View.GONE);
         //firebase references
         //mAuth = FirebaseAuth.getInstance();
         firebaseUsers = FirebaseDatabase.getInstance().getReferenceFromUrl("https://maevis-ecd17.firebaseio.com/Users");

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -582,10 +583,10 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("VERIFY REPORT");
+        builder.setTitle("APPROVE REPORT");
         builder.setMessage("Confirm verification of report.");
         builder.setInverseBackgroundForced(true);
-        builder.setPositiveButton("VERIFY", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("APPROVE", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 verifyReport();
             }
@@ -604,10 +605,10 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
     private void showDialogDecline() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("DECLINE REPORT");
+        builder.setTitle("REJECT REPORT");
         builder.setMessage("Decline this report?");
         builder.setInverseBackgroundForced(true);
-        builder.setPositiveButton("DECLINE", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("REJECT", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 declineReport();
             }
@@ -680,5 +681,18 @@ public class VerifyReport extends AppCompatActivity implements View.OnClickListe
         alert.show();
         alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         alert.getButton(alert.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

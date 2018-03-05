@@ -128,11 +128,7 @@
         <activity
             android:name=".VerifyReport"
             android:label="Verify Report"
-            android:parentActivityName=".Sidebar_HomePage"
             android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT.ACTIVITY"
-                android:value=".Sidebar_HomePage" />
         </activity>
         <activity
             android:name=".SidebarSettings"
