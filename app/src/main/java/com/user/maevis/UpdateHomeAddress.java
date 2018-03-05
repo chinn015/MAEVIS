@@ -105,15 +105,11 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
 
-        mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationChangeListener(this);
         final LatLng home_location;
 
-        BitmapDrawable bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user);
+        BitmapDrawable bitmapUser = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_user1);
         Bitmap user = bitmapUser.getBitmap();
 
         BitmapDrawable bitmapOldHome = (BitmapDrawable)getResources().getDrawable(R.mipmap.ic_marker_old_home);
@@ -141,11 +137,10 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
         if(mUserLocation == null){
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("Cebu City").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }
-        /*else{
+        } else{
             user_location = new LatLng(userLatitude, userLongitude);
             mMap.addMarker(new MarkerOptions().position(user_location).visible(true).alpha(1.0f).title("My Location").icon(BitmapDescriptorFactory.fromBitmap(userMarker)));
-        }*/
+        }
 
         getData();
 
@@ -161,6 +156,16 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
             public void onClick(View v) {
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(home_location).zoom(17).build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
+
+        btnUserLoc.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "My Location: " + userLocAddress,
+                        Toast.LENGTH_LONG).show();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
             }
         });
 
@@ -316,15 +321,7 @@ public class UpdateHomeAddress extends AppCompatActivity implements OnMapReadyCa
             }
         }
 
-        btnUserLoc.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "My Location: " + userLocAddress,
-                        Toast.LENGTH_LONG).show();
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(user_location).zoom(17).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-            }
-        });
 
 
 

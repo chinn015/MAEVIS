@@ -13,7 +13,7 @@
         android:layout_height="150dp"
         app:srcCompat="@drawable/maevis_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="55dp"
         android:layout_marginBottom="20dp" />
 
     <EditText
@@ -113,7 +113,8 @@
         android:text="Sign in with Google"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="17dp" />
+        android:textSize="17dp"
+        android:layout_marginTop="10dp"/>
 
 
     <!--<com.facebook.login.widget.LoginButton

@@ -103,10 +103,15 @@ public class ReportPage extends AppCompatActivity  implements View.OnClickListen
 
         viewReportType = (ImageView) findViewById(R.id.viewReportType);
         viewLocation = (TextView) findViewById(R.id.viewLocation);
+        viewUserPhoto = (CircleImageView) findViewById(R.id.user_photo);
+
 
         mCommentField = findViewById(R.id.comment);
         mCommentButton = findViewById(R.id.button_post_comment);
         mCommentsRecycler = findViewById(R.id.recycler_comments);
+        Picasso.with(getApplicationContext())
+                .load(SessionManager.getUserPhoto())
+                .into(viewUserPhoto);
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
